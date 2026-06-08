@@ -13,25 +13,26 @@
   --red:#CF6679;--gold:#C8861A;
 }
 body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
-.hdr{width:100%;max-width:480px;background:var(--panel);display:flex;align-items:center;gap:12px;padding:10px 16px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);}
+.hdr{width:100%;max-width:480px;background:var(--panel);display:flex;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);}
 .hdr-av{width:40px;height:40px;border-radius:50%;background:var(--green2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;cursor:pointer;}
 .hdr-info{flex:1;min-width:0;cursor:pointer;}
 .hdr-name{font-size:16px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hdr-name:hover{color:var(--green);}
 .hdr-sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.lang-btns{display:flex;gap:4px;flex-shrink:0;}
-.lbtn{background:var(--border);border:none;color:var(--muted);font-size:11px;font-weight:600;padding:4px 8px;border-radius:12px;cursor:pointer;font-family:inherit;}
+.hdr-date{font-size:11px;color:var(--gold);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lbtns{display:flex;gap:4px;flex-shrink:0;}
+.lbtn{background:var(--border);border:none;color:var(--muted);font-size:11px;font-weight:600;padding:4px 7px;border-radius:12px;cursor:pointer;font-family:inherit;transition:background 0.15s;}
 .lbtn.active{background:var(--green);color:#fff;}
 .lbtn:hover:not(.active){background:#3A4A52;color:var(--text);}
-.stats{width:100%;max-width:480px;background:var(--panel);padding:8px 16px;display:flex;gap:14px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center;}
+.stats{width:100%;max-width:480px;background:var(--panel);padding:7px 14px;display:flex;gap:12px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center;}
 .stat{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;}
 .sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.d-free{background:var(--green);} .d-taken{background:var(--gold);}
+.d-free{background:var(--green);}.d-taken{background:var(--gold);}
 .syncdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--green);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.srch{width:100%;max-width:480px;padding:8px 10px 0;}
-.srch input{width:100%;background:var(--bubble);border:none;border-radius:20px;padding:8px 14px;font-size:13px;color:var(--text);font-family:inherit;outline:none;}
-.srch input::placeholder{color:var(--muted);}
+.srchwrap{width:100%;max-width:480px;padding:8px 10px 0;}
+.srchinp{width:100%;background:var(--bubble);border:none;border-radius:20px;padding:8px 14px;font-size:13px;color:var(--text);font-family:inherit;outline:none;}
+.srchinp::placeholder{color:var(--muted);}
 .chat{width:100%;max-width:480px;flex:1;padding:12px 10px 90px;}
 .bbl{background:var(--bubble);border-radius:0 8px 8px 8px;padding:8px 8px 4px;}
 .bmeta{display:flex;align-items:center;gap:8px;margin-bottom:6px;padding:0 4px;}
@@ -44,7 +45,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .orow.sel{background:rgba(0,168,132,0.10);}
 .orow.cur{border-left:3px solid var(--gold);padding-left:9px;}
 .orow.busy{opacity:0.5;pointer-events:none;}
-.wacircle{width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.1s;}
+.wacircle{width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .orow.sel .wacircle{background:var(--green);border-color:var(--green);}
 .wacheck{display:none;}
 .orow.sel .wacheck{display:block;}
@@ -68,6 +69,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .ninp::placeholder{color:var(--muted);}
 .sndbtn{width:42px;height:42px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .sndbtn:hover{background:#009473;}
+/* NAME MODAL (first visit) */
 .mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;align-items:flex-end;justify-content:center;}
 .mbg.open{display:flex;}
 .msh{background:var(--panel);border-radius:16px 16px 0 0;padding:1.5rem 1.25rem;width:100%;max-width:480px;animation:slideUp 0.2s ease;max-height:88vh;overflow-y:auto;}
@@ -80,17 +82,17 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .mbt-c{background:var(--border);color:var(--muted);}
 .mbt-g{background:var(--green);color:#fff;}
 .mbt-r{background:var(--red);color:#fff;}
-.albl{font-size:12px;color:var(--muted);margin-bottom:4px;display:block;}
-.ainp{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);font-family:inherit;outline:none;margin-bottom:12px;}
+.albl{font-size:12px;color:var(--muted);margin-bottom:4px;display:block;margin-top:8px;}
+.ainp{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);font-family:inherit;outline:none;margin-bottom:8px;}
 .ainp:focus{border-color:var(--green);}
-.asel{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);font-family:inherit;outline:none;margin-bottom:12px;cursor:pointer;-webkit-appearance:none;appearance:none;}
+.asel{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);font-family:inherit;outline:none;margin-bottom:8px;cursor:pointer;-webkit-appearance:none;appearance:none;}
 .asel:focus{border-color:var(--green);}
-.asec{margin-bottom:20px;}
+.asec{margin-bottom:18px;}
 .asec:last-child{margin-bottom:0;}
-.asectitle{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-.slotgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.slotbox{background:var(--bubble);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
-.slotnum{font-size:28px;font-weight:700;color:var(--green);}
+.asectitle{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.slotgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.slotbox{background:var(--bubble);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.slotnum{font-size:26px;font-weight:700;color:var(--green);}
 .vlist{max-height:45vh;overflow-y:auto;}
 .vitem{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
 .vitem:last-child{border-bottom:none;}
@@ -99,17 +101,19 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .ldmsg{color:var(--muted);font-size:14px;text-align:center;padding:2rem;}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2A3942;color:var(--text);padding:8px 18px;border-radius:6px;font-size:13px;opacity:0;transition:all 0.25s;z-index:300;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.warn-box{background:rgba(207,102,121,0.12);border:1px solid var(--red);border-radius:8px;padding:8px 12px;font-size:12px;color:#F4B8C1;margin-bottom:10px;display:none;}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <div class="hdr-av" id="adminTrigger">&#9963;</div>
-  <div class="hdr-info" id="adminTrigger2">
+  <div class="hdr-av" id="hdrAv">&#9963;</div>
+  <div class="hdr-info" id="hdrInfo">
     <div class="hdr-name" id="headerName">STAR ICC NORDDEUTSCHLAND</div>
     <div class="hdr-sub" id="headerSub">Chaine de Priere ✏️</div>
+    <div class="hdr-date" id="headerDate" style="display:none"></div>
   </div>
-  <div class="lang-btns">
+  <div class="lbtns">
     <button class="lbtn active" id="btn-fr">FR</button>
     <button class="lbtn" id="btn-de">DE</button>
     <button class="lbtn" id="btn-en">EN</button>
@@ -126,7 +130,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
   </div>
 </div>
 
-<div class="srch"><input id="searchInp" placeholder="🔍 ..." oninput="renderSlots()"></div>
+<div class="srchwrap"><input class="srchinp" id="searchInp" placeholder="🔍 ..." oninput="renderSlots()"></div>
 
 <div class="chat">
   <div class="bbl">
@@ -136,37 +140,48 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
       <span class="btime" id="bTime"></span>
     </div>
     <div class="ptitle" id="pollTitle">📋 ...</div>
-    <div id="optList"><div class="ldmsg" id="ldmsg">⏳ Chargement...</div></div>
+    <div id="optList"><div class="ldmsg" id="ldmsg">⏳ ...</div></div>
     <hr class="pdiv">
     <div class="pfooter">
-      <button class="stmbtn" id="btnStimmen">Stimmen ansehen</button>
+      <button class="stmbtn" id="btnStimmen">---</button>
       <button class="admbtn" id="btnAdmin">⚙️ Admin</button>
     </div>
   </div>
 </div>
 
 <div class="botbar">
-  <input class="ninp" id="nameInput" placeholder="Votre prenom..." maxlength="25">
+  <input class="ninp" id="nameInput" placeholder="..." maxlength="25">
   <button class="sndbtn" id="btnSend">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
   </button>
 </div>
 
+<!-- NAME MODAL (premiere fois) -->
+<div class="mbg" id="nameModal">
+  <div class="msh">
+    <div class="mtitle" id="nmTitle">👋 Bienvenue</div>
+    <div class="msub" id="nmSub">Entrez votre prenom pour participer a la chaine de priere.</div>
+    <input class="ainp" id="nmInput" placeholder="Votre prenom..." maxlength="25">
+    <div class="macts" style="margin-top:0">
+      <button class="mbt mbt-g" id="nmBtn">✓ Confirmer</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADMIN MODAL -->
 <div class="mbg" id="adminModal">
   <div class="msh">
-    <div class="mtitle" id="admTitle">⚙️ Panneau Admin</div>
-    <!-- LOCK -->
+    <div class="mtitle" id="admTitle">⚙️ Admin</div>
     <div id="admLock">
-      <div class="msub" id="admLockSub">Entrez le mot de passe administrateur.</div>
+      <div class="msub" id="admLockSub">Mot de passe administrateur.</div>
       <input class="ainp" id="admPwd" type="password" placeholder="Mot de passe...">
       <div class="macts" style="margin-top:0">
         <button class="mbt mbt-c" id="admBtnCancel">Annuler</button>
         <button class="mbt mbt-g" id="admBtnEnter">Entrer</button>
       </div>
     </div>
-    <!-- CONTENT -->
     <div id="admContent" style="display:none">
+      <!-- TITRES -->
       <div class="asec">
         <div class="asectitle" id="admSecTitles">Modifier les titres</div>
         <label class="albl" id="admLblName">Nom du groupe</label>
@@ -175,13 +190,17 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
         <input class="ainp" id="editSub">
         <label class="albl" id="admLblPoll">Titre du sondage</label>
         <input class="ainp" id="editPollTitle">
+        <label class="albl" id="admLblDate">Date du sondage (optionnel)</label>
+        <input class="ainp" id="editDate" type="date">
       </div>
+      <!-- CRENEAUX -->
       <div class="asec">
         <div class="asectitle" id="admSecSlots">Gerer les creneaux</div>
         <div class="slotbox">
           <div class="slotnum" id="slotCountDisp">0</div>
-          <div id="admSlotLbl" style="font-size:13px;color:var(--muted)">creneaux de 15 min</div>
+          <div id="admSlotLbl" style="font-size:13px;color:var(--muted)">creneaux</div>
         </div>
+        <div id="slotWarnBox" class="warn-box"></div>
         <div class="slotgrid">
           <div>
             <label class="albl" id="admLblStart">Debut</label>
@@ -193,9 +212,10 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
           </div>
         </div>
       </div>
+      <!-- DANGER -->
       <div class="asec">
         <div class="asectitle" id="admSecDanger">Zone danger</div>
-        <button class="mbt mbt-r" style="width:100%" id="admBtnReset">🔄 Reinitialiser tous les votes</button>
+        <button class="mbt mbt-r" style="width:100%;margin-bottom:8px" id="admBtnReset">🔄 Reinitialiser tous les votes</button>
       </div>
       <div class="macts">
         <button class="mbt mbt-c" id="admBtnClose">Fermer</button>
@@ -219,56 +239,141 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 <div class="toast" id="toast"></div>
 
 <script>
-var SUPA_URL = 'https://bdyctczngulrnotuqvjk.supabase.co';
-var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkeWN0Y3puZ3Vscm5vdHVxdmprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDMyOTIsImV4cCI6MjA5NjUxOTI5Mn0.ThRBbY014r9q2HbtcGa7ZnlKQChc13_THKisdK1Pz-I';
+// ============================================================
+// CONFIG
+// ============================================================
+var SUPA_URL  = 'https://bdyctczngulrnotuqvjk.supabase.co';
+var SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkeWN0Y3puZ3Vscm5vdHVxdmprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDMyOTIsImV4cCI6MjA5NjUxOTI5Mn0.ThRBbY014r9q2HbtcGa7ZnlKQChc13_THKisdK1Pz-I';
 var ADMIN_PWD = 'icc2026';
-var LOCAL_KEY = 'icc_v8';
+var LOCAL_KEY = 'icc_v9';
 
-// TRADUCTIONS
+// ============================================================
+// TRADUCTIONS (100% completes)
+// ============================================================
 var TR = {
-  fr:{syncOk:'En direct',syncErr:'Hors ligne',loading:'Chargement...',free:'libres',freeOne:'libre',taken:'pris',srchPh:'🔍 Rechercher un creneau...',ptDef:'📋 Chaine de priere — Choisissez vos creneaux',stimmen:'Voir les votes',admin:'⚙️ Admin',nowBadge:'EN COURS',noName:'✏️ Entrez votre prenom en bas',hello:'👋 Bonjour ',namePh:'Votre prenom...',admTitle:'⚙️ Panneau Admin',admLockSub:'Entrez le mot de passe administrateur.',admPwdPh:'Mot de passe...',wrongPwd:'❌ Mot de passe incorrect',admSecTitles:'Modifier les titres',admLblName:'Nom du groupe',admLblSub:'Sous-titre',admLblPoll:'Titre du sondage',admSecSlots:'Gerer les creneaux (pas de 15 min)',admSlotLbl:'creneaux de 15 min',admLblStart:'Debut',admLblEnd:'Fin',midnight:'00H00 (minuit)',admSecDanger:'Zone danger',btnReset:'🔄 Reinitialiser tous les votes',btnCancel:'Annuler',btnEnter:'Entrer',btnClose:'Fermer',btnSave:'✓ Enregistrer',errSlot:'⚠️ La fin doit etre apres le debut',saved:'✅ Modifications enregistrees !',resetConfirm:'Reinitialiser TOUS les votes ? Action irreversible.',resetDone:'🔄 Votes reinitialises',errConn:'Erreur de connexion',errReset:'Erreur lors du reset',noVotes:'Aucun vote pour le moment',votersTitle:'Tous les votes'},
-  de:{syncOk:'Live',syncErr:'Offline',loading:'Laden...',free:'frei',freeOne:'frei',taken:'belegt',srchPh:'🔍 Zeitfenster suchen...',ptDef:'📋 Gebetskette — Wahle dein Zeitfenster',stimmen:'Stimmen ansehen',admin:'⚙️ Admin',nowBadge:'JETZT',noName:'✏️ Gib unten deinen Namen ein',hello:'👋 Hallo ',namePh:'Dein Vorname...',admTitle:'⚙️ Admin-Bereich',admLockSub:'Gib das Admin-Passwort ein.',admPwdPh:'Passwort...',wrongPwd:'❌ Falsches Passwort',admSecTitles:'Titel bearbeiten',admLblName:'Gruppenname',admLblSub:'Untertitel',admLblPoll:'Umfragetitel',admSecSlots:'Zeitfenster verwalten (15-Min)',admSlotLbl:'Zeitfenster a 15 Min',admLblStart:'Beginn',admLblEnd:'Ende',midnight:'00H00 (Mitternacht)',admSecDanger:'Gefahrenzone',btnReset:'🔄 Alle Stimmen zurucksetzen',btnCancel:'Abbrechen',btnEnter:'Eintreten',btnClose:'Schliessen',btnSave:'✓ Speichern',errSlot:'⚠️ Ende muss nach Beginn liegen',saved:'✅ Gespeichert!',resetConfirm:'ALLE Stimmen zurucksetzen? Unumkehrbar.',resetDone:'🔄 Alle Stimmen wurden zuruckgesetzt',errConn:'Verbindungsfehler',errReset:'Fehler beim Zurucksetzen',noVotes:'Noch keine Stimmen',votersTitle:'Alle Stimmen'},
-  en:{syncOk:'Live',syncErr:'Offline',loading:'Loading...',free:'free',freeOne:'free',taken:'taken',srchPh:'🔍 Search a slot...',ptDef:'📋 Prayer chain — Choose your slot',stimmen:'View votes',admin:'⚙️ Admin',nowBadge:'NOW',noName:'✏️ Enter your name below',hello:'👋 Hello ',namePh:'Your name...',admTitle:'⚙️ Admin Panel',admLockSub:'Enter the admin password.',admPwdPh:'Password...',wrongPwd:'❌ Wrong password',admSecTitles:'Edit titles',admLblName:'Group name',admLblSub:'Subtitle',admLblPoll:'Poll title',admSecSlots:'Manage slots (15-min)',admSlotLbl:'slots of 15 min',admLblStart:'Start',admLblEnd:'End',midnight:'00H00 (midnight)',admSecDanger:'Danger zone',btnReset:'🔄 Reset all votes',btnCancel:'Cancel',btnEnter:'Enter',btnClose:'Close',btnSave:'✓ Save',errSlot:'⚠️ End must be after start',saved:'✅ Changes saved!',resetConfirm:'Reset ALL votes? This cannot be undone.',resetDone:'🔄 All votes reset',errConn:'Connection error',errReset:'Error during reset',noVotes:'No votes yet',votersTitle:'All votes'}
+  fr:{
+    syncOk:'En direct',syncErr:'Hors ligne',
+    free:'libres',freeOne:'libre',taken:'pris',
+    srchPh:'🔍 Rechercher un creneau...',
+    ptDef:'📋 Chaine de priere — Choisissez vos creneaux',
+    stimmen:'Voir les votes',admin:'⚙️ Admin',
+    nowBadge:'EN COURS',noName:'✏️ Entrez votre prenom',
+    hello:'👋 Bonjour ',namePh:'Votre prenom...',
+    nmTitle:'👋 Bienvenue',nmSub:'Entrez votre prenom pour participer.',nmBtn:'✓ Confirmer',
+    admTitle:'⚙️ Panneau Admin',admLockSub:'Mot de passe administrateur.',admPwdPh:'Mot de passe...',
+    wrongPwd:'❌ Mot de passe incorrect',
+    admSecTitles:'Modifier les titres',admLblName:'Nom du groupe',admLblSub:'Sous-titre',
+    admLblPoll:'Titre du sondage',admLblDate:'Date du sondage (optionnel)',
+    admSecSlots:'Gerer les creneaux (pas de 15 min)',admSlotLbl:'creneaux de 15 min',
+    admLblStart:'Heure de debut',admLblEnd:'Heure de fin',
+    slotWarn:'Attention : la fin est avant le debut. Les creneaux couvriront minuit.',
+    admSecDanger:'Zone danger',btnReset:'🔄 Reinitialiser tous les votes',
+    btnCancel:'Annuler',btnEnter:'Entrer',btnClose:'Fermer',btnSave:'✓ Enregistrer',
+    saved:'✅ Modifications enregistrees !',
+    resetConfirm:'Reinitialiser TOUS les votes ? Action irreversible.',
+    resetDone:'🔄 Votes reinitialises',
+    errConn:'Erreur de connexion',errReset:'Erreur lors du reset',
+    noVotes:'Aucun vote pour le moment',votersTitle:'Tous les votes',
+    loading:'Chargement...'
+  },
+  de:{
+    syncOk:'Live',syncErr:'Offline',
+    free:'frei',freeOne:'frei',taken:'belegt',
+    srchPh:'🔍 Zeitfenster suchen...',
+    ptDef:'📋 Gebetskette — Wahle dein Zeitfenster',
+    stimmen:'Stimmen ansehen',admin:'⚙️ Admin',
+    nowBadge:'JETZT',noName:'✏️ Gib unten deinen Namen ein',
+    hello:'👋 Hallo ',namePh:'Dein Vorname...',
+    nmTitle:'👋 Willkommen',nmSub:'Gib deinen Vornamen ein.',nmBtn:'✓ Bestatigen',
+    admTitle:'⚙️ Admin-Bereich',admLockSub:'Admin-Passwort eingeben.',admPwdPh:'Passwort...',
+    wrongPwd:'❌ Falsches Passwort',
+    admSecTitles:'Titel bearbeiten',admLblName:'Gruppenname',admLblSub:'Untertitel',
+    admLblPoll:'Umfragetitel',admLblDate:'Datum der Umfrage (optional)',
+    admSecSlots:'Zeitfenster verwalten (15-Min)',admSlotLbl:'Zeitfenster a 15 Min',
+    admLblStart:'Startzeit',admLblEnd:'Endzeit',
+    slotWarn:'Hinweis: Ende liegt vor Beginn. Die Slots werden uber Mitternacht gehen.',
+    admSecDanger:'Gefahrenzone',btnReset:'🔄 Alle Stimmen zurucksetzen',
+    btnCancel:'Abbrechen',btnEnter:'Eintreten',btnClose:'Schliessen',btnSave:'✓ Speichern',
+    saved:'✅ Gespeichert!',
+    resetConfirm:'ALLE Stimmen zurucksetzen? Unumkehrbar.',
+    resetDone:'🔄 Alle Stimmen wurden zuruckgesetzt',
+    errConn:'Verbindungsfehler',errReset:'Fehler beim Zurucksetzen',
+    noVotes:'Noch keine Stimmen',votersTitle:'Alle Stimmen',
+    loading:'Laden...'
+  },
+  en:{
+    syncOk:'Live',syncErr:'Offline',
+    free:'free',freeOne:'free',taken:'taken',
+    srchPh:'🔍 Search a slot...',
+    ptDef:'📋 Prayer chain — Choose your slot',
+    stimmen:'View votes',admin:'⚙️ Admin',
+    nowBadge:'NOW',noName:'✏️ Enter your name',
+    hello:'👋 Hello ',namePh:'Your name...',
+    nmTitle:'👋 Welcome',nmSub:'Enter your name to join the prayer chain.',nmBtn:'✓ Confirm',
+    admTitle:'⚙️ Admin Panel',admLockSub:'Admin password.',admPwdPh:'Password...',
+    wrongPwd:'❌ Wrong password',
+    admSecTitles:'Edit titles',admLblName:'Group name',admLblSub:'Subtitle',
+    admLblPoll:'Poll title',admLblDate:'Poll date (optional)',
+    admSecSlots:'Manage slots (15-min steps)',admSlotLbl:'slots of 15 min',
+    admLblStart:'Start time',admLblEnd:'End time',
+    slotWarn:'Note: end is before start. Slots will cross midnight.',
+    admSecDanger:'Danger zone',btnReset:'🔄 Reset all votes',
+    btnCancel:'Cancel',btnEnter:'Enter',btnClose:'Close',btnSave:'✓ Save',
+    saved:'✅ Changes saved!',
+    resetConfirm:'Reset ALL votes? This cannot be undone.',
+    resetDone:'🔄 All votes reset',
+    errConn:'Connection error',errReset:'Error during reset',
+    noVotes:'No votes yet',votersTitle:'All votes',
+    loading:'Loading...'
+  }
 };
 
-var lang = 'fr';
-function tx(k){ return (TR[lang]&&TR[lang][k])||TR.fr[k]||k; }
+var lang='fr';
+function tx(k){return(TR[lang]&&TR[lang][k])||TR.fr[k]||k;}
 
 function applyLang(){
-  document.getElementById('searchInp').placeholder = tx('srchPh');
-  document.getElementById('nameInput').placeholder  = tx('namePh');
-  document.getElementById('ldmsg').textContent      = '⏳ ' + tx('loading');
-  document.getElementById('btnStimmen').textContent = tx('stimmen');
-  document.getElementById('btnAdmin').textContent   = tx('admin');
-  document.getElementById('admTitle').textContent   = tx('admTitle');
-  document.getElementById('admLockSub').textContent = tx('admLockSub');
-  document.getElementById('admPwd').placeholder     = tx('admPwdPh');
-  document.getElementById('admSecTitles').textContent = tx('admSecTitles');
-  document.getElementById('admLblName').textContent   = tx('admLblName');
-  document.getElementById('admLblSub').textContent    = tx('admLblSub');
-  document.getElementById('admLblPoll').textContent   = tx('admLblPoll');
-  document.getElementById('admSecSlots').textContent  = tx('admSecSlots');
-  document.getElementById('admSlotLbl').textContent   = tx('admSlotLbl');
-  document.getElementById('admLblStart').textContent  = tx('admLblStart');
-  document.getElementById('admLblEnd').textContent    = tx('admLblEnd');
-  document.getElementById('admSecDanger').textContent = tx('admSecDanger');
-  document.getElementById('admBtnReset').textContent  = tx('btnReset');
-  document.getElementById('admBtnCancel').textContent = tx('btnCancel');
-  document.getElementById('admBtnEnter').textContent  = tx('btnEnter');
-  document.getElementById('admBtnClose').textContent  = tx('btnClose');
-  document.getElementById('admBtnSave').textContent   = tx('btnSave');
-  document.getElementById('votersTitle').textContent  = tx('votersTitle');
+  // Header
+  document.getElementById('searchInp').placeholder   = tx('srchPh');
+  document.getElementById('nameInput').placeholder   = tx('namePh');
+  document.getElementById('ldmsg').textContent       = '⏳ '+tx('loading');
+  document.getElementById('btnStimmen').textContent  = tx('stimmen');
+  document.getElementById('btnAdmin').textContent    = tx('admin');
+  // Name modal
+  document.getElementById('nmTitle').textContent     = tx('nmTitle');
+  document.getElementById('nmSub').textContent       = tx('nmSub');
+  document.getElementById('nmBtn').textContent       = tx('nmBtn');
+  document.getElementById('nmInput').placeholder     = tx('namePh');
+  // Admin modal — lock
+  document.getElementById('admTitle').textContent    = tx('admTitle');
+  document.getElementById('admLockSub').textContent  = tx('admLockSub');
+  document.getElementById('admPwd').placeholder      = tx('admPwdPh');
+  document.getElementById('admBtnCancel').textContent= tx('btnCancel');
+  document.getElementById('admBtnEnter').textContent = tx('btnEnter');
+  // Admin modal — content
+  document.getElementById('admSecTitles').textContent= tx('admSecTitles');
+  document.getElementById('admLblName').textContent  = tx('admLblName');
+  document.getElementById('admLblSub').textContent   = tx('admLblSub');
+  document.getElementById('admLblPoll').textContent  = tx('admLblPoll');
+  document.getElementById('admLblDate').textContent  = tx('admLblDate');
+  document.getElementById('admSecSlots').textContent = tx('admSecSlots');
+  document.getElementById('admSlotLbl').textContent  = tx('admSlotLbl');
+  document.getElementById('admLblStart').textContent = tx('admLblStart');
+  document.getElementById('admLblEnd').textContent   = tx('admLblEnd');
+  document.getElementById('admSecDanger').textContent= tx('admSecDanger');
+  document.getElementById('admBtnReset').textContent = tx('btnReset');
+  document.getElementById('admBtnClose').textContent = tx('btnClose');
+  document.getElementById('admBtnSave').textContent  = tx('btnSave');
+  // Voters modal
+  document.getElementById('votersTitle').textContent = tx('votersTitle');
   document.getElementById('btnVotersClose').textContent = tx('btnClose');
-  // Midnight option
-  var se = document.getElementById('slotEnd');
-  for(var i=0;i<se.options.length;i++){
-    if(parseInt(se.options[i].value,10)===1440) se.options[i].textContent=tx('midnight');
-  }
+  // Sync status
   setSyncStatus(synced);
+  // Update slot warn if visible
+  updateSlotCount();
 }
 
 function setLang(l){
-  lang=l; ls.lang=l; saveLocal();
+  lang=l;ls.lang=l;saveLocal();
   ['fr','de','en'].forEach(function(x){
     document.getElementById('btn-'+x).classList.toggle('active',x===l);
   });
@@ -276,20 +381,37 @@ function setLang(l){
   renderSlots();
 }
 
+// ============================================================
 // COULEURS
+// ============================================================
 var COLORS=['#E53935','#8E24AA','#1E88E5','#00897B','#F4511E','#3949AB','#039BE5','#43A047','#FB8C00','#6D4C41','#D81B60','#5E35B1'];
 function gc(n){var h=0;for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%COLORS.length;return COLORS[Math.abs(h)];}
 function gi(n){var p=n.trim().split(' '),r='';for(var i=0;i<Math.min(p.length,2);i++)if(p[i])r+=p[i][0].toUpperCase();return r||'?';}
 
+// ============================================================
 // ETAT
-var ls={userName:'',lang:'fr',startH:8,startM:0,endH:24,endM:0,headerName:'STAR ICC NORDDEUTSCHLAND',headerSub:'Chaine de Priere · 21 Jours Jeune et Priere',pollTitle:'📋 Chaine de priere — Choisissez vos creneaux'};
+// ============================================================
+var ls={
+  userName:'',lang:'fr',
+  startH:8,startM:0,endH:24,endM:0,
+  headerName:'STAR ICC NORDDEUTSCHLAND',
+  headerSub:'Chaine de Priere · 21 Jours Jeune et Priere',
+  pollTitle:'📋 Chaine de priere — Choisissez vos creneaux',
+  pollDate:''
+};
 var allVotes=[];
 var synced=false;
 
-function loadLocal(){try{var s=localStorage.getItem(LOCAL_KEY);if(s){var p=JSON.parse(s);for(var k in p)ls[k]=p[k];}}catch(e){}}
-function saveLocal(){try{localStorage.setItem(LOCAL_KEY,JSON.stringify(ls));}catch(e){}}
+function loadLocal(){
+  try{var s=localStorage.getItem(LOCAL_KEY);if(s){var p=JSON.parse(s);for(var k in p)ls[k]=p[k];}}catch(e){}
+}
+function saveLocal(){
+  try{localStorage.setItem(LOCAL_KEY,JSON.stringify(ls));}catch(e){}
+}
 
+// ============================================================
 // SUPABASE
+// ============================================================
 function sfetch(path,method,body){
   var o={method:method||'GET',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=minimal':''}};
   if(body!==undefined)o.body=JSON.stringify(body);
@@ -310,14 +432,19 @@ function loadConfig(){
         if(row.key==='headerName')ls.headerName=row.value;
         if(row.key==='headerSub')ls.headerSub=row.value;
         if(row.key==='pollTitle')ls.pollTitle=row.value;
+        if(row.key==='pollDate')ls.pollDate=row.value;
         if(row.key==='startMin'){var hm=fromMin(parseInt(row.value,10));ls.startH=hm.h;ls.startM=hm.m;}
-        if(row.key==='endMin'){var v=parseInt(row.value,10);if(v===1440){ls.endH=24;ls.endM=0;}else{var hm2=fromMin(v);ls.endH=hm2.h;ls.endM=hm2.m;}}
+        if(row.key==='endMin'){
+          var v=parseInt(row.value,10);
+          if(v===1440){ls.endH=24;ls.endM=0;}
+          else{var hm2=fromMin(v);ls.endH=hm2.h;ls.endM=hm2.m;}
+        }
       });
     }).catch(function(){});
 }
-function saveCfg(key,val){
-  return sfetch('config?key=eq.'+encodeURIComponent(key),'DELETE')
-    .then(function(){return sfetch('config','POST',{key:key,value:String(val)});});
+function saveCfg(k,v){
+  return sfetch('config?key=eq.'+encodeURIComponent(k),'DELETE')
+    .then(function(){return sfetch('config','POST',{key:k,value:String(v)});});
 }
 function addVote(sk,un){return sfetch('votes','POST',{slot_key:sk,user_name:un});}
 function removeVote(sk,un){return sfetch('votes?slot_key=eq.'+encodeURIComponent(sk)+'&user_name=eq.'+encodeURIComponent(un),'DELETE');}
@@ -331,34 +458,76 @@ function setSyncStatus(ok){
   lbl.textContent=tx(ok?'syncOk':'syncErr');
 }
 
-// SLOTS
+// ============================================================
+// SLOTS — pas de validation start/end, supporte minuit
+// ============================================================
 function pad(n){return n<10?'0'+n:''+n;}
 function toMin(h,m){return h*60+m;}
 function fromMin(t){return{h:Math.floor(t/60)%24,m:t%60};}
+
 function genSlots(){
-  var arr=[],s=toMin(ls.startH,ls.startM),e=(ls.endH===24&&ls.endM===0)?1440:toMin(ls.endH,ls.endM);
-  for(var t=s;t<e;t+=15){
-    var c=fromMin(t),n=fromMin(t+15);
-    arr.push({key:c.h+':'+pad(c.m),label:pad(c.h)+'H'+pad(c.m)+' - '+(t+15>=1440?'00H00':pad(n.h)+'H'+pad(n.m))});
+  var arr=[];
+  var sm=toMin(ls.startH,ls.startM);
+  var em=(ls.endH===24&&ls.endM===0)?1440:toMin(ls.endH,ls.endM);
+  // Si fin <= debut : on fait debut → minuit → fin (creneaux qui passent minuit)
+  var total;
+  if(em>sm){
+    total=em-sm;
+  } else {
+    // Passe minuit : debut → 1440 + fin
+    total=(1440-sm)+em;
+  }
+  for(var i=0;i<total;i+=15){
+    var t=(sm+i)%1440;
+    var tn=(sm+i+15)%1440;
+    var cur=fromMin(t),nxt=fromMin(tn);
+    arr.push({
+      key:cur.h+':'+pad(cur.m),
+      label:pad(cur.h)+'H'+pad(cur.m)+' - '+pad(nxt.h)+'H'+pad(nxt.m)
+    });
   }
   return arr;
 }
-function getCurKey(){var n=new Date();return n.getHours()+':'+pad(Math.floor(n.getMinutes()/15)*15);}
 
+function getCurKey(){
+  var n=new Date();
+  return n.getHours()+':'+pad(Math.floor(n.getMinutes()/15)*15);
+}
+
+// ============================================================
 // RENDU
+// ============================================================
 function renderSlots(){
   var now=new Date();
   document.getElementById('bTime').textContent=pad(now.getHours())+':'+pad(now.getMinutes());
   document.getElementById('headerName').textContent=ls.headerName;
   document.getElementById('headerSub').textContent=ls.headerSub+' ✏️';
   document.getElementById('pollTitle').textContent=ls.pollTitle;
+  // Date
+  var dateEl=document.getElementById('headerDate');
+  if(ls.pollDate){
+    // Formatter la date
+    try{
+      var d=new Date(ls.pollDate+'T00:00:00');
+      var opts={weekday:'long',year:'numeric',month:'long',day:'numeric'};
+      dateEl.textContent='📅 '+d.toLocaleDateString(lang==='de'?'de-DE':lang==='en'?'en-GB':'fr-FR',opts);
+      dateEl.style.display='block';
+    }catch(e){dateEl.style.display='none';}
+  } else {
+    dateEl.style.display='none';
+  }
+
   var inp=document.getElementById('nameInput');
   if(ls.userName&&!inp.value)inp.value=ls.userName;
+
   var srch=document.getElementById('searchInp').value.toLowerCase();
-  var curKey=getCurKey(),SLOTS=genSlots(),total=allVotes.length;
+  var curKey=getCurKey();
+  var SLOTS=genSlots();
+  var total=allVotes.length;
   var free=0,taken=0,curLabel='';
   var list=document.getElementById('optList');
   list.innerHTML='';
+
   SLOTS.forEach(function(slot){
     if(srch&&slot.label.toLowerCase().indexOf(srch)===-1)return;
     var voters=allVotes.filter(function(v){return v.slot_key===slot.key;}).map(function(v){return v.user_name;});
@@ -369,14 +538,18 @@ function renderSlots(){
     var pct=(total>0&&voters.length>0)?Math.max(Math.round(voters.length/total*100),5):0;
     var row=document.createElement('div');
     row.className='orow'+(isMine?' sel':'')+(isCur?' cur':'');
-    var avH=voters.slice(0,3).map(function(n){return'<div class="vav" style="background:'+gc(n)+'" title="'+n+'">'+gi(n)+'</div>';}).join('');
-    row.innerHTML='<div class="wacircle"><svg class="wacheck" width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>'+
-      '<div class="ocontent"><div class="otime">🙏 '+slot.label+(isCur?' <span class="nowbadge">'+tx('nowBadge')+'</span>':'')+'</div>'+
-      '<div class="obarwrap"><div class="obar" style="width:'+pct+'%"></div></div></div>'+
+    var avH=voters.slice(0,3).map(function(n){
+      return'<div class="vav" style="background:'+gc(n)+'" title="'+n+'">'+gi(n)+'</div>';
+    }).join('');
+    row.innerHTML=
+      '<div class="wacircle"><svg class="wacheck" width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>'+
+      '<div class="ocontent"><div class="otime">🙏 '+slot.label+
+      (isCur?' <span class="nowbadge">'+tx('nowBadge')+'</span>':'')+
+      '</div><div class="obarwrap"><div class="obar" style="width:'+pct+'%"></div></div></div>'+
       '<div class="vstk">'+avH+'<div class="vcnt">'+(voters.length>0?voters.length:'')+'</div></div>';
     (function(sk,mine){
       row.onclick=function(){
-        if(!ls.userName){showToast(tx('noName'));return;}
+        if(!ls.userName){openNameModal();return;}
         row.classList.add('busy');
         var op=mine?removeVote(sk,ls.userName):addVote(sk,ls.userName);
         op.then(function(r){if(!r.ok)throw new Error();return loadVotes();})
@@ -392,14 +565,33 @@ function renderSlots(){
   document.getElementById('sNow').textContent=curLabel?'⏰ '+curLabel:'';
 }
 
-// PRENOM
+// ============================================================
+// PRENOM — modal premiere fois, barre en bas ensuite
+// ============================================================
+function openNameModal(){
+  document.getElementById('nmInput').value='';
+  document.getElementById('nameModal').classList.add('open');
+  setTimeout(function(){document.getElementById('nmInput').focus();},250);
+}
+function confirmName(){
+  var v=document.getElementById('nmInput').value.trim();
+  if(!v)return;
+  ls.userName=v;saveLocal();
+  document.getElementById('nameInput').value=v;
+  document.getElementById('nameModal').classList.remove('open');
+  showToast(tx('hello')+v+' !');
+  renderSlots();
+}
 function setName(){
   var v=document.getElementById('nameInput').value.trim();
-  if(!v){showToast(tx('noName'));return;}
-  ls.userName=v;saveLocal();renderSlots();showToast(tx('hello')+v+' !');
+  if(!v){openNameModal();return;}
+  ls.userName=v;saveLocal();renderSlots();
+  showToast(tx('hello')+v+' !');
 }
 
+// ============================================================
 // VOTERS
+// ============================================================
 function openVoters(){
   var SLOTS=genSlots(),list=document.getElementById('voterList');
   list.innerHTML='';var has=false;
@@ -407,7 +599,8 @@ function openVoters(){
     allVotes.filter(function(v){return v.slot_key===slot.key;}).forEach(function(v){
       has=true;var item=document.createElement('div');item.className='vitem';
       item.innerHTML='<div class="viav" style="background:'+gc(v.user_name)+'">'+gi(v.user_name)+'</div>'+
-        '<div><div style="font-size:14px">'+v.user_name+'</div><div style="font-size:12px;color:var(--muted)">🙏 '+slot.label+'</div></div>';
+        '<div><div style="font-size:14px">'+v.user_name+'</div>'+
+        '<div style="font-size:12px;color:var(--muted)">🙏 '+slot.label+'</div></div>';
       list.appendChild(item);
     });
   });
@@ -416,18 +609,46 @@ function openVoters(){
 }
 function closeVoters(){document.getElementById('votersModal').classList.remove('open');}
 
+// ============================================================
 // ADMIN
+// ============================================================
 function buildSelects(){
   var ss=document.getElementById('slotStart'),se=document.getElementById('slotEnd');
   ss.innerHTML='';se.innerHTML='';
-  for(var t=0;t<1440;t+=15){var hm=fromMin(t),o=document.createElement('option');o.value=t;o.textContent=pad(hm.h)+'H'+pad(hm.m);ss.appendChild(o);}
-  for(var t2=15;t2<=1440;t2+=15){var hm2=fromMin(t2%1440),o2=document.createElement('option');o2.value=t2;o2.textContent=t2===1440?tx('midnight'):pad(hm2.h)+'H'+pad(hm2.m);se.appendChild(o2);}
+  for(var t=0;t<1440;t+=15){
+    var hm=fromMin(t),o=document.createElement('option');
+    o.value=t;o.textContent=pad(hm.h)+'H'+pad(hm.m);ss.appendChild(o);
+  }
+  // Fin : toutes les heures + 00H00 (minuit=1440)
+  for(var t2=15;t2<=1440;t2+=15){
+    var hm2=fromMin(t2%1440),o2=document.createElement('option');
+    o2.value=t2;
+    o2.textContent=pad(hm2.h)+'H'+pad(hm2.m)+(t2===1440?' (00H00)':'');
+    se.appendChild(o2);
+  }
 }
+
 function updateSlotCount(){
-  var s=parseInt(document.getElementById('slotStart').value,10);
-  var e=parseInt(document.getElementById('slotEnd').value,10);
-  document.getElementById('slotCountDisp').textContent=(e>s)?Math.floor((e-s)/15):0;
+  var ss=document.getElementById('slotStart');
+  var se=document.getElementById('slotEnd');
+  if(!ss||!se)return;
+  var sm=parseInt(ss.value,10);
+  var em=parseInt(se.value,10);
+  if(isNaN(sm)||isNaN(em)){document.getElementById('slotCountDisp').textContent='0';return;}
+  var total;
+  var warnBox=document.getElementById('slotWarnBox');
+  if(em>sm){
+    total=Math.floor((em-sm)/15);
+    warnBox.style.display='none';
+  } else {
+    // Passe minuit
+    total=Math.floor((1440-sm+em)/15);
+    warnBox.textContent=tx('slotWarn');
+    warnBox.style.display='block';
+  }
+  document.getElementById('slotCountDisp').textContent=total>0?total:0;
 }
+
 function openAdmin(){
   document.getElementById('admLock').style.display='block';
   document.getElementById('admContent').style.display='none';
@@ -436,6 +657,7 @@ function openAdmin(){
   setTimeout(function(){document.getElementById('admPwd').focus();},250);
 }
 function closeAdmin(){document.getElementById('adminModal').classList.remove('open');}
+
 function unlockAdmin(){
   var pwd=document.getElementById('admPwd').value;
   if(pwd!==ADMIN_PWD){
@@ -444,9 +666,11 @@ function unlockAdmin(){
     document.getElementById('admPwd').focus();
     return;
   }
+  // Remplir les champs
   document.getElementById('editName').value=ls.headerName;
   document.getElementById('editSub').value=ls.headerSub;
   document.getElementById('editPollTitle').value=ls.pollTitle;
+  document.getElementById('editDate').value=ls.pollDate||'';
   buildSelects();
   var sm=toMin(ls.startH,ls.startM);
   var em=(ls.endH===24&&ls.endM===0)?1440:toMin(ls.endH,ls.endM);
@@ -456,62 +680,124 @@ function unlockAdmin(){
   document.getElementById('admLock').style.display='none';
   document.getElementById('admContent').style.display='block';
 }
+
 function saveAdmin(){
   var nn=document.getElementById('editName').value.trim();
   var ns=document.getElementById('editSub').value.trim();
   var np=document.getElementById('editPollTitle').value.trim();
+  var nd=document.getElementById('editDate').value;
   var sm=parseInt(document.getElementById('slotStart').value,10);
   var em=parseInt(document.getElementById('slotEnd').value,10);
-  if(isNaN(sm)||isNaN(em)||em<=sm){showToast(tx('errSlot'));return;}
-  if(nn)ls.headerName=nn;if(ns)ls.headerSub=ns;if(np)ls.pollTitle=np;
+  if(isNaN(sm)||isNaN(em)){showToast('⚠️ Erreur horaires');return;}
+  if(nn)ls.headerName=nn;
+  if(ns)ls.headerSub=ns;
+  if(np)ls.pollTitle=np;
+  ls.pollDate=nd;
   var shm=fromMin(sm);ls.startH=shm.h;ls.startM=shm.m;
-  if(em===1440){ls.endH=24;ls.endM=0;}else{var ehm=fromMin(em);ls.endH=ehm.h;ls.endM=ehm.m;}
+  if(em===1440){ls.endH=24;ls.endM=0;}
+  else{var ehm=fromMin(em);ls.endH=ehm.h;ls.endM=ehm.m;}
   saveLocal();
-  Promise.all([saveCfg('headerName',ls.headerName),saveCfg('headerSub',ls.headerSub),saveCfg('pollTitle',ls.pollTitle),saveCfg('startMin',sm),saveCfg('endMin',em)]).catch(function(){});
+  // Sync Supabase
+  var saves=[
+    saveCfg('headerName',ls.headerName),
+    saveCfg('headerSub',ls.headerSub),
+    saveCfg('pollTitle',ls.pollTitle),
+    saveCfg('pollDate',ls.pollDate),
+    saveCfg('startMin',sm),
+    saveCfg('endMin',em)
+  ];
+  Promise.all(saves).catch(function(){});
   renderSlots();closeAdmin();showToast(tx('saved'));
 }
+
 function doReset(){
   if(!confirm(tx('resetConfirm')))return;
   resetAll()
     .then(function(r){if(!r.ok)throw new Error();return loadVotes();})
-    .then(function(){renderSlots();closeAdmin();showToast(tx('resetDone'));})
+    .then(function(){
+      // NE PAS effacer le prenom — juste les votes
+      renderSlots();closeAdmin();showToast(tx('resetDone'));
+    })
     .catch(function(){showToast(tx('errReset'));});
 }
 
+// ============================================================
 // TOAST
-var tt;
-function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show');},3000);}
+// ============================================================
+var ttt;
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(ttt);ttt=setTimeout(function(){t.classList.remove('show');},3000);
+}
 
-// EVENTS — tout attaché ici, pas dans le HTML
-document.getElementById('adminTrigger').onclick  = openAdmin;
-document.getElementById('adminTrigger2').onclick = openAdmin;
-document.getElementById('btnAdmin').onclick      = openAdmin;
-document.getElementById('btnStimmen').onclick    = openVoters;
-document.getElementById('btnSend').onclick       = setName;
-document.getElementById('admBtnCancel').onclick  = closeAdmin;
-document.getElementById('admBtnEnter').onclick   = unlockAdmin;
-document.getElementById('admBtnClose').onclick   = closeAdmin;
-document.getElementById('admBtnSave').onclick    = saveAdmin;
-document.getElementById('admBtnReset').onclick   = doReset;
-document.getElementById('btnVotersClose').onclick= closeVoters;
+// ============================================================
+// EVENTS — tous attaches ici
+// ============================================================
+document.getElementById('hdrAv').onclick    = openAdmin;
+document.getElementById('hdrInfo').onclick  = openAdmin;
+document.getElementById('btnAdmin').onclick = openAdmin;
+document.getElementById('btnStimmen').onclick = openVoters;
+document.getElementById('btnSend').onclick  = setName;
+// Name modal
+document.getElementById('nmBtn').onclick    = confirmName;
+document.getElementById('nmInput').addEventListener('keydown',function(e){if(e.key==='Enter')confirmName();});
+// Admin
+document.getElementById('admBtnCancel').onclick = closeAdmin;
+document.getElementById('admBtnEnter').onclick  = unlockAdmin;
+document.getElementById('admBtnClose').onclick  = closeAdmin;
+document.getElementById('admBtnSave').onclick   = saveAdmin;
+document.getElementById('admBtnReset').onclick  = doReset;
+document.getElementById('admPwd').addEventListener('keydown',function(e){if(e.key==='Enter')unlockAdmin();});
+// Voters
+document.getElementById('btnVotersClose').onclick = closeVoters;
+// Name bar
+document.getElementById('nameInput').addEventListener('keydown',function(e){if(e.key==='Enter')setName();});
+// Lang
 document.getElementById('btn-fr').onclick = function(){setLang('fr');};
 document.getElementById('btn-de').onclick = function(){setLang('de');};
 document.getElementById('btn-en').onclick = function(){setLang('en');};
-document.getElementById('nameInput').addEventListener('keydown',function(e){if(e.key==='Enter')setName();});
-document.getElementById('admPwd').addEventListener('keydown',function(e){if(e.key==='Enter')unlockAdmin();});
 
+// ============================================================
 // POLLING
-function startPolling(){setInterval(function(){loadVotes().then(function(){renderSlots();});},5000);}
-setInterval(function(){var n=new Date();document.getElementById('bTime').textContent=pad(n.getHours())+':'+pad(n.getMinutes());},30000);
+// ============================================================
+function startPolling(){
+  setInterval(function(){loadVotes().then(function(){renderSlots();});},5000);
+}
+setInterval(function(){
+  var n=new Date();
+  document.getElementById('bTime').textContent=pad(n.getHours())+':'+pad(n.getMinutes());
+},30000);
 
+// ============================================================
 // INIT
+// ============================================================
 loadLocal();
 lang=ls.lang||'fr';
-['fr','de','en'].forEach(function(l){document.getElementById('btn-'+l).classList.toggle('active',l===lang);});
+['fr','de','en'].forEach(function(l){
+  document.getElementById('btn-'+l).classList.toggle('active',l===lang);
+});
 buildSelects();
 applyLang();
 if(ls.userName)document.getElementById('nameInput').value=ls.userName;
-loadConfig().then(function(){return loadVotes();}).then(function(){renderSlots();startPolling();}).catch(function(){renderSlots();startPolling();});
+
+// Si pas de prenom : ouvrir le modal au chargement
+loadConfig()
+  .then(function(){return loadVotes();})
+  .then(function(){
+    renderSlots();
+    startPolling();
+    if(!ls.userName){
+      setTimeout(function(){openNameModal();},600);
+    }
+  })
+  .catch(function(){
+    renderSlots();
+    startPolling();
+    if(!ls.userName){
+      setTimeout(function(){openNameModal();},600);
+    }
+  });
 </script>
 </body>
 </html>
