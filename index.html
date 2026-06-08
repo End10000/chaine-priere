@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaine de Priere - ICC Bremen</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --bg:#111B21; --panel:#1F2C34; --bubble:#202C33;
+  --green:#00A884; --green2:#005C4B; --text:#E9EDEF;
+  --muted:#8696A0; --border:#2A3942; --input:#2A3942;
+  --red:#CF6679; --gold:#C8861A;
+}
+body { background:var(--bg); font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; color:var(--text); min-height:100vh; display:flex; flex-direction:column; align-items:center; }
+
+/* HEADER */
+.wa-header { width:100%; max-width:480px; background:var(--panel); display:flex; align-items:center; gap:12px; padding:10px 16px; position:sticky; top:0; z-index:100; border-bottom:1px solid var(--border); }
+.wa-avatar { width:40px; height:40px; border-radius:50%; background:var(--green2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.wa-header-name { font-size:16px; font-weight:500; cursor:pointer; }
+.wa-header-name:hover { color:var(--green); }
+.wa-header-sub { font-size:12px; color:var(--muted); cursor:pointer; }
+.wa-header-sub:hover { color:var(--green); }
+
+/* STATS */
+.stats-bar { width:100%; max-width:480px; background:var(--panel); padding:8px 16px; display:flex; gap:16px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.stat { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:5px; }
+.stat-dot { width:8px; height:8px; border-radius:50%; }
+.d-free { background:var(--green); }
+.d-taken { background:var(--gold); }
+
+/* SEARCH */
+.search-wrap { width:100%; max-width:480px; padding:8px 10px 0; }
+.search-inp { width:100%; background:var(--bubble); border:none; border-radius:20px; padding:8px 14px; font-size:13px; color:var(--text); font-family:inherit; outline:none; }
+.search-inp::placeholder { color:var(--muted); }
+
+/* CHAT */
+.chat-area { width:100%; max-width:480px; flex:1; padding:12px 10px 90px; }
+.bubble { background:var(--bubble); border-radius:0 8px 8px 8px; padding:8px 8px 4px; }
+.bubble-meta { display:flex; align-items:center; gap:8px; margin-bottom:6px; padding:0 4px; }
+.b-av { width:28px; height:28px; border-radius:50%; background:var(--green2); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:#fff; }
+.b-sender { font-size:13px; font-weight:500; color:#64B5F6; }
+.b-time { font-size:11px; color:var(--muted); margin-left:auto; }
+.poll-title { font-size:14px; font-weight:500; padding:2px 6px 8px; }
+
+/* OPTIONS */
+.option-row { display:flex; align-items:center; gap:10px; padding:9px 6px; border-radius:8px; cursor:pointer; transition:background 0.1s; margin-bottom:1px; }
+.option-row:hover { background:rgba(255,255,255,0.05); }
+.option-row.selected { background:rgba(0,168,132,0.10); }
+.option-row.current-slot { border-left:3px solid var(--gold); }
+.wa-circle { width:22px; height:22px; border-radius:50%; border:2px solid var(--muted); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.1s; }
+.option-row.selected .wa-circle { background:var(--green); border-color:var(--green); }
+.wa-check { display:none; }
+.option-row.selected .wa-check { display:block; }
+.option-content { flex:1; min-width:0; }
+.option-time { font-size:15px; margin-bottom:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.now-badge { font-size:10px; background:var(--gold); color:#1a0a00; padding:1px 6px; border-radius:10px; font-weight:600; }
+.option-bar-wrap { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.option-bar { height:100%; background:var(--green); border-radius:2px; transition:width 0.3s; }
+.voter-stack { display:flex; align-items:center; flex-shrink:0; }
+.voter-av { width:22px; height:22px; border-radius:50%; border:1.5px solid var(--bubble); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:600; color:#fff; margin-left:-5px; }
+.voter-av:first-child { margin-left:0; }
+.voter-count { font-size:12px; color:var(--muted); margin-left:5px; min-width:10px; }
+
+/* POLL FOOTER */
+.poll-divider { border:none; border-top:1px solid var(--border); margin:4px 0; }
+.poll-footer { display:flex; flex-direction:column; }
+.stimmen-btn { background:none; border:none; color:var(--green); font-size:14px; font-weight:500; padding:10px 6px 4px; cursor:pointer; text-align:left; font-family:inherit; }
+.stimmen-btn:hover { opacity:0.8; }
+.admin-btn { background:none; border:none; color:var(--muted); font-size:13px; padding:4px 6px 8px; cursor:pointer; text-align:left; font-family:inherit; }
+.admin-btn:hover { color:var(--red); }
+
+/* BOTTOM BAR */
+.bottom-bar { width:100%; max-width:480px; background:var(--input); padding:10px 14px; position:fixed; bottom:0; display:flex; align-items:center; gap:10px; border-top:1px solid var(--border); }
+.name-inp { flex:1; background:var(--bubble); border:none; border-radius:20px; padding:9px 16px; font-size:14px; color:var(--text); font-family:inherit; outline:none; }
+.name-inp::placeholder { color:var(--muted); }
+.send-btn { width:42px; height:42px; border-radius:50%; background:var(--green); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.send-btn:hover { background:#009473; }
+
+/* MODALS */
+.modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:200; align-items:flex-end; justify-content:center; }
+.modal-bg.open { display:flex; }
+.modal-sheet { background:var(--panel); border-radius:16px 16px 0 0; padding:1.5rem 1.25rem; width:100%; max-width:480px; animation:slideUp 0.2s ease; max-height:88vh; overflow-y:auto; }
+@keyframes slideUp { from{transform:translateY(60px);opacity:0} to{transform:translateY(0);opacity:1} }
+.modal-title { font-size:16px; font-weight:500; margin-bottom:8px; }
+.modal-sub { font-size:13px; color:var(--muted); margin-bottom:1.25rem; line-height:1.5; }
+.modal-actions { display:flex; gap:8px; margin-top:1rem; }
+.mbt { flex:1; padding:10px; border-radius:8px; border:none; font-size:14px; font-weight:500; cursor:pointer; font-family:inherit; }
+.mbt-cancel { background:var(--border); color:var(--muted); }
+.mbt-green  { background:var(--green); color:#fff; }
+.mbt-red    { background:var(--red); color:#fff; }
+
+/* ADMIN PANEL */
+.adm-label { font-size:12px; color:var(--muted); margin-bottom:4px; display:block; }
+.adm-inp { width:100%; background:var(--bubble); border:1.5px solid var(--border); border-radius:8px; padding:10px 14px; font-size:14px; color:var(--text); font-family:inherit; outline:none; margin-bottom:12px; }
+.adm-inp:focus { border-color:var(--green); }
+.adm-select { width:100%; background:var(--bubble); border:1.5px solid var(--border); border-radius:8px; padding:10px 14px; font-size:14px; color:var(--text); font-family:inherit; outline:none; margin-bottom:12px; cursor:pointer; -webkit-appearance:none; appearance:none; }
+.adm-select:focus { border-color:var(--green); }
+.admin-section { margin-bottom:20px; }
+.admin-section:last-child { margin-bottom:0; }
+.admin-section-title { font-size:11px; font-weight:600; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:12px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+.slot-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.slot-count-box { background:var(--bubble); border-radius:8px; padding:10px 14px; margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+.slot-count-num { font-size:28px; font-weight:700; color:var(--green); }
+.slot-count-label { font-size:13px; color:var(--muted); }
+
+/* VOTERS */
+.voter-list { max-height:45vh; overflow-y:auto; }
+.voter-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.voter-item:last-child { border-bottom:none; }
+.vi-av { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; color:#fff; flex-shrink:0; }
+
+/* TOAST */
+.toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#2A3942; color:var(--text); padding:8px 16px; border-radius:6px; font-size:13px; opacity:0; transition:all 0.25s; z-index:300; pointer-events:none; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="wa-header">
+  <div class="wa-avatar">&#9963;</div>
+  <div style="flex:1; min-width:0;">
+    <div class="wa-header-name" id="headerName" onclick="openAdmin()">STAR ICC NORDDEUTSCHLAND</div>
+    <div class="wa-header-sub" id="headerSub" onclick="openAdmin()">Chaine de Priere · 21 Jours Jeune &amp; Priere ✏️</div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-dot d-free"></div><span id="sFree">--</span></div>
+  <div class="stat"><div class="stat-dot d-taken"></div><span id="sTaken">--</span></div>
+  <div class="stat"><span id="sNow"></span></div>
+</div>
+
+<div class="search-wrap">
+  <input class="search-inp" id="searchInp" placeholder="🔍 Rechercher un creneau..." oninput="render()">
+</div>
+
+<div class="chat-area">
+  <div class="bubble">
+    <div class="bubble-meta">
+      <div class="b-av">M</div>
+      <span class="b-sender">MPI</span>
+      <span class="b-time" id="bTime"></span>
+    </div>
+    <div class="poll-title" id="pollTitle">📋 Chaine de priere — Choisissez vos creneaux</div>
+    <div id="optionsList"></div>
+    <hr class="poll-divider">
+    <div class="poll-footer">
+      <button class="stimmen-btn" onclick="openVoters()">Stimmen ansehen</button>
+      <button class="admin-btn" onclick="openAdmin()">⚙️ Admin</button>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <input class="name-inp" id="nameInput" placeholder="Votre prenom..." maxlength="25">
+  <button class="send-btn" onclick="setName()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+  </button>
+</div>
+
+<!-- ADMIN MODAL -->
+<div class="modal-bg" id="adminModal">
+  <div class="modal-sheet">
+    <div class="modal-title">⚙️ Panneau Admin</div>
+
+    <!-- LOCK SCREEN -->
+    <div id="adminLock">
+      <div class="modal-sub">Entrez le mot de passe administrateur.</div>
+      <input class="adm-inp" id="adminPwd" type="password" placeholder="Mot de passe...">
+      <div class="modal-actions" style="margin-top:0">
+        <button class="mbt mbt-cancel" onclick="closeAdmin()">Annuler</button>
+        <button class="mbt mbt-green" onclick="unlockAdmin()">Entrer</button>
+      </div>
+    </div>
+
+    <!-- ADMIN CONTENT -->
+    <div id="adminContent" style="display:none">
+
+      <div class="admin-section">
+        <div class="admin-section-title">Modifier les titres</div>
+        <label class="adm-label">Nom du groupe</label>
+        <input class="adm-inp" id="editName">
+        <label class="adm-label">Sous-titre</label>
+        <input class="adm-inp" id="editSub">
+        <label class="adm-label">Titre du sondage</label>
+        <input class="adm-inp" id="editPollTitle">
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-title">Gerer les creneaux (pas de 15 min)</div>
+        <div class="slot-count-box">
+          <div class="slot-count-num" id="slotCountDisp">0</div>
+          <div class="slot-count-label">creneaux de 15 min</div>
+        </div>
+        <div class="slot-grid">
+          <div>
+            <label class="adm-label">Debut</label>
+            <select class="adm-select" id="slotStart" onchange="updateSlotCount()"></select>
+          </div>
+          <div>
+            <label class="adm-label">Fin</label>
+            <select class="adm-select" id="slotEnd" onchange="updateSlotCount()"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-title">Zone danger</div>
+        <button class="mbt mbt-red" style="width:100%" onclick="doReset()">🔄 Reinitialiser tous les votes</button>
+      </div>
+
+      <div class="modal-actions">
+        <button class="mbt mbt-cancel" onclick="closeAdmin()">Fermer</button>
+        <button class="mbt mbt-green" onclick="saveAdmin()">✓ Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VOTERS MODAL -->
+<div class="modal-bg" id="votersModal">
+  <div class="modal-sheet">
+    <div class="modal-title" style="margin-bottom:1rem">Tous les votes</div>
+    <div class="voter-list" id="voterList"></div>
+    <div style="margin-top:1rem">
+      <button class="mbt mbt-cancel" style="width:100%" onclick="closeVoters()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// =========================================================
+// CONFIGURATION — change ADMIN_PWD pour securiser
+// =========================================================
+var ADMIN_PWD = 'icc2026';
+var STORAGE_KEY = 'icc_poll_v6';
+
+// =========================================================
+// COULEURS AVATARS
+// =========================================================
+var COLORS = ['#E53935','#8E24AA','#1E88E5','#00897B','#F4511E','#3949AB','#039BE5','#43A047','#FB8C00','#6D4C41','#D81B60','#5E35B1'];
+
+function getColor(name) {
+  var h = 0;
+  for (var i = 0; i < name.length; i++) {
+    h = (h * 31 + name.charCodeAt(i)) % COLORS.length;
+  }
+  return COLORS[Math.abs(h)];
+}
+
+function getInitials(name) {
+  var parts = name.trim().split(' ');
+  var r = '';
+  for (var i = 0; i < Math.min(parts.length, 2); i++) {
+    if (parts[i]) r += parts[i][0].toUpperCase();
+  }
+  return r || '?';
+}
+
+// =========================================================
+// ETAT DE L'APPLICATION
+// =========================================================
+var state = {
+  slots:      {},       // { "slotKey": ["Nom1", "Nom2", ...] }
+  userName:   '',
+  startH:     8,        // heure de debut (0-23)
+  startM:     0,        // minute de debut (0, 15, 30, 45)
+  endH:       24,       // heure de fin (peut aller jusqu'a 24 = minuit)
+  endM:       0,        // minute de fin (0, 15, 30, 45)
+  headerName: 'STAR ICC NORDDEUTSCHLAND',
+  headerSub:  'Chaine de Priere · 21 Jours Jeune et Priere',
+  pollTitle:  '📋 Chaine de priere — Choisissez vos creneaux'
+};
+
+function loadState() {
+  try {
+    var s = localStorage.getItem(STORAGE_KEY);
+    if (s) {
+      var p = JSON.parse(s);
+      for (var k in p) { state[k] = p[k]; }
+    }
+  } catch(e) {}
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+// =========================================================
+// GENERATION DES CRENEAUX
+// =========================================================
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+// Convertit heure+minute en minutes depuis minuit
+function toMin(h, m) { return h * 60 + m; }
+
+// Convertit minutes en {h, m}
+function fromMin(total) {
+  var h = Math.floor(total / 60) % 24;
+  var m = total % 60;
+  return { h: h, m: m };
+}
+
+function genSlots() {
+  var arr = [];
+  var startTotal = toMin(state.startH, state.startM);
+  var endTotal   = toMin(state.endH,   state.endM);
+
+  // Gere le cas ou endH = 24 (minuit = 1440 min)
+  var realEnd = (state.endH === 24) ? 1440 : endTotal;
+
+  for (var t = startTotal; t < realEnd; t += 15) {
+    var cur  = fromMin(t);
+    var next = fromMin(t + 15);
+    // Si t+15 depasse 1440, on affiche 00H00 pour le creneau final
+    var key   = cur.h + ':' + pad(cur.m);
+    var label = pad(cur.h)  + 'H' + pad(cur.m)  + ' - ' +
+                pad(next.h) + 'H' + pad(next.m);
+    // Cas special : creneau qui finit a minuit (00H00)
+    if (t + 15 >= 1440) {
+      label = pad(cur.h) + 'H' + pad(cur.m) + ' - 00H00';
+    }
+    arr.push({ key: key, label: label, totalMin: t });
+  }
+  return arr;
+}
+
+function getCurrentKey() {
+  var now = new Date();
+  var h   = now.getHours();
+  var m   = Math.floor(now.getMinutes() / 15) * 15;
+  return h + ':' + pad(m);
+}
+
+// =========================================================
+// CONSTRUCTION DES SELECTS (options de 15 en 15 min)
+// =========================================================
+function buildSelects() {
+  var startSel = document.getElementById('slotStart');
+  var endSel   = document.getElementById('slotEnd');
+  startSel.innerHTML = '';
+  endSel.innerHTML   = '';
+
+  // Genere toutes les options de 00H00 a 23H45 pour le debut
+  for (var t = 0; t < 1440; t += 15) {
+    var hm  = fromMin(t);
+    var opt = document.createElement('option');
+    opt.value = t; // valeur en minutes
+    opt.textContent = pad(hm.h) + 'H' + pad(hm.m);
+    startSel.appendChild(opt);
+  }
+
+  // Genere toutes les options de 00H15 a 00H00 (minuit) pour la fin
+  for (var t2 = 15; t2 <= 1440; t2 += 15) {
+    var hm2  = fromMin(t2 % 1440);
+    var opt2 = document.createElement('option');
+    opt2.value = t2; // valeur en minutes
+    if (t2 === 1440) {
+      opt2.textContent = '00H00 (minuit)';
+    } else {
+      opt2.textContent = pad(hm2.h) + 'H' + pad(hm2.m);
+    }
+    endSel.appendChild(opt2);
+  }
+}
+
+function updateSlotCount() {
+  var s = parseInt(document.getElementById('slotStart').value, 10);
+  var e = parseInt(document.getElementById('slotEnd').value, 10);
+  var count = (e > s) ? Math.floor((e - s) / 15) : 0;
+  document.getElementById('slotCountDisp').textContent = count;
+}
+
+// =========================================================
+// RENDU PRINCIPAL
+// =========================================================
+function render() {
+  var now = new Date();
+  document.getElementById('bTime').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+  document.getElementById('headerName').textContent = state.headerName;
+  document.getElementById('headerSub').textContent  = state.headerSub + ' ✏️';
+  document.getElementById('pollTitle').textContent  = state.pollTitle;
+
+  var nameInp = document.getElementById('nameInput');
+  if (state.userName && !nameInp.value) nameInp.value = state.userName;
+
+  var search  = document.getElementById('searchInp').value.toLowerCase();
+  var curKey  = getCurrentKey();
+  var SLOTS   = genSlots();
+
+  // Calcul total votes pour les barres de pourcentage
+  var total = 0;
+  for (var k in state.slots) { total += state.slots[k].length; }
+
+  var free = 0, taken = 0, curLabel = '';
+  var list = document.getElementById('optionsList');
+  list.innerHTML = '';
+
+  for (var i = 0; i < SLOTS.length; i++) {
+    var slot   = SLOTS[i];
+    var voters = state.slots[slot.key] || [];
+    var isMine = (state.userName !== '' && voters.indexOf(state.userName) !== -1);
+    var isCur  = (slot.key === curKey);
+
+    if (search && slot.label.toLowerCase().indexOf(search) === -1) continue;
+
+    if (isCur) curLabel = slot.label;
+    if (voters.length === 0) free++; else taken++;
+
+    var pct = (total > 0 && voters.length > 0) ? Math.max(Math.round(voters.length / total * 100), 5) : 0;
+
+    var row = document.createElement('div');
+    row.className = 'option-row' + (isMine ? ' selected' : '') + (isCur ? ' current-slot' : '');
+
+    // Avatars des votants
+    var avatarsHTML = '';
+    var disp = voters.slice(0, 3);
+    for (var j = 0; j < disp.length; j++) {
+      avatarsHTML += '<div class="voter-av" style="background:' + getColor(disp[j]) + '" title="' + disp[j] + '">' + getInitials(disp[j]) + '</div>';
+    }
+
+    row.innerHTML =
+      '<div class="wa-circle">' +
+        '<svg class="wa-check" width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' +
+      '</div>' +
+      '<div class="option-content">' +
+        '<div class="option-time">🙏 ' + slot.label + (isCur ? ' <span class="now-badge">EN COURS</span>' : '') + '</div>' +
+        '<div class="option-bar-wrap"><div class="option-bar" style="width:' + pct + '%"></div></div>' +
+      '</div>' +
+      '<div class="voter-stack">' + avatarsHTML + '<div class="voter-count">' + (voters.length > 0 ? voters.length : '') + '</div></div>';
+
+    // Toggle direct sans confirmation — comme WhatsApp
+    (function(slotKey, mine) {
+      row.onclick = function() {
+        if (!state.userName) { showToast('✏️ Entrez votre prenom en bas'); return; }
+        if (!state.slots[slotKey]) state.slots[slotKey] = [];
+        if (mine) {
+          state.slots[slotKey] = state.slots[slotKey].filter(function(n) { return n !== state.userName; });
+          if (state.slots[slotKey].length === 0) delete state.slots[slotKey];
+        } else {
+          if (state.slots[slotKey].indexOf(state.userName) === -1) {
+            state.slots[slotKey].push(state.userName);
+          }
+        }
+        saveState();
+        render();
+      };
+    })(slot.key, isMine);
+
+    list.appendChild(row);
+  }
+
+  document.getElementById('sFree').textContent  = free  + (free  !== 1 ? ' libres' : ' libre');
+  document.getElementById('sTaken').textContent = taken + ' pris';
+  document.getElementById('sNow').textContent   = curLabel ? '⏰ ' + curLabel : '';
+}
+
+// =========================================================
+// PRENOM
+// =========================================================
+function setName() {
+  var v = document.getElementById('nameInput').value.trim();
+  if (!v) { showToast('✏️ Entrez votre prenom'); return; }
+  state.userName = v;
+  saveState();
+  render();
+  showToast('👋 Bonjour ' + v + ' !');
+}
+
+// =========================================================
+// VOTES (Stimmen ansehen)
+// =========================================================
+function openVoters() {
+  var SLOTS = genSlots();
+  var list  = document.getElementById('voterList');
+  list.innerHTML = '';
+  var has = false;
+
+  for (var i = 0; i < SLOTS.length; i++) {
+    var voters = state.slots[SLOTS[i].key] || [];
+    for (var j = 0; j < voters.length; j++) {
+      has = true;
+      var name = voters[j];
+      var item = document.createElement('div');
+      item.className = 'voter-item';
+      item.innerHTML =
+        '<div class="vi-av" style="background:' + getColor(name) + '">' + getInitials(name) + '</div>' +
+        '<div>' +
+          '<div style="font-size:14px">' + name + '</div>' +
+          '<div style="font-size:12px;color:var(--muted)">🙏 ' + SLOTS[i].label + '</div>' +
+        '</div>';
+      list.appendChild(item);
+    }
+  }
+
+  if (!has) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:13px;text-align:center;padding:1.5rem">Aucun vote pour l\'instant</p>';
+  }
+  document.getElementById('votersModal').classList.add('open');
+}
+function closeVoters() { document.getElementById('votersModal').classList.remove('open'); }
+
+// =========================================================
+// ADMIN
+// =========================================================
+function openAdmin() {
+  document.getElementById('adminLock').style.display    = 'block';
+  document.getElementById('adminContent').style.display = 'none';
+  document.getElementById('adminPwd').value = '';
+  document.getElementById('adminModal').classList.add('open');
+  setTimeout(function() { document.getElementById('adminPwd').focus(); }, 200);
+}
+
+function closeAdmin() {
+  document.getElementById('adminModal').classList.remove('open');
+}
+
+function unlockAdmin() {
+  if (document.getElementById('adminPwd').value !== ADMIN_PWD) {
+    showToast('❌ Mot de passe incorrect');
+    document.getElementById('adminPwd').value = '';
+    document.getElementById('adminPwd').focus();
+    return;
+  }
+
+  // Remplir les champs avec les valeurs actuelles
+  document.getElementById('editName').value      = state.headerName;
+  document.getElementById('editSub').value       = state.headerSub;
+  document.getElementById('editPollTitle').value = state.pollTitle;
+
+  // Convertir startH+startM et endH+endM en minutes pour les selects
+  var startTotal = toMin(state.startH, state.startM);
+  var endTotal   = toMin(state.endH,   state.endM);
+  // Si endH=24 et endM=0, c'est minuit = 1440
+  if (state.endH === 24 && state.endM === 0) endTotal = 1440;
+
+  document.getElementById('slotStart').value = startTotal;
+  document.getElementById('slotEnd').value   = endTotal;
+
+  updateSlotCount();
+
+  document.getElementById('adminLock').style.display    = 'none';
+  document.getElementById('adminContent').style.display = 'block';
+}
+
+function saveAdmin() {
+  var newName  = document.getElementById('editName').value.trim();
+  var newSub   = document.getElementById('editSub').value.trim();
+  var newTitle = document.getElementById('editPollTitle').value.trim();
+
+  var startMin = parseInt(document.getElementById('slotStart').value, 10);
+  var endMin   = parseInt(document.getElementById('slotEnd').value,   10);
+
+  if (isNaN(startMin) || isNaN(endMin)) {
+    showToast('⚠️ Veuillez choisir des horaires valides'); return;
+  }
+  if (endMin <= startMin) {
+    showToast('⚠️ La fin doit etre apres le debut'); return;
+  }
+
+  if (newName)  state.headerName = newName;
+  if (newSub)   state.headerSub  = newSub;
+  if (newTitle) state.pollTitle  = newTitle;
+
+  // Convertir minutes en H:M
+  var sHM = fromMin(startMin);
+  state.startH = sHM.h;
+  state.startM = sHM.m;
+
+  if (endMin === 1440) {
+    state.endH = 24;
+    state.endM = 0;
+  } else {
+    var eHM = fromMin(endMin);
+    state.endH = eHM.h;
+    state.endM = eHM.m;
+  }
+
+  saveState();
+  render();
+  closeAdmin();
+  showToast('✅ Modifications enregistrees !');
+}
+
+function doReset() {
+  if (!confirm('Reinitialiser TOUS les votes ? Cette action est irreversible.')) return;
+  state.slots = {};
+  saveState();
+  render();
+  closeAdmin();
+  showToast('🔄 Tous les votes ont ete reinitialises');
+}
+
+// =========================================================
+// TOAST
+// =========================================================
+var toastTimer;
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+// =========================================================
+// EVENEMENTS CLAVIER
+// =========================================================
+document.getElementById('nameInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') setName();
+});
+document.getElementById('adminPwd').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') unlockAdmin();
+});
+
+// =========================================================
+// DEMARRAGE
+// =========================================================
+buildSelects();
+loadState();
+render();
+
+// Rafraichissement automatique toutes les minutes
+setInterval(render, 60000);
+</script>
+</body>
+</html>
