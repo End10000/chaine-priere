@@ -13,8 +13,6 @@
   --red:#CF6679;--gold:#C8861A;
 }
 body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
-
-/* HEADER */
 .hdr{width:100%;max-width:480px;background:var(--panel);display:flex;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);}
 .hdr-av{width:40px;height:40px;border-radius:50%;background:var(--green2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;cursor:pointer;}
 .hdr-info{flex:1;min-width:0;cursor:pointer;}
@@ -25,22 +23,21 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .lbtn{background:var(--border);border:none;color:var(--muted);font-size:11px;font-weight:600;padding:4px 7px;border-radius:12px;cursor:pointer;font-family:inherit;transition:background 0.15s;}
 .lbtn.active{background:var(--green);color:#fff;}
 .lbtn:hover:not(.active){background:#3A4A52;color:var(--text);}
-
-/* POLL TAB INDICATOR */
-.poll-indicator{width:100%;max-width:480px;padding:0;}
-.poll-tab{width:100%;display:flex;border-bottom:1px solid var(--border);}
-.tab-btn{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;border:none;background:var(--panel);color:var(--muted);border-bottom:2px solid transparent;transition:all 0.15s;font-family:inherit;}
-.tab-btn.active{color:var(--green);border-bottom-color:var(--green);background:var(--panel);}
-.tab-btn:hover:not(.active){color:var(--text);}
-.tab-badge{display:inline-block;background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:5px;vertical-align:middle;}
-.tab-badge.new{background:var(--gold);}
-
+/* TABS */
+.tabs-wrap{width:100%;max-width:480px;display:none;}
+.tabs-wrap.show{display:block;}
+.tabs{display:flex;border-bottom:1px solid var(--border);background:var(--panel);}
+.tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);border-bottom:2px solid transparent;font-family:inherit;transition:all 0.15s;}
+.tab.active{color:var(--green);border-bottom-color:var(--green);}
+.tab:hover:not(.active){color:var(--text);}
+.tab-count{display:inline-block;background:var(--border);color:var(--muted);font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;}
+.tab.active .tab-count{background:rgba(0,168,132,0.2);color:var(--green);}
+.tab-new{display:inline-block;background:var(--gold);color:#1a0a00;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;}
 /* DATE BANNER */
-.date-banner{width:100%;max-width:480px;background:var(--green2);padding:6px 16px;display:none;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
-.date-banner.show{display:flex;}
-.date-banner-lbl{font-size:12px;color:#A8E6D4;}
-.date-banner-val{font-size:13px;color:#E9EDEF;font-weight:600;flex:1;}
-
+.dbanner{width:100%;max-width:480px;background:var(--green2);padding:6px 16px;display:none;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.dbanner.show{display:flex;}
+.dbanner-lbl{font-size:12px;color:#A8E6D4;flex-shrink:0;}
+.dbanner-val{font-size:13px;color:#E9EDEF;font-weight:600;}
 /* STATS */
 .stats{width:100%;max-width:480px;background:var(--panel);padding:7px 14px;display:flex;gap:12px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center;}
 .stat{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;}
@@ -48,12 +45,10 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .d-free{background:var(--green);}.d-taken{background:var(--gold);}
 .syncdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--green);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-
 /* SEARCH */
 .srchwrap{width:100%;max-width:480px;padding:8px 10px 0;}
 .srchinp{width:100%;background:var(--bubble);border:none;border-radius:20px;padding:8px 14px;font-size:13px;color:var(--text);font-family:inherit;outline:none;}
 .srchinp::placeholder{color:var(--muted);}
-
 /* CHAT */
 .chat{width:100%;max-width:480px;flex:1;padding:12px 10px 100px;}
 .bbl{background:var(--bubble);border-radius:0 8px 8px 8px;padding:8px 8px 4px;}
@@ -63,7 +58,6 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .btime{font-size:11px;color:var(--muted);margin-left:auto;}
 .ptitle{font-size:14px;font-weight:500;padding:2px 6px 4px;}
 .psubtitle{font-size:12px;color:var(--gold);padding:0 6px 8px;font-style:italic;}
-
 /* OPTIONS */
 .orow{display:flex;align-items:center;gap:10px;padding:9px 6px;border-radius:8px;cursor:pointer;transition:background 0.1s;margin-bottom:1px;user-select:none;}
 .orow:hover{background:rgba(255,255,255,0.05);}
@@ -72,81 +66,72 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .orow.busy{opacity:0.5;pointer-events:none;}
 .wacircle{width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .orow.sel .wacircle{background:var(--green);border-color:var(--green);}
-.wacheck{display:none;}
-.orow.sel .wacheck{display:block;}
+.wacheck{display:none;}.orow.sel .wacheck{display:block;}
 .ocontent{flex:1;min-width:0;}
 .otime{font-size:15px;margin-bottom:4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.nowbadge{font-size:10px;background:var(--gold);color:#1a0a00;padding:1px 6px;border-radius:10px;font-weight:600;flex-shrink:0;}
+.nowbadge{font-size:10px;background:var(--gold);color:#1a0a00;padding:1px 6px;border-radius:10px;font-weight:600;}
 .obarwrap{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
 .obar{height:100%;background:var(--green);border-radius:2px;transition:width 0.3s;}
 .vstk{display:flex;align-items:center;flex-shrink:0;}
 .vav{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--bubble);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff;margin-left:-5px;flex-shrink:0;}
 .vav:first-child{margin-left:0;}
 .vcnt{font-size:12px;color:var(--muted);margin-left:5px;min-width:12px;}
-
-/* POLL FOOTER */
 .pdiv{border:none;border-top:1px solid var(--border);margin:4px 0;}
 .pfooter{display:flex;flex-direction:column;}
 .stmbtn{background:none;border:none;color:var(--green);font-size:14px;font-weight:500;padding:10px 6px 4px;cursor:pointer;text-align:left;font-family:inherit;}
-.stmbtn:hover{opacity:0.8;}
 .admbtn{background:none;border:none;color:var(--muted);font-size:13px;padding:4px 6px 8px;cursor:pointer;text-align:left;font-family:inherit;}
 .admbtn:hover{color:var(--red);}
-
-/* BOTTOM BAR */
+/* BOTTOM */
 .botbar{width:100%;max-width:480px;background:var(--input);padding:10px 14px;position:fixed;bottom:0;display:flex;align-items:center;gap:10px;border-top:1px solid var(--border);}
 .ninp{flex:1;background:var(--bubble);border:none;border-radius:20px;padding:9px 16px;font-size:14px;color:var(--text);font-family:inherit;outline:none;}
 .ninp::placeholder{color:var(--muted);}
 .sndbtn{width:42px;height:42px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .sndbtn:hover{background:#009473;}
-
 /* MODALS */
 .mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;align-items:flex-end;justify-content:center;}
 .mbg.open{display:flex;}
-.msh{background:var(--panel);border-radius:16px 16px 0 0;padding:1.5rem 1.25rem;width:100%;max-width:480px;animation:slideUp 0.2s ease;max-height:88vh;overflow-y:auto;}
+.msh{background:var(--panel);border-radius:16px 16px 0 0;padding:1.5rem 1.25rem;width:100%;max-width:480px;animation:slideUp 0.2s ease;max-height:90vh;overflow-y:auto;}
 @keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
 .mtitle{font-size:16px;font-weight:500;margin-bottom:8px;}
 .msub{font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.5;}
 .macts{display:flex;gap:8px;margin-top:1rem;}
-.mbt{flex:1;padding:10px;border-radius:8px;border:none;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;}
+.mbt{flex:1;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:opacity 0.15s;}
 .mbt:hover{opacity:0.85;}
 .mbt-c{background:var(--border);color:var(--muted);}
 .mbt-g{background:var(--green);color:#fff;}
 .mbt-r{background:var(--red);color:#fff;}
-.mbt-gold{background:var(--gold);color:#fff;}
-.albl{font-size:12px;color:var(--muted);margin-bottom:4px;margin-top:10px;display:block;}
-.ainp{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);font-family:inherit;outline:none;margin-bottom:4px;}
-.ainp:focus{border-color:var(--green);}
-.asel{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);font-family:inherit;outline:none;margin-bottom:4px;cursor:pointer;-webkit-appearance:none;appearance:none;}
-.asel:focus{border-color:var(--green);}
+.mbt-gold{background:var(--gold);color:#1a0a00;}
+/* ADMIN */
 .asec{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);}
 .asec:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
-.asectitle{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
-.slotgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.slotbox{background:var(--bubble);border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
-.slotnum{font-size:26px;font-weight:700;color:var(--green);}
-.warnbox{background:rgba(200,134,26,0.15);border:1px solid var(--gold);border-radius:8px;padding:8px 12px;font-size:12px;color:#F0C060;margin-bottom:8px;display:none;line-height:1.5;}
-
+.asectitle{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;}
+.albl{font-size:12px;color:var(--muted);margin-bottom:3px;margin-top:8px;display:block;}
+.ainp{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;margin-bottom:2px;}
+.ainp:focus{border-color:var(--green);}
+.asel{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;margin-bottom:2px;cursor:pointer;-webkit-appearance:none;appearance:none;}
+.asel:focus{border-color:var(--green);}
+.poll-ctrl{display:flex;gap:6px;margin-top:10px;}
+.poll-ctrl .mbt{font-size:12px;padding:8px 10px;}
+.slotinfo{background:var(--bubble);border-radius:8px;padding:8px 12px;margin-top:8px;display:flex;align-items:center;gap:8px;}
+.slotnum{font-size:22px;font-weight:700;color:var(--green);}
+.slotlbl{font-size:12px;color:var(--muted);}
+.warnbox{background:rgba(200,134,26,0.12);border:1px solid var(--gold);border-radius:6px;padding:7px 10px;font-size:12px;color:#F0C060;margin-top:6px;display:none;line-height:1.5;}
+.poll-status{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:4px 10px;border-radius:12px;margin-bottom:10px;}
+.ps-visible{background:rgba(0,168,132,0.15);color:var(--green);}
+.ps-hidden{background:var(--border);color:var(--muted);}
 /* VOTERS */
 .vlist{max-height:45vh;overflow-y:auto;}
 .vitem{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
 .vitem:last-child{border-bottom:none;}
-.viav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;flex-shrink:0;}
+.viav{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0;}
 .emsg{color:var(--muted);font-size:13px;text-align:center;padding:1.5rem;}
 .ldmsg{color:var(--muted);font-size:14px;text-align:center;padding:2rem;}
-
-/* PREV POLL LINK */
-.prev-poll-link{width:100%;max-width:480px;text-align:center;padding:12px 16px;font-size:13px;color:var(--muted);border-top:1px solid var(--border);cursor:pointer;display:none;}
-.prev-poll-link:hover{color:var(--text);}
-.prev-poll-link.show{display:block;}
-
-/* TOAST */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2A3942;color:var(--text);padding:8px 18px;border-radius:6px;font-size:13px;opacity:0;transition:all 0.25s;z-index:300;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="hdr">
   <div class="hdr-av" id="hdrAv">&#9963;</div>
   <div class="hdr-info" id="hdrInfo">
@@ -160,27 +145,24 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
   </div>
 </div>
 
-<!-- ONGLETS (visibles seulement si sondage B est actif) -->
-<div class="poll-indicator" id="pollTabs" style="display:none">
-  <div class="poll-tab">
-    <button class="tab-btn active" id="tabBtnA" onclick="switchTab('A')">
+<div class="tabs-wrap" id="tabsWrap">
+  <div class="tabs">
+    <button class="tab active" id="tabA">
       <span id="tabLblA">Aujourd'hui</span>
-      <span class="tab-badge" id="tabBadgeA">0</span>
+      <span class="tab-count" id="tabCntA">0</span>
     </button>
-    <button class="tab-btn" id="tabBtnB" onclick="switchTab('B')">
+    <button class="tab" id="tabB">
       <span id="tabLblB">Demain</span>
-      <span class="tab-badge new" id="tabBadgeB">Nouveau</span>
+      <span class="tab-new" id="tabNewB">Nouveau</span>
     </button>
   </div>
 </div>
 
-<!-- DATE BANNER -->
-<div class="date-banner" id="dateBanner">
-  <span class="date-banner-lbl" id="dateBannerLbl">📅</span>
-  <span class="date-banner-val" id="dateBannerVal"></span>
+<div class="dbanner" id="dbanner">
+  <span class="dbanner-lbl" id="dbannerLbl">📅</span>
+  <span class="dbanner-val" id="dbannerVal"></span>
 </div>
 
-<!-- STATS -->
 <div class="stats">
   <div class="stat"><div class="sdot d-free"></div><span id="sFree">--</span></div>
   <div class="stat"><div class="sdot d-taken"></div><span id="sTaken">--</span></div>
@@ -191,10 +173,8 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
   </div>
 </div>
 
-<!-- SEARCH -->
-<div class="srchwrap"><input class="srchinp" id="searchInp" placeholder="🔍 ..." oninput="renderSlots()"></div>
+<div class="srchwrap"><input class="srchinp" id="searchInp" oninput="renderSlots()"></div>
 
-<!-- CHAT BUBBLE -->
 <div class="chat">
   <div class="bbl">
     <div class="bmeta">
@@ -203,7 +183,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
       <span class="btime" id="bTime"></span>
     </div>
     <div class="ptitle" id="pollTitle">📋 ...</div>
-    <div class="psubtitle" id="pollSubtitle" style="display:none"></div>
+    <div class="psubtitle" id="pollSub" style="display:none"></div>
     <div id="optList"><div class="ldmsg" id="ldmsg">⏳ ...</div></div>
     <hr class="pdiv">
     <div class="pfooter">
@@ -213,13 +193,10 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
   </div>
 </div>
 
-<!-- BOTTOM BAR -->
 <div class="botbar">
-  <input class="ninp" id="nameInput" placeholder="..." maxlength="25">
+  <input class="ninp" id="nameInput" maxlength="25">
   <button class="sndbtn" id="btnSend">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-    </svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
   </button>
 </div>
 
@@ -227,9 +204,9 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 <div class="mbg" id="nameModal">
   <div class="msh">
     <div class="mtitle" id="nmTitle">👋 Bienvenue</div>
-    <div class="msub" id="nmSub">Entrez votre prenom pour participer. Une seule fois.</div>
-    <input class="ainp" id="nmInput" placeholder="Votre prenom..." maxlength="25">
-    <div class="macts" style="margin-top:4px">
+    <div class="msub" id="nmSub">Entrez votre prenom. Une seule fois.</div>
+    <input class="ainp" id="nmInput" maxlength="25">
+    <div class="macts" style="margin-top:6px">
       <button class="mbt mbt-g" id="nmBtn">✓ Confirmer</button>
     </div>
   </div>
@@ -238,78 +215,86 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 <!-- ADMIN MODAL -->
 <div class="mbg" id="adminModal">
   <div class="msh">
-    <div class="mtitle" id="admModalTitle">⚙️ Admin</div>
+    <div class="mtitle" id="admTitle">⚙️ Admin</div>
 
-    <!-- LOCK -->
     <div id="admLock">
       <div class="msub" id="admLockSub">Mot de passe administrateur.</div>
-      <input class="ainp" id="admPwd" type="password" placeholder="Mot de passe...">
-      <div class="macts" style="margin-top:4px">
-        <button class="mbt mbt-c" id="admBtnCancel">Annuler</button>
-        <button class="mbt mbt-g" id="admBtnEnter">Entrer</button>
+      <input class="ainp" id="admPwd" type="password">
+      <div class="macts" style="margin-top:6px">
+        <button class="mbt mbt-c" id="aBtnCancel">Annuler</button>
+        <button class="mbt mbt-g" id="aBtnEnter">Entrer</button>
       </div>
     </div>
 
-    <!-- CONTENT -->
     <div id="admContent" style="display:none">
 
-      <!-- SONDAGE ACTIF (A) -->
+      <!-- SONDAGE A -->
       <div class="asec">
-        <div class="asectitle" id="admSecA">Sondage actif (aujourd'hui)</div>
-        <label class="albl" id="admLblATitle">Titre</label>
-        <input class="ainp" id="editATitle">
-        <label class="albl" id="admLblASub">Sous-titre</label>
-        <input class="ainp" id="editASub" placeholder="ex: Sondage du Jeudi 12 juin">
-        <label class="albl" id="admLblADate">Date</label>
-        <input class="ainp" id="editADate" type="date">
-        <label class="albl" id="admLblAStart">Debut</label>
-        <select class="asel" id="slotAStart" onchange="updateSlotCountA()"></select>
-        <label class="albl" id="admLblAEnd">Fin</label>
-        <select class="asel" id="slotAEnd" onchange="updateSlotCountA()"></select>
-        <div class="slotbox" style="margin-top:8px">
-          <div class="slotnum" id="slotCountA">0</div>
-          <div id="admSlotLblA" style="font-size:13px;color:var(--muted)">creneaux</div>
+        <div class="asectitle" id="admSecA">Sondage A — Actif</div>
+        <div id="psA" class="poll-status ps-visible">● Visible</div>
+        <label class="albl" id="aLblTitle">Titre</label>
+        <input class="ainp" id="aTitle">
+        <label class="albl" id="aLblSub">Sous-titre</label>
+        <input class="ainp" id="aSub">
+        <label class="albl" id="aLblDate">Date</label>
+        <input class="ainp" id="aDate" type="date">
+        <label class="albl" id="aLblStart">Debut</label>
+        <select class="asel" id="aStart" onchange="calcA()"></select>
+        <label class="albl" id="aLblEnd">Fin</label>
+        <select class="asel" id="aEnd" onchange="calcA()"></select>
+        <div class="slotinfo"><div class="slotnum" id="aCnt">0</div><div class="slotlbl" id="aLblSlot">creneaux</div></div>
+        <div class="warnbox" id="aWarn"></div>
+        <div class="poll-ctrl">
+          <button class="mbt" id="aBtnVis" style="flex:1">---</button>
+          <button class="mbt mbt-r" id="aBtnClear" style="flex:1">---</button>
         </div>
-        <div class="warnbox" id="warnA"></div>
-        <button class="mbt mbt-r" style="width:100%;margin-top:4px" id="admBtnResetA">🔄 Vider ce sondage</button>
       </div>
 
-      <!-- SONDAGE B (demain) -->
+      <!-- SONDAGE B -->
       <div class="asec">
-        <div class="asectitle" id="admSecB">Sondage suivant (demain)</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <span style="font-size:13px;color:var(--muted)" id="admBVisibleLbl">Visible par les membres :</span>
-          <button class="mbt" id="admBtnToggleB" style="flex:none;padding:6px 14px;font-size:13px;">---</button>
+        <div class="asectitle" id="admSecB">Sondage B — Suivant</div>
+        <div id="psB" class="poll-status ps-hidden">● Masque</div>
+        <label class="albl" id="bLblTitle">Titre</label>
+        <input class="ainp" id="bTitle">
+        <label class="albl" id="bLblSub">Sous-titre</label>
+        <input class="ainp" id="bSub">
+        <label class="albl" id="bLblDate">Date</label>
+        <input class="ainp" id="bDate" type="date">
+        <label class="albl" id="bLblStart">Debut</label>
+        <select class="asel" id="bStart" onchange="calcB()"></select>
+        <label class="albl" id="bLblEnd">Fin</label>
+        <select class="asel" id="bEnd" onchange="calcB()"></select>
+        <div class="slotinfo"><div class="slotnum" id="bCnt">0</div><div class="slotlbl" id="bLblSlot">creneaux</div></div>
+        <div class="warnbox" id="bWarn"></div>
+        <div class="poll-ctrl">
+          <button class="mbt" id="bBtnVis" style="flex:1">---</button>
+          <button class="mbt mbt-r" id="bBtnClear" style="flex:1">---</button>
         </div>
-        <label class="albl" id="admLblBTitle">Titre</label>
-        <input class="ainp" id="editBTitle">
-        <label class="albl" id="admLblBSub">Sous-titre</label>
-        <input class="ainp" id="editBSub" placeholder="ex: Sondage du Vendredi 13 juin">
-        <label class="albl" id="admLblBDate">Date</label>
-        <input class="ainp" id="editBDate" type="date">
-        <label class="albl" id="admLblBStart">Debut</label>
-        <select class="asel" id="slotBStart" onchange="updateSlotCountB()"></select>
-        <label class="albl" id="admLblBEnd">Fin</label>
-        <select class="asel" id="slotBEnd" onchange="updateSlotCountB()"></select>
-        <div class="slotbox" style="margin-top:8px">
-          <div class="slotnum" id="slotCountB">0</div>
-          <div id="admSlotLblB" style="font-size:13px;color:var(--muted)">creneaux</div>
-        </div>
-        <div class="warnbox" id="warnB"></div>
       </div>
 
-      <!-- HEADER -->
+      <!-- PRIORITE -->
       <div class="asec">
-        <div class="asectitle" id="admSecHeader">Titres du groupe</div>
-        <label class="albl" id="admLblName">Nom du groupe</label>
-        <input class="ainp" id="editName">
-        <label class="albl" id="admLblSub">Sous-titre du groupe</label>
-        <input class="ainp" id="editSub">
+        <div class="asectitle" id="admSecPrio">Priorite d'affichage</div>
+        <div class="msub" id="admPrioSub" style="margin-bottom:8px">Quand les deux sondages sont visibles, lequel s'affiche en premier ?</div>
+        <div style="display:flex;gap:8px;">
+          <button class="mbt" id="pBtnA" style="flex:1">---</button>
+          <button class="mbt" id="pBtnB" style="flex:1">---</button>
+          <button class="mbt mbt-gold" id="pBtnAuto" style="flex:1">---</button>
+        </div>
+      </div>
+
+      <!-- GROUPE -->
+      <div class="asec">
+        <div class="asectitle" id="admSecGrp">Groupe</div>
+        <label class="albl" id="gLblName">Nom</label>
+        <input class="ainp" id="gName">
+        <label class="albl" id="gLblSub">Sous-titre</label>
+        <input class="ainp" id="gSub">
       </div>
 
       <div class="macts">
-        <button class="mbt mbt-c" id="admBtnClose">Fermer</button>
-        <button class="mbt mbt-g" id="admBtnSave">✓ Enregistrer</button>
+        <button class="mbt mbt-c" id="aBtnClose">Fermer</button>
+        <button class="mbt mbt-g" id="aBtnSave">✓ Enregistrer</button>
       </div>
     </div>
   </div>
@@ -318,10 +303,10 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 <!-- VOTERS MODAL -->
 <div class="mbg" id="votersModal">
   <div class="msh">
-    <div class="mtitle" id="votersTitle" style="margin-bottom:1rem">Tous les votes</div>
-    <div class="vlist" id="voterList"></div>
+    <div class="mtitle" id="vTitle" style="margin-bottom:1rem">Votes</div>
+    <div class="vlist" id="vList"></div>
     <div style="margin-top:1rem">
-      <button class="mbt mbt-c" id="btnVotersClose" style="width:100%">Fermer</button>
+      <button class="mbt mbt-c" id="vClose" style="width:100%">Fermer</button>
     </div>
   </div>
 </div>
@@ -335,7 +320,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 var SUPA_URL  = 'https://bdyctczngulrnotuqvjk.supabase.co';
 var SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkeWN0Y3puZ3Vscm5vdHVxdmprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDMyOTIsImV4cCI6MjA5NjUxOTI5Mn0.ThRBbY014r9q2HbtcGa7ZnlKQChc13_THKisdK1Pz-I';
 var ADMIN_PWD = 'icc2026';
-var LOCAL_KEY = 'icc_v11';
+var LS_KEY    = 'icc_v12';
 
 // ============================================================
 // TRADUCTIONS
@@ -344,192 +329,156 @@ var TR = {
   fr:{
     syncOk:'En direct', syncErr:'Hors ligne',
     free:'libres', freeOne:'libre', taken:'pris',
-    srchPh:'🔍 Rechercher un creneau...',
-    stimmen:'Voir les votes', admin:'⚙️ Admin',
-    nowBadge:'EN COURS',
-    noName:'✏️ Entrez votre prenom',
-    hello:'👋 Bonjour ',
-    namePh:'Votre prenom...',
-    nmTitle:'👋 Bienvenue',
-    nmSub:'Entrez votre prenom pour participer. Une seule fois.',
-    nmBtn:'✓ Confirmer',
+    srchPh:'🔍 Rechercher...', stimmen:'Voir les votes', admin:'⚙️ Admin',
+    nowBadge:'EN COURS', noName:'✏️ Entrez votre prenom',
+    hello:'👋 Bonjour ', namePh:'Votre prenom...',
+    nmTitle:'👋 Bienvenue', nmSub:'Entrez votre prenom. Une seule fois.', nmBtn:'✓ Confirmer',
     tabToday:"Aujourd'hui", tabTomorrow:'Demain', tabNew:'Nouveau',
-    admModalTitle:'⚙️ Panneau Admin',
-    admLockSub:'Mot de passe administrateur.',
-    admPwdPh:'Mot de passe...',
+    admTitle:'⚙️ Panneau Admin', admLockSub:'Mot de passe administrateur.', admPwdPh:'Mot de passe...',
     wrongPwd:'❌ Mot de passe incorrect',
-    admSecA:'Sondage actif (aujourd\'hui)',
-    admLblATitle:'Titre', admLblASub:'Sous-titre', admLblADate:'Date',
-    admLblAStart:'Debut', admLblAEnd:'Fin',
-    admSlotLbl:'creneaux de 15 min',
-    btnResetA:'🔄 Vider ce sondage',
-    resetAConfirm:'Vider le sondage d\'aujourd\'hui ?\nLes prenoms sont conserves.',
-    resetADone:'🔄 Sondage d\'aujourd\'hui vide',
-    admSecB:'Sondage suivant (demain)',
-    admBVisibleLbl:'Visible par les membres :',
-    bVisible:'✅ Oui', bHidden:'🚫 Non',
-    admLblBTitle:'Titre', admLblBSub:'Sous-titre', admLblBDate:'Date',
-    admLblBStart:'Debut', admLblBEnd:'Fin',
-    admSecHeader:'Titres du groupe',
-    admLblName:'Nom du groupe', admLblSub:'Sous-titre du groupe',
+    admSecA:'Sondage A — Actif', admSecB:'Sondage B — Suivant',
+    lblTitle:'Titre', lblSub:'Sous-titre', lblDate:'Date',
+    lblStart:'Heure de debut', lblEnd:'Heure de fin',
+    lblSlot:'creneaux de 15 min',
+    btnVisible:'👁 Visible', btnHidden:'🚫 Masque',
+    btnClear:'🗑 Vider',
+    clearConfA:"Vider le sondage A ?\nLes prenoms sont conserves.",
+    clearConfB:"Vider le sondage B ?\nLes prenoms sont conserves.",
+    clearDone:'🗑 Sondage vide',
+    admSecPrio:'Priorite d\'affichage',
+    admPrioSub:'Quand les deux sont visibles, lequel s\'affiche en premier ?',
+    prioA:'A en premier', prioB:'B en premier', prioAuto:'Auto (date)',
+    admSecGrp:'Groupe', gLblName:'Nom', gLblSub:'Sous-titre',
     btnCancel:'Annuler', btnClose:'Fermer', btnSave:'✓ Enregistrer',
-    saved:'✅ Modifications enregistrees !',
-    slotWarn:'Ces creneaux passent minuit. Normal pour un sondage de nuit.',
-    errConn:'Erreur de connexion', errSave:'Erreur sauvegarde',
-    noVotes:'Aucun vote pour le moment',
-    votersTitle:'Tous les votes',
-    loading:'Chargement...',
-    dateBannerLbl:'📅 Sondage pour le',
-    prevPollLink:'← Voir le sondage precedent',
-    backToCurrent:'→ Retour au sondage actif',
+    saved:'✅ Enregistre !',
+    slotWarn:'Ces creneaux passent minuit.',
+    errConn:'Erreur de connexion',
+    noVotes:'Aucun vote pour le moment', vTitle:'Tous les votes',
+    loading:'Chargement...', dbannerLbl:'📅 Sondage pour le',
+    psVisible:'● Visible', psHidden:'● Masque',
   },
   de:{
     syncOk:'Live', syncErr:'Offline',
     free:'frei', freeOne:'frei', taken:'belegt',
-    srchPh:'🔍 Zeitfenster suchen...',
-    stimmen:'Stimmen ansehen', admin:'⚙️ Admin',
-    nowBadge:'JETZT',
-    noName:'✏️ Gib deinen Namen ein',
-    hello:'👋 Hallo ',
-    namePh:'Dein Vorname...',
-    nmTitle:'👋 Willkommen',
-    nmSub:'Gib deinen Vornamen ein. Nur einmal.',
-    nmBtn:'✓ Bestatigen',
+    srchPh:'🔍 Suchen...', stimmen:'Stimmen ansehen', admin:'⚙️ Admin',
+    nowBadge:'JETZT', noName:'✏️ Namen eingeben',
+    hello:'👋 Hallo ', namePh:'Dein Vorname...',
+    nmTitle:'👋 Willkommen', nmSub:'Gib deinen Vornamen ein. Nur einmal.', nmBtn:'✓ Bestatigen',
     tabToday:'Heute', tabTomorrow:'Morgen', tabNew:'Neu',
-    admModalTitle:'⚙️ Admin-Bereich',
-    admLockSub:'Admin-Passwort.',
-    admPwdPh:'Passwort...',
+    admTitle:'⚙️ Admin', admLockSub:'Admin-Passwort.', admPwdPh:'Passwort...',
     wrongPwd:'❌ Falsches Passwort',
-    admSecA:'Aktive Umfrage (heute)',
-    admLblATitle:'Titel', admLblASub:'Untertitel', admLblADate:'Datum',
-    admLblAStart:'Beginn', admLblAEnd:'Ende',
-    admSlotLbl:'Zeitfenster a 15 Min',
-    btnResetA:'🔄 Diese Umfrage leeren',
-    resetAConfirm:'Heutige Umfrage leeren?\nVornamen bleiben erhalten.',
-    resetADone:'🔄 Heutige Umfrage geleert',
-    admSecB:'Nachste Umfrage (morgen)',
-    admBVisibleLbl:'Sichtbar fur Mitglieder:',
-    bVisible:'✅ Ja', bHidden:'🚫 Nein',
-    admLblBTitle:'Titel', admLblBSub:'Untertitel', admLblBDate:'Datum',
-    admLblBStart:'Beginn', admLblBEnd:'Ende',
-    admSecHeader:'Gruppentitel',
-    admLblName:'Gruppenname', admLblSub:'Untertitel der Gruppe',
+    admSecA:'Umfrage A — Aktiv', admSecB:'Umfrage B — Nachste',
+    lblTitle:'Titel', lblSub:'Untertitel', lblDate:'Datum',
+    lblStart:'Startzeit', lblEnd:'Endzeit',
+    lblSlot:'Zeitfenster a 15 Min',
+    btnVisible:'👁 Sichtbar', btnHidden:'🚫 Versteckt',
+    btnClear:'🗑 Leeren',
+    clearConfA:'Umfrage A leeren?\nVornamen bleiben.',
+    clearConfB:'Umfrage B leeren?\nVornamen bleiben.',
+    clearDone:'🗑 Umfrage geleert',
+    admSecPrio:'Anzeigeprioritat',
+    admPrioSub:'Welche wird zuerst angezeigt wenn beide sichtbar sind?',
+    prioA:'A zuerst', prioB:'B zuerst', prioAuto:'Auto (Datum)',
+    admSecGrp:'Gruppe', gLblName:'Name', gLblSub:'Untertitel',
     btnCancel:'Abbrechen', btnClose:'Schliessen', btnSave:'✓ Speichern',
     saved:'✅ Gespeichert!',
     slotWarn:'Diese Slots gehen uber Mitternacht.',
-    errConn:'Verbindungsfehler', errSave:'Speicherfehler',
-    noVotes:'Noch keine Stimmen',
-    votersTitle:'Alle Stimmen',
-    loading:'Laden...',
-    dateBannerLbl:'📅 Umfrage fur',
-    prevPollLink:'← Vorherige Umfrage',
-    backToCurrent:'→ Zuruck zur aktiven Umfrage',
+    errConn:'Verbindungsfehler',
+    noVotes:'Noch keine Stimmen', vTitle:'Alle Stimmen',
+    loading:'Laden...', dbannerLbl:'📅 Umfrage fur',
+    psVisible:'● Sichtbar', psHidden:'● Versteckt',
   },
   en:{
     syncOk:'Live', syncErr:'Offline',
     free:'free', freeOne:'free', taken:'taken',
-    srchPh:'🔍 Search a slot...',
-    stimmen:'View votes', admin:'⚙️ Admin',
-    nowBadge:'NOW',
-    noName:'✏️ Enter your name',
-    hello:'👋 Hello ',
-    namePh:'Your name...',
-    nmTitle:'👋 Welcome',
-    nmSub:'Enter your name to join. Only once.',
-    nmBtn:'✓ Confirm',
+    srchPh:'🔍 Search...', stimmen:'View votes', admin:'⚙️ Admin',
+    nowBadge:'NOW', noName:'✏️ Enter your name',
+    hello:'👋 Hello ', namePh:'Your name...',
+    nmTitle:'👋 Welcome', nmSub:'Enter your name. Only once.', nmBtn:'✓ Confirm',
     tabToday:'Today', tabTomorrow:'Tomorrow', tabNew:'New',
-    admModalTitle:'⚙️ Admin Panel',
-    admLockSub:'Admin password.',
-    admPwdPh:'Password...',
+    admTitle:'⚙️ Admin Panel', admLockSub:'Admin password.', admPwdPh:'Password...',
     wrongPwd:'❌ Wrong password',
-    admSecA:"Today's poll",
-    admLblATitle:'Title', admLblASub:'Subtitle', admLblADate:'Date',
-    admLblAStart:'Start', admLblAEnd:'End',
-    admSlotLbl:'slots of 15 min',
-    btnResetA:'🔄 Clear this poll',
-    resetAConfirm:"Clear today's poll?\nNames are preserved.",
-    resetADone:"🔄 Today's poll cleared",
-    admSecB:"Tomorrow's poll",
-    admBVisibleLbl:'Visible to members:',
-    bVisible:'✅ Yes', bHidden:'🚫 No',
-    admLblBTitle:'Title', admLblBSub:'Subtitle', admLblBDate:'Date',
-    admLblBStart:'Start', admLblBEnd:'End',
-    admSecHeader:'Group titles',
-    admLblName:'Group name', admLblSub:'Group subtitle',
+    admSecA:'Poll A — Active', admSecB:'Poll B — Next',
+    lblTitle:'Title', lblSub:'Subtitle', lblDate:'Date',
+    lblStart:'Start time', lblEnd:'End time',
+    lblSlot:'slots of 15 min',
+    btnVisible:'👁 Visible', btnHidden:'🚫 Hidden',
+    btnClear:'🗑 Clear',
+    clearConfA:"Clear poll A?\nNames are preserved.",
+    clearConfB:"Clear poll B?\nNames are preserved.",
+    clearDone:'🗑 Poll cleared',
+    admSecPrio:'Display priority',
+    admPrioSub:'When both are visible, which one appears first?',
+    prioA:'A first', prioB:'B first', prioAuto:'Auto (date)',
+    admSecGrp:'Group', gLblName:'Name', gLblSub:'Subtitle',
     btnCancel:'Cancel', btnClose:'Close', btnSave:'✓ Save',
-    saved:'✅ Changes saved!',
+    saved:'✅ Saved!',
     slotWarn:'These slots cross midnight.',
-    errConn:'Connection error', errSave:'Save error',
-    noVotes:'No votes yet',
-    votersTitle:'All votes',
-    loading:'Loading...',
-    dateBannerLbl:'📅 Poll for',
-    prevPollLink:'← View previous poll',
-    backToCurrent:'→ Back to active poll',
+    errConn:'Connection error',
+    noVotes:'No votes yet', vTitle:'All votes',
+    loading:'Loading...', dbannerLbl:'📅 Poll for',
+    psVisible:'● Visible', psHidden:'● Hidden',
   }
 };
 
 var lang = 'fr';
-function tx(k){ return (TR[lang]&&TR[lang][k]) || TR.fr[k] || k; }
+function tx(k){ return (TR[lang]&&TR[lang][k])||TR.fr[k]||k; }
 
 function applyLang(){
-  var el = function(id){ return document.getElementById(id); };
-  el('searchInp').placeholder    = tx('srchPh');
-  el('nameInput').placeholder    = tx('namePh');
-  el('ldmsg').textContent        = '⏳ ' + tx('loading');
-  el('btnStimmen').textContent   = tx('stimmen');
-  el('btnAdmin').textContent     = tx('admin');
-  el('nmTitle').textContent      = tx('nmTitle');
-  el('nmSub').textContent        = tx('nmSub');
-  el('nmBtn').textContent        = tx('nmBtn');
-  el('nmInput').placeholder      = tx('namePh');
-  el('admModalTitle').textContent= tx('admModalTitle');
-  el('admLockSub').textContent   = tx('admLockSub');
-  el('admPwd').placeholder       = tx('admPwdPh');
-  el('admBtnCancel').textContent = tx('btnCancel');
-  el('admBtnEnter').textContent  = '→';
-  el('admSecA').textContent      = tx('admSecA');
-  el('admLblATitle').textContent = tx('admLblATitle');
-  el('admLblASub').textContent   = tx('admLblASub');
-  el('admLblADate').textContent  = tx('admLblADate');
-  el('admLblAStart').textContent = tx('admLblAStart');
-  el('admLblAEnd').textContent   = tx('admLblAEnd');
-  el('admSlotLblA').textContent  = tx('admSlotLbl');
-  el('admBtnResetA').textContent = tx('btnResetA');
-  el('admSecB').textContent      = tx('admSecB');
-  el('admBVisibleLbl').textContent = tx('admBVisibleLbl');
-  el('admLblBTitle').textContent = tx('admLblBTitle');
-  el('admLblBSub').textContent   = tx('admLblBSub');
-  el('admLblBDate').textContent  = tx('admLblBDate');
-  el('admLblBStart').textContent = tx('admLblBStart');
-  el('admLblBEnd').textContent   = tx('admLblBEnd');
-  el('admSlotLblB').textContent  = tx('admSlotLbl');
-  el('admSecHeader').textContent = tx('admSecHeader');
-  el('admLblName').textContent   = tx('admLblName');
-  el('admLblSub').textContent    = tx('admLblSub');
-  el('admBtnClose').textContent  = tx('btnClose');
-  el('admBtnSave').textContent   = tx('btnSave');
-  el('votersTitle').textContent  = tx('votersTitle');
-  el('btnVotersClose').textContent = tx('btnClose');
-  el('dateBannerLbl').textContent  = tx('dateBannerLbl');
-  // Tabs
-  el('tabLblA').textContent  = tx('tabToday');
-  el('tabLblB').textContent  = tx('tabTomorrow');
-  el('tabBadgeB').textContent= tx('tabNew');
-  // Toggle B button
-  updateToggleBBtn();
+  function el(id){ return document.getElementById(id); }
+  el('searchInp').placeholder  = tx('srchPh');
+  el('nameInput').placeholder  = tx('namePh');
+  el('ldmsg').textContent      = '⏳ '+tx('loading');
+  el('btnStimmen').textContent = tx('stimmen');
+  el('btnAdmin').textContent   = tx('admin');
+  el('nmTitle').textContent    = tx('nmTitle');
+  el('nmSub').textContent      = tx('nmSub');
+  el('nmBtn').textContent      = tx('nmBtn');
+  el('nmInput').placeholder    = tx('namePh');
+  el('admTitle').textContent   = tx('admTitle');
+  el('admLockSub').textContent = tx('admLockSub');
+  el('admPwd').placeholder     = tx('admPwdPh');
+  el('aBtnCancel').textContent = tx('btnCancel');
+  el('aBtnEnter').textContent  = '→';
+  el('admSecA').textContent    = tx('admSecA');
+  el('admSecB').textContent    = tx('admSecB');
+  ['a','b'].forEach(function(p){
+    el(p+'LblTitle').textContent = tx('lblTitle');
+    el(p+'LblSub').textContent   = tx('lblSub');
+    el(p+'LblDate').textContent  = tx('lblDate');
+    el(p+'LblStart').textContent = tx('lblStart');
+    el(p+'LblEnd').textContent   = tx('lblEnd');
+    el(p+'LblSlot').textContent  = tx('lblSlot');
+  });
+  el('admSecPrio').textContent = tx('admSecPrio');
+  el('admPrioSub').textContent = tx('admPrioSub');
+  el('pBtnA').textContent     = tx('prioA');
+  el('pBtnB').textContent     = tx('prioB');
+  el('pBtnAuto').textContent  = tx('prioAuto');
+  el('admSecGrp').textContent = tx('admSecGrp');
+  el('gLblName').textContent  = tx('gLblName');
+  el('gLblSub').textContent   = tx('gLblSub');
+  el('aBtnClose').textContent = tx('btnClose');
+  el('aBtnSave').textContent  = tx('btnSave');
+  el('vTitle').textContent    = tx('vTitle');
+  el('vClose').textContent    = tx('btnClose');
+  el('dbannerLbl').textContent= tx('dbannerLbl');
+  el('tabLblA').textContent   = tx('tabToday');
+  el('tabLblB').textContent   = tx('tabTomorrow');
+  el('tabNewB').textContent   = tx('tabNew');
+  // Boutons dynamiques
+  updateAdmVisBtns();
+  updatePrioBtns();
   setSyncStatus(synced);
-  updateSlotCountA();
-  updateSlotCountB();
+  calcA(); calcB();
 }
 
 function setLang(l){
-  lang = l; ls.lang = l; saveLocal();
+  lang=l; st.lang=l; saveLocal();
   ['fr','de','en'].forEach(function(x){
-    document.getElementById('btn-'+x).classList.toggle('active', x===l);
+    document.getElementById('btn-'+x).classList.toggle('active',x===l);
   });
-  applyLang();
-  renderSlots();
+  applyLang(); renderSlots();
 }
 
 // ============================================================
@@ -540,94 +489,85 @@ function gc(n){var h=0;for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%COLOR
 function gi(n){var p=n.trim().split(' '),r='';for(var i=0;i<Math.min(p.length,2);i++)if(p[i])r+=p[i][0].toUpperCase();return r||'?';}
 
 // ============================================================
-// ETAT LOCAL
+// ETAT
 // ============================================================
-var ls = {
-  userName: '',
-  lang: 'fr',
-  headerName: 'STAR ICC NORDDEUTSCHLAND',
-  headerSub:  'Chaine de Priere · 21 Jours Jeune et Priere',
-  // Sondage A (actif)
-  aTitle:    '📋 Chaine de priere — Choisissez vos creneaux',
-  aSubtitle: '',
-  aDate:     '',
-  aStartH:8, aStartM:0, aEndH:24, aEndM:0,
-  // Sondage B (demain)
-  bVisible:  false,
-  bTitle:    '📋 Chaine de priere — Choisissez vos creneaux',
-  bSubtitle: '',
-  bDate:     '',
-  bStartH:8, bStartM:0, bEndH:24, bEndM:0,
-  // Quel onglet est actif dans l'UI
-  currentTab: 'A'
+var st = {
+  userName:'', lang:'fr',
+  grpName:'STAR ICC NORDDEUTSCHLAND',
+  grpSub:'Chaine de Priere · 21 Jours Jeune et Priere',
+  // Sondage A
+  aVisible:true,
+  aTitle:'📋 Chaine de priere — Choisissez vos creneaux',
+  aSub:'', aDate:'',
+  aSH:8, aSM:0, aEH:24, aEM:0,
+  // Sondage B
+  bVisible:false,
+  bTitle:'📋 Chaine de priere — Choisissez vos creneaux',
+  bSub:'', bDate:'',
+  bSH:8, bSM:0, bEH:24, bEM:0,
+  // Priorite: 'A','B','auto'
+  priority:'auto',
+  // Onglet actif dans l'UI
+  tab:'A'
 };
 
-var votesA  = [];
-var votesB  = [];
-var synced  = false;
+var votesA=[], votesB=[], synced=false;
 
 function loadLocal(){
-  try{var s=localStorage.getItem(LOCAL_KEY);if(s){var p=JSON.parse(s);for(var k in p)ls[k]=p[k];}}catch(e){}
+  try{var s=localStorage.getItem(LS_KEY);if(s){var p=JSON.parse(s);for(var k in p)st[k]=p[k];}}catch(e){}
 }
 function saveLocal(){
-  try{localStorage.setItem(LOCAL_KEY,JSON.stringify(ls));}catch(e){}
+  try{localStorage.setItem(LS_KEY,JSON.stringify(st));}catch(e){}
 }
 
 // ============================================================
 // SUPABASE
 // ============================================================
-function sfetch(path, method, body){
-  var opts={method:method||'GET',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=minimal':''}};
-  if(body!==undefined)opts.body=JSON.stringify(body);
-  return fetch(SUPA_URL+'/rest/v1/'+path,opts);
+function sfetch(path,method,body){
+  var o={method:method||'GET',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=minimal':''}};
+  if(body!==undefined)o.body=JSON.stringify(body);
+  return fetch(SUPA_URL+'/rest/v1/'+path,o);
 }
-
 function loadAllVotes(){
-  // Charge les deux tables en parallele
   return Promise.all([
-    sfetch('votes?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];}).then(function(d){if(Array.isArray(d))votesA=d;}).catch(function(){}),
-    sfetch('votes_b?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];}).then(function(d){if(Array.isArray(d))votesB=d;}).catch(function(){})
-  ]).then(function(){ setSyncStatus(true); }).catch(function(){ setSyncStatus(false); });
+    sfetch('votes?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];}).then(function(d){if(Array.isArray(d))votesA=d;}),
+    sfetch('votes_b?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];}).then(function(d){if(Array.isArray(d))votesB=d;})
+  ]).then(function(){setSyncStatus(true);}).catch(function(){setSyncStatus(false);});
 }
-
 function loadConfig(){
-  return sfetch('config?select=key,value')
-    .then(function(r){return r.ok?r.json():[];})
-    .then(function(d){
-      if(!Array.isArray(d))return;
-      d.forEach(function(row){
-        // Header
-        if(row.key==='headerName')ls.headerName=row.value;
-        if(row.key==='headerSub') ls.headerSub=row.value;
-        // Sondage A
-        if(row.key==='aTitle')   ls.aTitle=row.value;
-        if(row.key==='aSubtitle')ls.aSubtitle=row.value;
-        if(row.key==='aDate')    ls.aDate=row.value;
-        if(row.key==='aStartMin'){var hm=fromMin(parseInt(row.value,10));ls.aStartH=hm.h;ls.aStartM=hm.m;}
-        if(row.key==='aEndMin'){var v=parseInt(row.value,10);if(v===1440){ls.aEndH=24;ls.aEndM=0;}else{var hm2=fromMin(v);ls.aEndH=hm2.h;ls.aEndM=hm2.m;}}
-        // Sondage B
-        if(row.key==='bVisible') ls.bVisible=(row.value==='true');
-        if(row.key==='bTitle')   ls.bTitle=row.value;
-        if(row.key==='bSubtitle')ls.bSubtitle=row.value;
-        if(row.key==='bDate')    ls.bDate=row.value;
-        if(row.key==='bStartMin'){var hm3=fromMin(parseInt(row.value,10));ls.bStartH=hm3.h;ls.bStartM=hm3.m;}
-        if(row.key==='bEndMin'){var v2=parseInt(row.value,10);if(v2===1440){ls.bEndH=24;ls.bEndM=0;}else{var hm4=fromMin(v2);ls.bEndH=hm4.h;ls.bEndM=hm4.m;}}
-      });
-    }).catch(function(){});
+  return sfetch('config?select=key,value').then(function(r){return r.ok?r.json():[];})
+  .then(function(d){
+    if(!Array.isArray(d))return;
+    d.forEach(function(row){
+      var k=row.key,v=row.value;
+      if(k==='grpName')   st.grpName=v;
+      if(k==='grpSub')    st.grpSub=v;
+      if(k==='aVisible')  st.aVisible=(v==='true');
+      if(k==='aTitle')    st.aTitle=v;
+      if(k==='aSub')      st.aSub=v;
+      if(k==='aDate')     st.aDate=v;
+      if(k==='aSMin'){var hm=fromMin(+v);st.aSH=hm.h;st.aSM=hm.m;}
+      if(k==='aEMin'){var v2=+v;if(v2===1440){st.aEH=24;st.aEM=0;}else{var hm2=fromMin(v2);st.aEH=hm2.h;st.aEM=hm2.m;}}
+      if(k==='bVisible')  st.bVisible=(v==='true');
+      if(k==='bTitle')    st.bTitle=v;
+      if(k==='bSub')      st.bSub=v;
+      if(k==='bDate')     st.bDate=v;
+      if(k==='bSMin'){var hm3=fromMin(+v);st.bSH=hm3.h;st.bSM=hm3.m;}
+      if(k==='bEMin'){var v3=+v;if(v3===1440){st.bEH=24;st.bEM=0;}else{var hm4=fromMin(v3);st.bEH=hm4.h;st.bEM=hm4.m;}}
+      if(k==='priority')  st.priority=v;
+    });
+  }).catch(function(){});
 }
-
 function saveCfg(k,v){
   return sfetch('config?key=eq.'+encodeURIComponent(k),'DELETE')
     .then(function(){return sfetch('config','POST',{key:k,value:String(v)});});
 }
-
-function addVoteA(sk,un){return sfetch('votes','POST',{slot_key:sk,user_name:un});}
-function removeVoteA(sk,un){return sfetch('votes?slot_key=eq.'+encodeURIComponent(sk)+'&user_name=eq.'+encodeURIComponent(un),'DELETE');}
-function clearVotesA(){return sfetch('votes?slot_key=neq.__none__','DELETE');}
-
-function addVoteB(sk,un){return sfetch('votes_b','POST',{slot_key:sk,user_name:un});}
-function removeVoteB(sk,un){return sfetch('votes_b?slot_key=eq.'+encodeURIComponent(sk)+'&user_name=eq.'+encodeURIComponent(un),'DELETE');}
-function clearVotesB(){return sfetch('votes_b?slot_key=neq.__none__','DELETE');}
+function clearA(){return sfetch('votes?slot_key=neq.__x__','DELETE');}
+function clearB(){return sfetch('votes_b?slot_key=neq.__x__','DELETE');}
+function addVA(sk,un){return sfetch('votes','POST',{slot_key:sk,user_name:un});}
+function remVA(sk,un){return sfetch('votes?slot_key=eq.'+encodeURIComponent(sk)+'&user_name=eq.'+encodeURIComponent(un),'DELETE');}
+function addVB(sk,un){return sfetch('votes_b','POST',{slot_key:sk,user_name:un});}
+function remVB(sk,un){return sfetch('votes_b?slot_key=eq.'+encodeURIComponent(sk)+'&user_name=eq.'+encodeURIComponent(un),'DELETE');}
 
 function setSyncStatus(ok){
   synced=ok;
@@ -643,47 +583,32 @@ function setSyncStatus(ok){
 function pad(n){return n<10?'0'+n:''+n;}
 function toMin(h,m){return h*60+m;}
 function fromMin(t){return{h:Math.floor(t/60)%24,m:t%60};}
-
-function genSlots(startH,startM,endH,endM){
-  var arr=[];
-  var sm=toMin(startH,startM);
-  var em=(endH===24&&endM===0)?1440:toMin(endH,endM);
-  var totalMin=em>sm?(em-sm):(1440-sm+em);
-  for(var i=0;i<totalMin;i+=15){
-    var t=(sm+i)%1440,tn=(sm+i+15)%1440;
-    var cur=fromMin(t),nxt=fromMin(tn);
-    arr.push({key:cur.h+':'+pad(cur.m),label:pad(cur.h)+'H'+pad(cur.m)+' - '+pad(nxt.h)+'H'+pad(nxt.m)});
+function genSlots(sh,sm,eh,em){
+  var arr=[],s=toMin(sh,sm),e=(eh===24&&em===0)?1440:toMin(eh,em);
+  var total=e>s?(e-s):(1440-s+e);
+  for(var i=0;i<total;i+=15){
+    var t=(s+i)%1440,tn=(s+i+15)%1440;
+    var c=fromMin(t),n=fromMin(tn);
+    arr.push({key:c.h+':'+pad(c.m),label:pad(c.h)+'H'+pad(c.m)+' - '+pad(n.h)+'H'+pad(n.m)});
   }
   return arr;
 }
-
 function getCurKey(){var n=new Date();return n.getHours()+':'+pad(Math.floor(n.getMinutes()/15)*15);}
 
-// ============================================================
-// TABS
-// ============================================================
-function switchTab(tab){
-  ls.currentTab = tab;
-  saveLocal();
-  document.getElementById('tabBtnA').classList.toggle('active', tab==='A');
-  document.getElementById('tabBtnB').classList.toggle('active', tab==='B');
-  renderSlots();
-}
-
-function updateTabs(){
-  var tabs = document.getElementById('pollTabs');
-  if(ls.bVisible){
-    tabs.style.display = 'block';
-    // Badge A = nombre de votes
-    document.getElementById('tabBadgeA').textContent = votesA.length;
-    // Si tab courant n'est plus valide
-    if(!ls.bVisible && ls.currentTab==='B') ls.currentTab='A';
-  } else {
-    tabs.style.display = 'none';
-    ls.currentTab = 'A';
+// Determine quel onglet montrer en priorite
+function getDefaultTab(){
+  if(!st.aVisible && !st.bVisible) return 'A';
+  if(st.aVisible && !st.bVisible)  return 'A';
+  if(!st.aVisible && st.bVisible)  return 'B';
+  // Les deux visibles — appliquer la priorite
+  if(st.priority==='A') return 'A';
+  if(st.priority==='B') return 'B';
+  // Auto : comparer les dates
+  if(st.aDate && st.bDate){
+    return st.bDate > st.aDate ? 'B' : 'A';
   }
-  document.getElementById('tabBtnA').classList.toggle('active', ls.currentTab==='A');
-  document.getElementById('tabBtnB').classList.toggle('active', ls.currentTab==='B');
+  if(st.bDate && !st.aDate) return 'B';
+  return 'A'; // defaut
 }
 
 // ============================================================
@@ -692,82 +617,85 @@ function updateTabs(){
 function renderSlots(){
   var now=new Date();
   document.getElementById('bTime').textContent=pad(now.getHours())+':'+pad(now.getMinutes());
-  document.getElementById('headerName').textContent=ls.headerName;
-  document.getElementById('headerSub').textContent=ls.headerSub+' ✏️';
+  document.getElementById('headerName').textContent=st.grpName;
+  document.getElementById('headerSub').textContent=st.grpSub+' ✏️';
 
-  updateTabs();
+  // Gestion des onglets
+  var bothVis = st.aVisible && st.bVisible;
+  var tabsEl  = document.getElementById('tabsWrap');
+  tabsEl.classList.toggle('show', bothVis);
 
-  // Choisir le bon sondage
-  var isB     = (ls.bVisible && ls.currentTab==='B');
-  var title   = isB ? ls.bTitle    : ls.aTitle;
-  var sub     = isB ? ls.bSubtitle : ls.aSubtitle;
-  var date    = isB ? ls.bDate     : ls.aDate;
-  var votes   = isB ? votesB       : votesA;
-  var SLOTS   = isB
-    ? genSlots(ls.bStartH,ls.bStartM,ls.bEndH,ls.bEndM)
-    : genSlots(ls.aStartH,ls.aStartM,ls.aEndH,ls.aEndM);
-  var addFn   = isB ? addVoteB    : addVoteA;
-  var remFn   = isB ? removeVoteB : removeVoteA;
+  // Si un seul visible, forcer le bon tab
+  if(!bothVis){
+    st.tab = st.bVisible ? 'B' : 'A';
+  } else {
+    // Si le tab courant est masque, basculer
+    if(st.tab==='A' && !st.aVisible) st.tab='B';
+    if(st.tab==='B' && !st.bVisible) st.tab='A';
+  }
 
-  // Titre & sous-titre
+  document.getElementById('tabA').classList.toggle('active', st.tab==='A');
+  document.getElementById('tabB').classList.toggle('active', st.tab==='B');
+  document.getElementById('tabCntA').textContent = votesA.length;
+
+  var isB    = (st.tab==='B');
+  var title  = isB ? st.bTitle  : st.aTitle;
+  var sub    = isB ? st.bSub    : st.aSub;
+  var date   = isB ? st.bDate   : st.aDate;
+  var votes  = isB ? votesB     : votesA;
+  var SLOTS  = isB ? genSlots(st.bSH,st.bSM,st.bEH,st.bEM)
+                   : genSlots(st.aSH,st.aSM,st.aEH,st.aEM);
+  var addFn  = isB ? addVB : addVA;
+  var remFn  = isB ? remVB : remVA;
+
   document.getElementById('pollTitle').textContent = title;
-  var subEl = document.getElementById('pollSubtitle');
-  if(sub && sub.trim()){subEl.textContent=sub;subEl.style.display='block';}
+  var subEl=document.getElementById('pollSub');
+  if(sub&&sub.trim()){subEl.textContent=sub;subEl.style.display='block';}
   else{subEl.style.display='none';}
 
   // Bandeau date
-  var banner = document.getElementById('dateBanner');
-  var bannerVal = document.getElementById('dateBannerVal');
+  var banner=document.getElementById('dbanner');
+  var bannerVal=document.getElementById('dbannerVal');
   if(date){
     try{
       var d=new Date(date+'T00:00:00');
       var loc=lang==='de'?'de-DE':lang==='en'?'en-GB':'fr-FR';
-      var opts={weekday:'long',day:'numeric',month:'long',year:'numeric'};
-      bannerVal.textContent=d.toLocaleDateString(loc,opts);
-      document.getElementById('dateBannerLbl').textContent=tx('dateBannerLbl');
+      bannerVal.textContent=d.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+      document.getElementById('dbannerLbl').textContent=tx('dbannerLbl');
       banner.classList.add('show');
     }catch(e){banner.classList.remove('show');}
-  } else {
-    banner.classList.remove('show');
-  }
+  } else { banner.classList.remove('show'); }
 
-  // Input prenom
   var inp=document.getElementById('nameInput');
-  if(ls.userName&&!inp.value)inp.value=ls.userName;
+  if(st.userName&&!inp.value)inp.value=st.userName;
 
   var srch=document.getElementById('searchInp').value.toLowerCase();
   var curKey=getCurKey();
-  var total=votes.length;
-  var free=0,taken=0,curLabel='';
+  var total=votes.length,free=0,taken=0,curLabel='';
   var list=document.getElementById('optList');
   list.innerHTML='';
 
   SLOTS.forEach(function(slot){
     if(srch&&slot.label.toLowerCase().indexOf(srch)===-1)return;
     var voters=votes.filter(function(v){return v.slot_key===slot.key;}).map(function(v){return v.user_name;});
-    var isMine=(ls.userName!==''&&voters.indexOf(ls.userName)!==-1);
-    var isCur=(slot.key===curKey && !isB); // badge EN COURS seulement sur sondage A
+    var isMine=(st.userName!==''&&voters.indexOf(st.userName)!==-1);
+    var isCur=(!isB && slot.key===curKey);
     if(isCur)curLabel=slot.label;
     if(voters.length===0)free++;else taken++;
     var pct=(total>0&&voters.length>0)?Math.max(Math.round(voters.length/total*100),5):0;
-
     var row=document.createElement('div');
     row.className='orow'+(isMine?' sel':'')+(isCur?' cur':'');
-    var avH=voters.slice(0,3).map(function(n){
-      return'<div class="vav" style="background:'+gc(n)+'" title="'+n+'">'+gi(n)+'</div>';
-    }).join('');
+    var avH=voters.slice(0,3).map(function(n){return'<div class="vav" style="background:'+gc(n)+'" title="'+n+'">'+gi(n)+'</div>';}).join('');
     row.innerHTML=
       '<div class="wacircle"><svg class="wacheck" width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>'+
-      '<div class="ocontent"><div class="otime">🙏 '+slot.label+
-      (isCur?'<span class="nowbadge">'+tx('nowBadge')+'</span>':'')+
+      '<div class="ocontent"><div class="otime">🙏 '+slot.label+(isCur?' <span class="nowbadge">'+tx('nowBadge')+'</span>':'')+
       '</div><div class="obarwrap"><div class="obar" style="width:'+pct+'%"></div></div></div>'+
       '<div class="vstk">'+avH+'<div class="vcnt">'+(voters.length>0?voters.length:'')+'</div></div>';
-
     (function(sk,mine,af,rf){
       row.onclick=function(){
-        if(!ls.userName){openNameModal();return;}
+        if(!st.userName){openNameModal();return;}
         row.classList.add('busy');
-        var op=mine?rf(sk,ls.userName):af(sk,ls.userName);
+        var op=mine?rf(sk,st.userName):af(sk,st.userName);
         op.then(function(r){if(!r.ok)throw new Error();return loadAllVotes();})
           .then(function(){renderSlots();})
           .catch(function(){showToast(tx('errConn'));row.classList.remove('busy');});
@@ -793,7 +721,7 @@ function openNameModal(){
 function confirmName(){
   var v=document.getElementById('nmInput').value.trim();
   if(!v)return;
-  ls.userName=v;saveLocal();
+  st.userName=v;saveLocal();
   document.getElementById('nameInput').value=v;
   document.getElementById('nameModal').classList.remove('open');
   showToast(tx('hello')+v+' !');
@@ -802,7 +730,7 @@ function confirmName(){
 function setName(){
   var v=document.getElementById('nameInput').value.trim();
   if(!v){openNameModal();return;}
-  ls.userName=v;saveLocal();renderSlots();
+  st.userName=v;saveLocal();renderSlots();
   showToast(tx('hello')+v+' !');
 }
 
@@ -810,10 +738,10 @@ function setName(){
 // VOTERS
 // ============================================================
 function openVoters(){
-  var isB=(ls.bVisible&&ls.currentTab==='B');
+  var isB=(st.tab==='B');
   var votes=isB?votesB:votesA;
-  var SLOTS=isB?genSlots(ls.bStartH,ls.bStartM,ls.bEndH,ls.bEndM):genSlots(ls.aStartH,ls.aStartM,ls.aEndH,ls.aEndM);
-  var list=document.getElementById('voterList');
+  var SLOTS=isB?genSlots(st.bSH,st.bSM,st.bEH,st.bEM):genSlots(st.aSH,st.aSM,st.aEH,st.aEM);
+  var list=document.getElementById('vList');
   list.innerHTML='';var has=false;
   SLOTS.forEach(function(slot){
     votes.filter(function(v){return v.slot_key===slot.key;}).forEach(function(v){
@@ -830,57 +758,59 @@ function openVoters(){
 function closeVoters(){document.getElementById('votersModal').classList.remove('open');}
 
 // ============================================================
-// ADMIN — selects
+// ADMIN
 // ============================================================
 function buildSelects(){
-  ['slotAStart','slotAEnd','slotBStart','slotBEnd'].forEach(function(id){
-    var el=document.getElementById(id);
+  ['aStart','aEnd','bStart','bEnd'].forEach(function(id){
+    var el=document.getElementById(id),isEnd=(id==='aEnd'||id==='bEnd');
     el.innerHTML='';
-    var isEnd=(id==='slotAEnd'||id==='slotBEnd');
-    var start=isEnd?15:0;
-    var end=isEnd?1440:1425;
-    var step=15;
-    for(var t=start;t<=end;t+=step){
+    for(var t=isEnd?15:0;t<=(isEnd?1440:1425);t+=15){
       var hm=fromMin(t%1440),o=document.createElement('option');
-      o.value=t;o.textContent=pad(hm.h)+'H'+pad(hm.m);
-      el.appendChild(o);
+      o.value=t;o.textContent=pad(hm.h)+'H'+pad(hm.m);el.appendChild(o);
     }
   });
 }
-
-function computeSlotCount(sm,em){
-  var total=em>sm?Math.floor((em-sm)/15):Math.floor((1440-sm+em)/15);
-  return total>0?total:0;
-}
-
-function updateSlotCountA(){
-  var sm=parseInt(document.getElementById('slotAStart').value,10)||0;
-  var em=parseInt(document.getElementById('slotAEnd').value,10)||1440;
-  document.getElementById('slotCountA').textContent=computeSlotCount(sm,em);
-  var wb=document.getElementById('warnA');
+function calcCount(sm,em){var total=em>sm?Math.floor((em-sm)/15):Math.floor((1440-sm+em)/15);return total>0?total:0;}
+function calcA(){
+  var sm=+document.getElementById('aStart').value||0;
+  var em=+document.getElementById('aEnd').value||1440;
+  document.getElementById('aCnt').textContent=calcCount(sm,em);
+  var wb=document.getElementById('aWarn');
   if(em<=sm){wb.textContent=tx('slotWarn');wb.style.display='block';}else{wb.style.display='none';}
 }
-function updateSlotCountB(){
-  var sm=parseInt(document.getElementById('slotBStart').value,10)||0;
-  var em=parseInt(document.getElementById('slotBEnd').value,10)||1440;
-  document.getElementById('slotCountB').textContent=computeSlotCount(sm,em);
-  var wb=document.getElementById('warnB');
+function calcB(){
+  var sm=+document.getElementById('bStart').value||0;
+  var em=+document.getElementById('bEnd').value||1440;
+  document.getElementById('bCnt').textContent=calcCount(sm,em);
+  var wb=document.getElementById('bWarn');
   if(em<=sm){wb.textContent=tx('slotWarn');wb.style.display='block';}else{wb.style.display='none';}
 }
 
-function updateToggleBBtn(){
-  var btn=document.getElementById('admBtnToggleB');
-  if(ls.bVisible){btn.textContent=tx('bVisible');btn.className='mbt mbt-g';}
-  else{btn.textContent=tx('bHidden');btn.className='mbt mbt-c';}
+function updateAdmVisBtns(){
+  var bva=document.getElementById('aBtnVis'),bca=document.getElementById('aBtnClear');
+  var bvb=document.getElementById('bBtnVis'),bcb=document.getElementById('bBtnClear');
+  if(!bva)return;
+  if(st.aVisible){bva.textContent=tx('btnVisible');bva.className='mbt mbt-g';}
+  else{bva.textContent=tx('btnHidden');bva.className='mbt mbt-c';}
+  bca.textContent=tx('btnClear');
+  var psa=document.getElementById('psA');
+  psa.textContent=st.aVisible?tx('psVisible'):tx('psHidden');
+  psa.className='poll-status '+(st.aVisible?'ps-visible':'ps-hidden');
+
+  if(st.bVisible){bvb.textContent=tx('btnVisible');bvb.className='mbt mbt-g';}
+  else{bvb.textContent=tx('btnHidden');bvb.className='mbt mbt-c';}
+  bcb.textContent=tx('btnClear');
+  var psb=document.getElementById('psB');
+  psb.textContent=st.bVisible?tx('psVisible'):tx('psHidden');
+  psb.className='poll-status '+(st.bVisible?'ps-visible':'ps-hidden');
 }
 
-function toggleBVisible(){
-  ls.bVisible=!ls.bVisible;
-  saveLocal();
-  updateToggleBBtn();
-  saveCfg('bVisible',ls.bVisible).catch(function(){});
-  renderSlots();
-  showToast(ls.bVisible?'✅ Sondage B visible':'🚫 Sondage B masque');
+function updatePrioBtns(){
+  var pa=document.getElementById('pBtnA'),pb=document.getElementById('pBtnB'),pauto=document.getElementById('pBtnAuto');
+  if(!pa)return;
+  pa.className    ='mbt '+(st.priority==='A'?'mbt-g':'mbt-c');
+  pb.className    ='mbt '+(st.priority==='B'?'mbt-g':'mbt-c');
+  pauto.className ='mbt '+(st.priority==='auto'?'mbt-gold':'mbt-c');
 }
 
 function openAdmin(){
@@ -900,76 +830,100 @@ function unlockAdmin(){
     return;
   }
   // Remplir A
-  document.getElementById('editATitle').value=ls.aTitle;
-  document.getElementById('editASub').value=ls.aSubtitle||'';
-  document.getElementById('editADate').value=ls.aDate||'';
-  document.getElementById('slotAStart').value=toMin(ls.aStartH,ls.aStartM);
-  document.getElementById('slotAEnd').value=(ls.aEndH===24&&ls.aEndM===0)?1440:toMin(ls.aEndH,ls.aEndM);
-  updateSlotCountA();
+  document.getElementById('aTitle').value=st.aTitle;
+  document.getElementById('aSub').value=st.aSub||'';
+  document.getElementById('aDate').value=st.aDate||'';
+  document.getElementById('aStart').value=toMin(st.aSH,st.aSM);
+  document.getElementById('aEnd').value=(st.aEH===24&&st.aEM===0)?1440:toMin(st.aEH,st.aEM);
+  calcA();
   // Remplir B
-  document.getElementById('editBTitle').value=ls.bTitle;
-  document.getElementById('editBSub').value=ls.bSubtitle||'';
-  document.getElementById('editBDate').value=ls.bDate||'';
-  document.getElementById('slotBStart').value=toMin(ls.bStartH,ls.bStartM);
-  document.getElementById('slotBEnd').value=(ls.bEndH===24&&ls.bEndM===0)?1440:toMin(ls.bEndH,ls.bEndM);
-  updateSlotCountB();
-  // Header
-  document.getElementById('editName').value=ls.headerName;
-  document.getElementById('editSub').value=ls.headerSub;
-  updateToggleBBtn();
+  document.getElementById('bTitle').value=st.bTitle;
+  document.getElementById('bSub').value=st.bSub||'';
+  document.getElementById('bDate').value=st.bDate||'';
+  document.getElementById('bStart').value=toMin(st.bSH,st.bSM);
+  document.getElementById('bEnd').value=(st.bEH===24&&st.bEM===0)?1440:toMin(st.bEH,st.bEM);
+  calcB();
+  // Groupe
+  document.getElementById('gName').value=st.grpName;
+  document.getElementById('gSub').value=st.grpSub;
+  // Boutons visibilite et priorite
+  updateAdmVisBtns();
+  updatePrioBtns();
   document.getElementById('admLock').style.display='none';
   document.getElementById('admContent').style.display='block';
 }
 
+function toggleVis(which){
+  if(which==='A') st.aVisible=!st.aVisible;
+  else            st.bVisible=!st.bVisible;
+  saveLocal();
+  saveCfg(which==='A'?'aVisible':'bVisible', which==='A'?st.aVisible:st.bVisible).catch(function(){});
+  updateAdmVisBtns();
+  renderSlots();
+  showToast(which==='A'
+    ? (st.aVisible?'✅ Sondage A visible':'🚫 Sondage A masque')
+    : (st.bVisible?'✅ Sondage B visible':'🚫 Sondage B masque'));
+}
+
+function doClear(which){
+  var msg=which==='A'?tx('clearConfA'):tx('clearConfB');
+  if(!confirm(msg))return;
+  var fn=which==='A'?clearA:clearB;
+  fn().then(function(r){if(!r.ok)throw new Error();return loadAllVotes();})
+    .then(function(){renderSlots();showToast(tx('clearDone'));})
+    .catch(function(){showToast(tx('errConn'));});
+}
+
+function setPrio(p){
+  st.priority=p;saveLocal();
+  saveCfg('priority',p).catch(function(){});
+  updatePrioBtns();
+  // Si les deux visibles, recalculer le tab par defaut
+  if(st.aVisible&&st.bVisible){
+    st.tab=getDefaultTab();
+    renderSlots();
+  }
+}
+
 function saveAdmin(){
-  // A
-  var at=document.getElementById('editATitle').value.trim();
-  var as=document.getElementById('editASub').value.trim();
-  var ad=document.getElementById('editADate').value;
-  var asm=parseInt(document.getElementById('slotAStart').value,10);
-  var aem=parseInt(document.getElementById('slotAEnd').value,10);
-  // B
-  var bt=document.getElementById('editBTitle').value.trim();
-  var bs=document.getElementById('editBSub').value.trim();
-  var bd=document.getElementById('editBDate').value;
-  var bsm=parseInt(document.getElementById('slotBStart').value,10);
-  var bem=parseInt(document.getElementById('slotBEnd').value,10);
-  // Header
-  var hn=document.getElementById('editName').value.trim();
-  var hs=document.getElementById('editSub').value.trim();
+  var at=document.getElementById('aTitle').value.trim();
+  var as=document.getElementById('aSub').value.trim();
+  var ad=document.getElementById('aDate').value;
+  var asm=+document.getElementById('aStart').value;
+  var aem=+document.getElementById('aEnd').value;
+  var bt=document.getElementById('bTitle').value.trim();
+  var bs=document.getElementById('bSub').value.trim();
+  var bd=document.getElementById('bDate').value;
+  var bsm=+document.getElementById('bStart').value;
+  var bem=+document.getElementById('bEnd').value;
+  var gn=document.getElementById('gName').value.trim();
+  var gs=document.getElementById('gSub').value.trim();
 
   if(isNaN(asm)||isNaN(aem)||isNaN(bsm)||isNaN(bem)){showToast('⚠️ Horaires invalides');return;}
 
-  if(at)ls.aTitle=at; ls.aSubtitle=as; ls.aDate=ad;
-  var ashm=fromMin(asm);ls.aStartH=ashm.h;ls.aStartM=ashm.m;
-  if(aem===1440){ls.aEndH=24;ls.aEndM=0;}else{var aehm=fromMin(aem);ls.aEndH=aehm.h;ls.aEndM=aehm.m;}
+  if(at)st.aTitle=at; st.aSub=as; st.aDate=ad;
+  var ashm=fromMin(asm);st.aSH=ashm.h;st.aSM=ashm.m;
+  if(aem===1440){st.aEH=24;st.aEM=0;}else{var aehm=fromMin(aem);st.aEH=aehm.h;st.aEM=aehm.m;}
 
-  if(bt)ls.bTitle=bt; ls.bSubtitle=bs; ls.bDate=bd;
-  var bshm=fromMin(bsm);ls.bStartH=bshm.h;ls.bStartM=bshm.m;
-  if(bem===1440){ls.bEndH=24;ls.bEndM=0;}else{var behm=fromMin(bem);ls.bEndH=behm.h;ls.bEndM=behm.m;}
+  if(bt)st.bTitle=bt; st.bSub=bs; st.bDate=bd;
+  var bshm=fromMin(bsm);st.bSH=bshm.h;st.bSM=bshm.m;
+  if(bem===1440){st.bEH=24;st.bEM=0;}else{var behm=fromMin(bem);st.bEH=behm.h;st.bEM=behm.m;}
 
-  if(hn)ls.headerName=hn;
-  if(hs)ls.headerSub=hs;
+  if(gn)st.grpName=gn; if(gs)st.grpSub=gs;
   saveLocal();
 
   Promise.all([
-    saveCfg('headerName',ls.headerName), saveCfg('headerSub',ls.headerSub),
-    saveCfg('aTitle',ls.aTitle), saveCfg('aSubtitle',ls.aSubtitle),
-    saveCfg('aDate',ls.aDate), saveCfg('aStartMin',asm), saveCfg('aEndMin',aem),
-    saveCfg('bTitle',ls.bTitle), saveCfg('bSubtitle',ls.bSubtitle),
-    saveCfg('bDate',ls.bDate), saveCfg('bStartMin',bsm), saveCfg('bEndMin',bem),
-    saveCfg('bVisible',ls.bVisible)
+    saveCfg('grpName',st.grpName),saveCfg('grpSub',st.grpSub),
+    saveCfg('aVisible',st.aVisible),saveCfg('aTitle',st.aTitle),
+    saveCfg('aSub',st.aSub),saveCfg('aDate',st.aDate),
+    saveCfg('aSMin',asm),saveCfg('aEMin',aem),
+    saveCfg('bVisible',st.bVisible),saveCfg('bTitle',st.bTitle),
+    saveCfg('bSub',st.bSub),saveCfg('bDate',st.bDate),
+    saveCfg('bSMin',bsm),saveCfg('bEMin',bem),
+    saveCfg('priority',st.priority)
   ]).catch(function(){});
 
   renderSlots(); closeAdmin(); showToast(tx('saved'));
-}
-
-function doResetA(){
-  if(!confirm(tx('resetAConfirm')))return;
-  clearVotesA()
-    .then(function(r){if(!r.ok)throw new Error();return loadAllVotes();})
-    .then(function(){renderSlots();closeAdmin();showToast(tx('resetADone'));})
-    .catch(function(){showToast(tx('errConn'));});
 }
 
 // ============================================================
@@ -983,27 +937,42 @@ function showToast(msg){
 }
 
 // ============================================================
+// SWITCH TAB (clic utilisateur)
+// ============================================================
+function switchTab(tab){
+  st.tab=tab; saveLocal();
+  renderSlots();
+}
+
+// ============================================================
 // EVENTS
 // ============================================================
-document.getElementById('hdrAv').onclick     = openAdmin;
-document.getElementById('hdrInfo').onclick   = openAdmin;
-document.getElementById('btnAdmin').onclick  = openAdmin;
-document.getElementById('btnStimmen').onclick= openVoters;
-document.getElementById('btnSend').onclick   = setName;
+document.getElementById('hdrAv').onclick    = openAdmin;
+document.getElementById('hdrInfo').onclick  = openAdmin;
+document.getElementById('btnAdmin').onclick = openAdmin;
+document.getElementById('btnStimmen').onclick = openVoters;
+document.getElementById('btnSend').onclick  = setName;
 document.getElementById('nameInput').addEventListener('keydown',function(e){if(e.key==='Enter')setName();});
-document.getElementById('nmBtn').onclick     = confirmName;
+document.getElementById('nmBtn').onclick    = confirmName;
 document.getElementById('nmInput').addEventListener('keydown',function(e){if(e.key==='Enter')confirmName();});
-document.getElementById('admBtnCancel').onclick  = closeAdmin;
-document.getElementById('admBtnEnter').onclick   = unlockAdmin;
+document.getElementById('aBtnCancel').onclick = closeAdmin;
+document.getElementById('aBtnEnter').onclick  = unlockAdmin;
 document.getElementById('admPwd').addEventListener('keydown',function(e){if(e.key==='Enter')unlockAdmin();});
-document.getElementById('admBtnClose').onclick   = closeAdmin;
-document.getElementById('admBtnSave').onclick    = saveAdmin;
-document.getElementById('admBtnResetA').onclick  = doResetA;
-document.getElementById('admBtnToggleB').onclick = toggleBVisible;
-document.getElementById('btnVotersClose').onclick= closeVoters;
-document.getElementById('btn-fr').onclick = function(){setLang('fr');};
-document.getElementById('btn-de').onclick = function(){setLang('de');};
-document.getElementById('btn-en').onclick = function(){setLang('en');};
+document.getElementById('aBtnClose').onclick  = closeAdmin;
+document.getElementById('aBtnSave').onclick   = saveAdmin;
+document.getElementById('aBtnVis').onclick    = function(){toggleVis('A');};
+document.getElementById('aBtnClear').onclick  = function(){doClear('A');};
+document.getElementById('bBtnVis').onclick    = function(){toggleVis('B');};
+document.getElementById('bBtnClear').onclick  = function(){doClear('B');};
+document.getElementById('pBtnA').onclick      = function(){setPrio('A');};
+document.getElementById('pBtnB').onclick      = function(){setPrio('B');};
+document.getElementById('pBtnAuto').onclick   = function(){setPrio('auto');};
+document.getElementById('vClose').onclick     = closeVoters;
+document.getElementById('tabA').onclick       = function(){switchTab('A');};
+document.getElementById('tabB').onclick       = function(){switchTab('B');};
+document.getElementById('btn-fr').onclick     = function(){setLang('fr');};
+document.getElementById('btn-de').onclick     = function(){setLang('de');};
+document.getElementById('btn-en').onclick     = function(){setLang('en');};
 
 // ============================================================
 // POLLING
@@ -1020,23 +989,30 @@ setInterval(function(){
 // INIT
 // ============================================================
 loadLocal();
-lang=ls.lang||'fr';
+lang=st.lang||'fr';
 ['fr','de','en'].forEach(function(l){document.getElementById('btn-'+l).classList.toggle('active',l===lang);});
 buildSelects();
 applyLang();
-if(ls.userName)document.getElementById('nameInput').value=ls.userName;
+if(st.userName)document.getElementById('nameInput').value=st.userName;
 
+// Appliquer la priorite au tab par defaut au premier chargement
 loadConfig()
   .then(function(){return loadAllVotes();})
   .then(function(){
+    // Appliquer la priorite d'affichage au chargement
+    if(st.aVisible&&st.bVisible){
+      st.tab=getDefaultTab();
+    } else {
+      st.tab=st.bVisible?'B':'A';
+    }
     renderSlots();
     startPolling();
-    if(!ls.userName)setTimeout(function(){openNameModal();},700);
+    if(!st.userName)setTimeout(function(){openNameModal();},700);
   })
   .catch(function(){
     renderSlots();
     startPolling();
-    if(!ls.userName)setTimeout(function(){openNameModal();},700);
+    if(!st.userName)setTimeout(function(){openNameModal();},700);
   });
 </script>
 </body>
