@@ -26,10 +26,20 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .lbtn.active{background:var(--green);color:#fff;}
 .lbtn:hover:not(.active){background:#3A4A52;color:var(--text);}
 
-/* POLL DATE BANNER */
-.date-banner{width:100%;max-width:480px;background:var(--green2);padding:6px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
-.date-banner-text{font-size:13px;font-weight:500;color:#A8E6D4;flex:1;}
-.date-banner-day{font-size:13px;color:#E9EDEF;font-weight:600;}
+/* POLL TAB INDICATOR */
+.poll-indicator{width:100%;max-width:480px;padding:0;}
+.poll-tab{width:100%;display:flex;border-bottom:1px solid var(--border);}
+.tab-btn{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;border:none;background:var(--panel);color:var(--muted);border-bottom:2px solid transparent;transition:all 0.15s;font-family:inherit;}
+.tab-btn.active{color:var(--green);border-bottom-color:var(--green);background:var(--panel);}
+.tab-btn:hover:not(.active){color:var(--text);}
+.tab-badge{display:inline-block;background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:5px;vertical-align:middle;}
+.tab-badge.new{background:var(--gold);}
+
+/* DATE BANNER */
+.date-banner{width:100%;max-width:480px;background:var(--green2);padding:6px 16px;display:none;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.date-banner.show{display:flex;}
+.date-banner-lbl{font-size:12px;color:#A8E6D4;}
+.date-banner-val{font-size:13px;color:#E9EDEF;font-weight:600;flex:1;}
 
 /* STATS */
 .stats{width:100%;max-width:480px;background:var(--panel);padding:7px 14px;display:flex;gap:12px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center;}
@@ -45,16 +55,16 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .srchinp::placeholder{color:var(--muted);}
 
 /* CHAT */
-.chat{width:100%;max-width:480px;flex:1;padding:12px 10px 90px;}
+.chat{width:100%;max-width:480px;flex:1;padding:12px 10px 100px;}
 .bbl{background:var(--bubble);border-radius:0 8px 8px 8px;padding:8px 8px 4px;}
 .bmeta{display:flex;align-items:center;gap:8px;margin-bottom:4px;padding:0 4px;}
 .bav{width:28px;height:28px;border-radius:50%;background:var(--green2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0;}
 .bsender{font-size:13px;font-weight:500;color:#64B5F6;}
 .btime{font-size:11px;color:var(--muted);margin-left:auto;}
-.ptitle{font-size:14px;font-weight:500;padding:2px 6px 6px;}
+.ptitle{font-size:14px;font-weight:500;padding:2px 6px 4px;}
 .psubtitle{font-size:12px;color:var(--gold);padding:0 6px 8px;font-style:italic;}
 
-/* OPTION ROWS */
+/* OPTIONS */
 .orow{display:flex;align-items:center;gap:10px;padding:9px 6px;border-radius:8px;cursor:pointer;transition:background 0.1s;margin-bottom:1px;user-select:none;}
 .orow:hover{background:rgba(255,255,255,0.05);}
 .orow.sel{background:rgba(0,168,132,0.10);}
@@ -102,6 +112,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .mbt-c{background:var(--border);color:var(--muted);}
 .mbt-g{background:var(--green);color:#fff;}
 .mbt-r{background:var(--red);color:#fff;}
+.mbt-gold{background:var(--gold);color:#fff;}
 .albl{font-size:12px;color:var(--muted);margin-bottom:4px;margin-top:10px;display:block;}
 .ainp{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);font-family:inherit;outline:none;margin-bottom:4px;}
 .ainp:focus{border-color:var(--green);}
@@ -122,6 +133,11 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .viav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;flex-shrink:0;}
 .emsg{color:var(--muted);font-size:13px;text-align:center;padding:1.5rem;}
 .ldmsg{color:var(--muted);font-size:14px;text-align:center;padding:2rem;}
+
+/* PREV POLL LINK */
+.prev-poll-link{width:100%;max-width:480px;text-align:center;padding:12px 16px;font-size:13px;color:var(--muted);border-top:1px solid var(--border);cursor:pointer;display:none;}
+.prev-poll-link:hover{color:var(--text);}
+.prev-poll-link.show{display:block;}
 
 /* TOAST */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#2A3942;color:var(--text);padding:8px 18px;border-radius:6px;font-size:13px;opacity:0;transition:all 0.25s;z-index:300;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;}
@@ -144,10 +160,24 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
   </div>
 </div>
 
+<!-- ONGLETS (visibles seulement si sondage B est actif) -->
+<div class="poll-indicator" id="pollTabs" style="display:none">
+  <div class="poll-tab">
+    <button class="tab-btn active" id="tabBtnA" onclick="switchTab('A')">
+      <span id="tabLblA">Aujourd'hui</span>
+      <span class="tab-badge" id="tabBadgeA">0</span>
+    </button>
+    <button class="tab-btn" id="tabBtnB" onclick="switchTab('B')">
+      <span id="tabLblB">Demain</span>
+      <span class="tab-badge new" id="tabBadgeB">Nouveau</span>
+    </button>
+  </div>
+</div>
+
 <!-- DATE BANNER -->
-<div class="date-banner" id="dateBanner" style="display:none">
-  <span class="date-banner-text" id="dateBannerLabel">📅</span>
-  <span class="date-banner-day" id="dateBannerVal"></span>
+<div class="date-banner" id="dateBanner">
+  <span class="date-banner-lbl" id="dateBannerLbl">📅</span>
+  <span class="date-banner-val" id="dateBannerVal"></span>
 </div>
 
 <!-- STATS -->
@@ -164,7 +194,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 <!-- SEARCH -->
 <div class="srchwrap"><input class="srchinp" id="searchInp" placeholder="🔍 ..." oninput="renderSlots()"></div>
 
-<!-- CHAT -->
+<!-- CHAT BUBBLE -->
 <div class="chat">
   <div class="bbl">
     <div class="bmeta">
@@ -193,13 +223,13 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
   </button>
 </div>
 
-<!-- NAME MODAL (premiere visite uniquement) -->
+<!-- NAME MODAL -->
 <div class="mbg" id="nameModal">
   <div class="msh">
     <div class="mtitle" id="nmTitle">👋 Bienvenue</div>
-    <div class="msub" id="nmSub">Entrez votre prenom pour participer a la chaine de priere. Vous ne le saisirez qu'une seule fois.</div>
-    <input class="ainp" id="nmInput" placeholder="Votre prenom..." maxlength="25" style="margin-top:4px">
-    <div class="macts" style="margin-top:8px">
+    <div class="msub" id="nmSub">Entrez votre prenom pour participer. Une seule fois.</div>
+    <input class="ainp" id="nmInput" placeholder="Votre prenom..." maxlength="25">
+    <div class="macts" style="margin-top:4px">
       <button class="mbt mbt-g" id="nmBtn">✓ Confirmer</button>
     </div>
   </div>
@@ -209,62 +239,72 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 <div class="mbg" id="adminModal">
   <div class="msh">
     <div class="mtitle" id="admModalTitle">⚙️ Admin</div>
-    <!-- LOCK SCREEN -->
+
+    <!-- LOCK -->
     <div id="admLock">
       <div class="msub" id="admLockSub">Mot de passe administrateur.</div>
-      <input class="ainp" id="admPwd" type="password">
+      <input class="ainp" id="admPwd" type="password" placeholder="Mot de passe...">
       <div class="macts" style="margin-top:4px">
         <button class="mbt mbt-c" id="admBtnCancel">Annuler</button>
         <button class="mbt mbt-g" id="admBtnEnter">Entrer</button>
       </div>
     </div>
+
     <!-- CONTENT -->
     <div id="admContent" style="display:none">
 
-      <!-- SECTION : SONDAGE DU JOUR -->
+      <!-- SONDAGE ACTIF (A) -->
       <div class="asec">
-        <div class="asectitle" id="admSecPoll">Sondage du jour</div>
-        <label class="albl" id="admLblPollTitle">Titre principal</label>
-        <input class="ainp" id="editPollTitle">
-        <label class="albl" id="admLblPollSub">Sous-titre (optionnel — ex: Sondage du Jeudi 12 juin)</label>
-        <input class="ainp" id="editPollSub" placeholder="ex: Sondage du Jeudi 12 juin">
-        <label class="albl" id="admLblDate">Date (s'affiche en bandeau)</label>
-        <input class="ainp" id="editDate" type="date">
+        <div class="asectitle" id="admSecA">Sondage actif (aujourd'hui)</div>
+        <label class="albl" id="admLblATitle">Titre</label>
+        <input class="ainp" id="editATitle">
+        <label class="albl" id="admLblASub">Sous-titre</label>
+        <input class="ainp" id="editASub" placeholder="ex: Sondage du Jeudi 12 juin">
+        <label class="albl" id="admLblADate">Date</label>
+        <input class="ainp" id="editADate" type="date">
+        <label class="albl" id="admLblAStart">Debut</label>
+        <select class="asel" id="slotAStart" onchange="updateSlotCountA()"></select>
+        <label class="albl" id="admLblAEnd">Fin</label>
+        <select class="asel" id="slotAEnd" onchange="updateSlotCountA()"></select>
+        <div class="slotbox" style="margin-top:8px">
+          <div class="slotnum" id="slotCountA">0</div>
+          <div id="admSlotLblA" style="font-size:13px;color:var(--muted)">creneaux</div>
+        </div>
+        <div class="warnbox" id="warnA"></div>
+        <button class="mbt mbt-r" style="width:100%;margin-top:4px" id="admBtnResetA">🔄 Vider ce sondage</button>
       </div>
 
-      <!-- SECTION : TITRES HEADER -->
+      <!-- SONDAGE B (demain) -->
       <div class="asec">
-        <div class="asectitle" id="admSecTitles">Titres du groupe</div>
+        <div class="asectitle" id="admSecB">Sondage suivant (demain)</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <span style="font-size:13px;color:var(--muted)" id="admBVisibleLbl">Visible par les membres :</span>
+          <button class="mbt" id="admBtnToggleB" style="flex:none;padding:6px 14px;font-size:13px;">---</button>
+        </div>
+        <label class="albl" id="admLblBTitle">Titre</label>
+        <input class="ainp" id="editBTitle">
+        <label class="albl" id="admLblBSub">Sous-titre</label>
+        <input class="ainp" id="editBSub" placeholder="ex: Sondage du Vendredi 13 juin">
+        <label class="albl" id="admLblBDate">Date</label>
+        <input class="ainp" id="editBDate" type="date">
+        <label class="albl" id="admLblBStart">Debut</label>
+        <select class="asel" id="slotBStart" onchange="updateSlotCountB()"></select>
+        <label class="albl" id="admLblBEnd">Fin</label>
+        <select class="asel" id="slotBEnd" onchange="updateSlotCountB()"></select>
+        <div class="slotbox" style="margin-top:8px">
+          <div class="slotnum" id="slotCountB">0</div>
+          <div id="admSlotLblB" style="font-size:13px;color:var(--muted)">creneaux</div>
+        </div>
+        <div class="warnbox" id="warnB"></div>
+      </div>
+
+      <!-- HEADER -->
+      <div class="asec">
+        <div class="asectitle" id="admSecHeader">Titres du groupe</div>
         <label class="albl" id="admLblName">Nom du groupe</label>
         <input class="ainp" id="editName">
         <label class="albl" id="admLblSub">Sous-titre du groupe</label>
         <input class="ainp" id="editSub">
-      </div>
-
-      <!-- SECTION : CRENEAUX -->
-      <div class="asec">
-        <div class="asectitle" id="admSecSlots">Creneaux (pas de 15 min)</div>
-        <div class="slotbox">
-          <div class="slotnum" id="slotCountDisp">0</div>
-          <div id="admSlotLbl" style="font-size:13px;color:var(--muted)">creneaux</div>
-        </div>
-        <div class="warnbox" id="warnBox"></div>
-        <div class="slotgrid">
-          <div>
-            <label class="albl" id="admLblStart">Debut</label>
-            <select class="asel" id="slotStart" onchange="updateSlotCount()"></select>
-          </div>
-          <div>
-            <label class="albl" id="admLblEnd">Fin</label>
-            <select class="asel" id="slotEnd" onchange="updateSlotCount()"></select>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION : RESET -->
-      <div class="asec">
-        <div class="asectitle" id="admSecDanger">Zone danger</div>
-        <button class="mbt mbt-r" style="width:100%" id="admBtnReset">🔄 Reinitialiser les votes</button>
       </div>
 
       <div class="macts">
@@ -295,10 +335,10 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 var SUPA_URL  = 'https://bdyctczngulrnotuqvjk.supabase.co';
 var SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkeWN0Y3puZ3Vscm5vdHVxdmprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDMyOTIsImV4cCI6MjA5NjUxOTI5Mn0.ThRBbY014r9q2HbtcGa7ZnlKQChc13_THKisdK1Pz-I';
 var ADMIN_PWD = 'icc2026';
-var LOCAL_KEY = 'icc_v10';
+var LOCAL_KEY = 'icc_v11';
 
 // ============================================================
-// TRADUCTIONS — 100% completes FR / DE / EN
+// TRADUCTIONS
 // ============================================================
 var TR = {
   fr:{
@@ -311,38 +351,37 @@ var TR = {
     hello:'👋 Bonjour ',
     namePh:'Votre prenom...',
     nmTitle:'👋 Bienvenue',
-    nmSub:'Entrez votre prenom pour participer. Vous ne le saisirez qu\'une seule fois.',
+    nmSub:'Entrez votre prenom pour participer. Une seule fois.',
     nmBtn:'✓ Confirmer',
+    tabToday:"Aujourd'hui", tabTomorrow:'Demain', tabNew:'Nouveau',
     admModalTitle:'⚙️ Panneau Admin',
     admLockSub:'Mot de passe administrateur.',
     admPwdPh:'Mot de passe...',
     wrongPwd:'❌ Mot de passe incorrect',
-    admSecPoll:'Sondage du jour',
-    admLblPollTitle:'Titre principal',
-    admLblPollSub:'Sous-titre (ex: Sondage du Jeudi 12 juin)',
-    admLblDate:'Date (bandeau en haut)',
-    admSecTitles:'Titres du groupe',
-    admLblName:'Nom du groupe',
-    admLblSub:'Sous-titre du groupe',
-    admSecSlots:'Creneaux (pas de 15 min)',
+    admSecA:'Sondage actif (aujourd\'hui)',
+    admLblATitle:'Titre', admLblASub:'Sous-titre', admLblADate:'Date',
+    admLblAStart:'Debut', admLblAEnd:'Fin',
     admSlotLbl:'creneaux de 15 min',
-    admLblStart:'Heure de debut',
-    admLblEnd:'Heure de fin',
-    slotWarn:'Ces creneaux passent minuit. C\'est normal si votre sondage couvre la nuit.',
-    admSecDanger:'Zone danger',
-    btnReset:'🔄 Reinitialiser les votes',
-    btnCancel:'Annuler', btnEnter:'Entrer',
-    btnClose:'Fermer', btnSave:'✓ Enregistrer',
+    btnResetA:'🔄 Vider ce sondage',
+    resetAConfirm:'Vider le sondage d\'aujourd\'hui ?\nLes prenoms sont conserves.',
+    resetADone:'🔄 Sondage d\'aujourd\'hui vide',
+    admSecB:'Sondage suivant (demain)',
+    admBVisibleLbl:'Visible par les membres :',
+    bVisible:'✅ Oui', bHidden:'🚫 Non',
+    admLblBTitle:'Titre', admLblBSub:'Sous-titre', admLblBDate:'Date',
+    admLblBStart:'Debut', admLblBEnd:'Fin',
+    admSecHeader:'Titres du groupe',
+    admLblName:'Nom du groupe', admLblSub:'Sous-titre du groupe',
+    btnCancel:'Annuler', btnClose:'Fermer', btnSave:'✓ Enregistrer',
     saved:'✅ Modifications enregistrees !',
-    resetConfirm:'Reinitialiser TOUS les votes ?\n\nLes prenoms sont conserves. Action irreversible.',
-    resetDone:'🔄 Votes reinitialises — Prenoms conserves',
-    errConn:'Erreur de connexion. Reessayez.',
-    errReset:'Erreur lors du reset',
+    slotWarn:'Ces creneaux passent minuit. Normal pour un sondage de nuit.',
+    errConn:'Erreur de connexion', errSave:'Erreur sauvegarde',
     noVotes:'Aucun vote pour le moment',
     votersTitle:'Tous les votes',
     loading:'Chargement...',
-    dateBannerLabel:'📅 Sondage pour le',
-    pollSubDefault:'Cochez votre creneau de priere'
+    dateBannerLbl:'📅 Sondage pour le',
+    prevPollLink:'← Voir le sondage precedent',
+    backToCurrent:'→ Retour au sondage actif',
   },
   de:{
     syncOk:'Live', syncErr:'Offline',
@@ -354,38 +393,37 @@ var TR = {
     hello:'👋 Hallo ',
     namePh:'Dein Vorname...',
     nmTitle:'👋 Willkommen',
-    nmSub:'Gib deinen Vornamen ein. Du musst ihn nur einmal eingeben.',
+    nmSub:'Gib deinen Vornamen ein. Nur einmal.',
     nmBtn:'✓ Bestatigen',
+    tabToday:'Heute', tabTomorrow:'Morgen', tabNew:'Neu',
     admModalTitle:'⚙️ Admin-Bereich',
     admLockSub:'Admin-Passwort.',
     admPwdPh:'Passwort...',
     wrongPwd:'❌ Falsches Passwort',
-    admSecPoll:'Heutige Umfrage',
-    admLblPollTitle:'Haupttitel',
-    admLblPollSub:'Untertitel (z.B.: Umfrage fur Donnerstag 12. Juni)',
-    admLblDate:'Datum (oben anzeigen)',
-    admSecTitles:'Gruppentitel',
-    admLblName:'Gruppenname',
-    admLblSub:'Untertitel der Gruppe',
-    admSecSlots:'Zeitfenster (15-Min-Schritte)',
+    admSecA:'Aktive Umfrage (heute)',
+    admLblATitle:'Titel', admLblASub:'Untertitel', admLblADate:'Datum',
+    admLblAStart:'Beginn', admLblAEnd:'Ende',
     admSlotLbl:'Zeitfenster a 15 Min',
-    admLblStart:'Startzeit',
-    admLblEnd:'Endzeit',
-    slotWarn:'Diese Slots gehen uber Mitternacht. Normal, wenn die Umfrage die Nacht abdeckt.',
-    admSecDanger:'Gefahrenzone',
-    btnReset:'🔄 Alle Stimmen zurucksetzen',
-    btnCancel:'Abbrechen', btnEnter:'Eintreten',
-    btnClose:'Schliessen', btnSave:'✓ Speichern',
+    btnResetA:'🔄 Diese Umfrage leeren',
+    resetAConfirm:'Heutige Umfrage leeren?\nVornamen bleiben erhalten.',
+    resetADone:'🔄 Heutige Umfrage geleert',
+    admSecB:'Nachste Umfrage (morgen)',
+    admBVisibleLbl:'Sichtbar fur Mitglieder:',
+    bVisible:'✅ Ja', bHidden:'🚫 Nein',
+    admLblBTitle:'Titel', admLblBSub:'Untertitel', admLblBDate:'Datum',
+    admLblBStart:'Beginn', admLblBEnd:'Ende',
+    admSecHeader:'Gruppentitel',
+    admLblName:'Gruppenname', admLblSub:'Untertitel der Gruppe',
+    btnCancel:'Abbrechen', btnClose:'Schliessen', btnSave:'✓ Speichern',
     saved:'✅ Gespeichert!',
-    resetConfirm:'ALLE Stimmen zurucksetzen?\n\nVornamen bleiben erhalten. Unumkehrbar.',
-    resetDone:'🔄 Stimmen zuruckgesetzt — Vornamen behalten',
-    errConn:'Verbindungsfehler. Bitte erneut versuchen.',
-    errReset:'Fehler beim Zurucksetzen',
+    slotWarn:'Diese Slots gehen uber Mitternacht.',
+    errConn:'Verbindungsfehler', errSave:'Speicherfehler',
     noVotes:'Noch keine Stimmen',
     votersTitle:'Alle Stimmen',
     loading:'Laden...',
-    dateBannerLabel:'📅 Umfrage fur',
-    pollSubDefault:'Wahle dein Gebets-Zeitfenster'
+    dateBannerLbl:'📅 Umfrage fur',
+    prevPollLink:'← Vorherige Umfrage',
+    backToCurrent:'→ Zuruck zur aktiven Umfrage',
   },
   en:{
     syncOk:'Live', syncErr:'Offline',
@@ -397,620 +435,608 @@ var TR = {
     hello:'👋 Hello ',
     namePh:'Your name...',
     nmTitle:'👋 Welcome',
-    nmSub:'Enter your name to join. You only need to do this once.',
+    nmSub:'Enter your name to join. Only once.',
     nmBtn:'✓ Confirm',
+    tabToday:'Today', tabTomorrow:'Tomorrow', tabNew:'New',
     admModalTitle:'⚙️ Admin Panel',
     admLockSub:'Admin password.',
     admPwdPh:'Password...',
     wrongPwd:'❌ Wrong password',
-    admSecPoll:'Today\'s poll',
-    admLblPollTitle:'Main title',
-    admLblPollSub:'Subtitle (e.g.: Poll for Thursday June 12)',
-    admLblDate:'Date (displayed as banner)',
-    admSecTitles:'Group titles',
-    admLblName:'Group name',
-    admLblSub:'Group subtitle',
-    admSecSlots:'Slots (15-min steps)',
+    admSecA:"Today's poll",
+    admLblATitle:'Title', admLblASub:'Subtitle', admLblADate:'Date',
+    admLblAStart:'Start', admLblAEnd:'End',
     admSlotLbl:'slots of 15 min',
-    admLblStart:'Start time',
-    admLblEnd:'End time',
-    slotWarn:'These slots cross midnight. Normal if your poll covers the night.',
-    admSecDanger:'Danger zone',
-    btnReset:'🔄 Reset all votes',
-    btnCancel:'Cancel', btnEnter:'Enter',
-    btnClose:'Close', btnSave:'✓ Save',
+    btnResetA:'🔄 Clear this poll',
+    resetAConfirm:"Clear today's poll?\nNames are preserved.",
+    resetADone:"🔄 Today's poll cleared",
+    admSecB:"Tomorrow's poll",
+    admBVisibleLbl:'Visible to members:',
+    bVisible:'✅ Yes', bHidden:'🚫 No',
+    admLblBTitle:'Title', admLblBSub:'Subtitle', admLblBDate:'Date',
+    admLblBStart:'Start', admLblBEnd:'End',
+    admSecHeader:'Group titles',
+    admLblName:'Group name', admLblSub:'Group subtitle',
+    btnCancel:'Cancel', btnClose:'Close', btnSave:'✓ Save',
     saved:'✅ Changes saved!',
-    resetConfirm:'Reset ALL votes?\n\nNames are kept. This cannot be undone.',
-    resetDone:'🔄 Votes reset — Names preserved',
-    errConn:'Connection error. Please retry.',
-    errReset:'Error during reset',
+    slotWarn:'These slots cross midnight.',
+    errConn:'Connection error', errSave:'Save error',
     noVotes:'No votes yet',
     votersTitle:'All votes',
     loading:'Loading...',
-    dateBannerLabel:'📅 Poll for',
-    pollSubDefault:'Choose your prayer slot'
+    dateBannerLbl:'📅 Poll for',
+    prevPollLink:'← View previous poll',
+    backToCurrent:'→ Back to active poll',
   }
 };
 
 var lang = 'fr';
-function tx(k){ return (TR[lang] && TR[lang][k]) || TR.fr[k] || k; }
+function tx(k){ return (TR[lang]&&TR[lang][k]) || TR.fr[k] || k; }
 
-// Applique la traduction a tous les elements statiques
 function applyLang(){
-  // Search & name bar
-  document.getElementById('searchInp').placeholder   = tx('srchPh');
-  document.getElementById('nameInput').placeholder   = tx('namePh');
-  document.getElementById('ldmsg').textContent       = '⏳ ' + tx('loading');
-  document.getElementById('btnStimmen').textContent  = tx('stimmen');
-  document.getElementById('btnAdmin').textContent    = tx('admin');
-  // Name modal
-  document.getElementById('nmTitle').textContent     = tx('nmTitle');
-  document.getElementById('nmSub').textContent       = tx('nmSub');
-  document.getElementById('nmBtn').textContent       = tx('nmBtn');
-  document.getElementById('nmInput').placeholder     = tx('namePh');
-  // Admin modal — lock
-  document.getElementById('admModalTitle').textContent = tx('admModalTitle');
-  document.getElementById('admLockSub').textContent    = tx('admLockSub');
-  document.getElementById('admPwd').placeholder        = tx('admPwdPh');
-  document.getElementById('admBtnCancel').textContent  = tx('btnCancel');
-  document.getElementById('admBtnEnter').textContent   = tx('btnEnter');
-  // Admin modal — content sections
-  document.getElementById('admSecPoll').textContent    = tx('admSecPoll');
-  document.getElementById('admLblPollTitle').textContent = tx('admLblPollTitle');
-  document.getElementById('admLblPollSub').textContent   = tx('admLblPollSub');
-  document.getElementById('admLblDate').textContent      = tx('admLblDate');
-  document.getElementById('admSecTitles').textContent  = tx('admSecTitles');
-  document.getElementById('admLblName').textContent    = tx('admLblName');
-  document.getElementById('admLblSub').textContent     = tx('admLblSub');
-  document.getElementById('admSecSlots').textContent   = tx('admSecSlots');
-  document.getElementById('admSlotLbl').textContent    = tx('admSlotLbl');
-  document.getElementById('admLblStart').textContent   = tx('admLblStart');
-  document.getElementById('admLblEnd').textContent     = tx('admLblEnd');
-  document.getElementById('admSecDanger').textContent  = tx('admSecDanger');
-  document.getElementById('admBtnReset').textContent   = tx('btnReset');
-  document.getElementById('admBtnClose').textContent   = tx('btnClose');
-  document.getElementById('admBtnSave').textContent    = tx('btnSave');
-  // Voters modal
-  document.getElementById('votersTitle').textContent      = tx('votersTitle');
-  document.getElementById('btnVotersClose').textContent   = tx('btnClose');
-  // Date banner label
-  document.getElementById('dateBannerLabel').textContent = tx('dateBannerLabel');
-  // Sync
+  var el = function(id){ return document.getElementById(id); };
+  el('searchInp').placeholder    = tx('srchPh');
+  el('nameInput').placeholder    = tx('namePh');
+  el('ldmsg').textContent        = '⏳ ' + tx('loading');
+  el('btnStimmen').textContent   = tx('stimmen');
+  el('btnAdmin').textContent     = tx('admin');
+  el('nmTitle').textContent      = tx('nmTitle');
+  el('nmSub').textContent        = tx('nmSub');
+  el('nmBtn').textContent        = tx('nmBtn');
+  el('nmInput').placeholder      = tx('namePh');
+  el('admModalTitle').textContent= tx('admModalTitle');
+  el('admLockSub').textContent   = tx('admLockSub');
+  el('admPwd').placeholder       = tx('admPwdPh');
+  el('admBtnCancel').textContent = tx('btnCancel');
+  el('admBtnEnter').textContent  = '→';
+  el('admSecA').textContent      = tx('admSecA');
+  el('admLblATitle').textContent = tx('admLblATitle');
+  el('admLblASub').textContent   = tx('admLblASub');
+  el('admLblADate').textContent  = tx('admLblADate');
+  el('admLblAStart').textContent = tx('admLblAStart');
+  el('admLblAEnd').textContent   = tx('admLblAEnd');
+  el('admSlotLblA').textContent  = tx('admSlotLbl');
+  el('admBtnResetA').textContent = tx('btnResetA');
+  el('admSecB').textContent      = tx('admSecB');
+  el('admBVisibleLbl').textContent = tx('admBVisibleLbl');
+  el('admLblBTitle').textContent = tx('admLblBTitle');
+  el('admLblBSub').textContent   = tx('admLblBSub');
+  el('admLblBDate').textContent  = tx('admLblBDate');
+  el('admLblBStart').textContent = tx('admLblBStart');
+  el('admLblBEnd').textContent   = tx('admLblBEnd');
+  el('admSlotLblB').textContent  = tx('admSlotLbl');
+  el('admSecHeader').textContent = tx('admSecHeader');
+  el('admLblName').textContent   = tx('admLblName');
+  el('admLblSub').textContent    = tx('admLblSub');
+  el('admBtnClose').textContent  = tx('btnClose');
+  el('admBtnSave').textContent   = tx('btnSave');
+  el('votersTitle').textContent  = tx('votersTitle');
+  el('btnVotersClose').textContent = tx('btnClose');
+  el('dateBannerLbl').textContent  = tx('dateBannerLbl');
+  // Tabs
+  el('tabLblA').textContent  = tx('tabToday');
+  el('tabLblB').textContent  = tx('tabTomorrow');
+  el('tabBadgeB').textContent= tx('tabNew');
+  // Toggle B button
+  updateToggleBBtn();
   setSyncStatus(synced);
-  // Slot count / warn refresh
-  updateSlotCount();
+  updateSlotCountA();
+  updateSlotCountB();
 }
 
 function setLang(l){
-  lang = l;
-  ls.lang = l;
-  saveLocal();
+  lang = l; ls.lang = l; saveLocal();
   ['fr','de','en'].forEach(function(x){
-    document.getElementById('btn-'+x).classList.toggle('active', x === l);
+    document.getElementById('btn-'+x).classList.toggle('active', x===l);
   });
   applyLang();
   renderSlots();
 }
 
 // ============================================================
-// COULEURS AVATARS
+// COULEURS
 // ============================================================
-var COLORS = ['#E53935','#8E24AA','#1E88E5','#00897B','#F4511E','#3949AB','#039BE5','#43A047','#FB8C00','#6D4C41','#D81B60','#5E35B1'];
-function gc(n){ var h=0; for(var i=0;i<n.length;i++) h=(h*31+n.charCodeAt(i))%COLORS.length; return COLORS[Math.abs(h)]; }
-function gi(n){ var p=n.trim().split(' '),r=''; for(var i=0;i<Math.min(p.length,2);i++) if(p[i]) r+=p[i][0].toUpperCase(); return r||'?'; }
+var COLORS=['#E53935','#8E24AA','#1E88E5','#00897B','#F4511E','#3949AB','#039BE5','#43A047','#FB8C00','#6D4C41','#D81B60','#5E35B1'];
+function gc(n){var h=0;for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%COLORS.length;return COLORS[Math.abs(h)];}
+function gi(n){var p=n.trim().split(' '),r='';for(var i=0;i<Math.min(p.length,2);i++)if(p[i])r+=p[i][0].toUpperCase();return r||'?';}
 
 // ============================================================
-// ETAT LOCAL (localStorage)
+// ETAT LOCAL
 // ============================================================
 var ls = {
   userName: '',
   lang: 'fr',
-  startH: 8,  startM: 0,
-  endH:   24, endM:   0,
-  headerName:  'STAR ICC NORDDEUTSCHLAND',
-  headerSub:   'Chaine de Priere · 21 Jours Jeune et Priere',
-  pollTitle:   '📋 Chaine de priere — Choisissez vos creneaux',
-  pollSubtitle:'',
-  pollDate:    ''
+  headerName: 'STAR ICC NORDDEUTSCHLAND',
+  headerSub:  'Chaine de Priere · 21 Jours Jeune et Priere',
+  // Sondage A (actif)
+  aTitle:    '📋 Chaine de priere — Choisissez vos creneaux',
+  aSubtitle: '',
+  aDate:     '',
+  aStartH:8, aStartM:0, aEndH:24, aEndM:0,
+  // Sondage B (demain)
+  bVisible:  false,
+  bTitle:    '📋 Chaine de priere — Choisissez vos creneaux',
+  bSubtitle: '',
+  bDate:     '',
+  bStartH:8, bStartM:0, bEndH:24, bEndM:0,
+  // Quel onglet est actif dans l'UI
+  currentTab: 'A'
 };
-var allVotes = [];
-var synced   = false;
+
+var votesA  = [];
+var votesB  = [];
+var synced  = false;
 
 function loadLocal(){
-  try{
-    var s = localStorage.getItem(LOCAL_KEY);
-    if(s){ var p=JSON.parse(s); for(var k in p) ls[k]=p[k]; }
-  }catch(e){}
+  try{var s=localStorage.getItem(LOCAL_KEY);if(s){var p=JSON.parse(s);for(var k in p)ls[k]=p[k];}}catch(e){}
 }
 function saveLocal(){
-  try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(ls)); }catch(e){}
+  try{localStorage.setItem(LOCAL_KEY,JSON.stringify(ls));}catch(e){}
 }
 
 // ============================================================
-// SUPABASE — helper fetch
+// SUPABASE
 // ============================================================
 function sfetch(path, method, body){
-  var opts = {
-    method: method || 'GET',
-    headers: {
-      'apikey':        SUPA_KEY,
-      'Authorization': 'Bearer ' + SUPA_KEY,
-      'Content-Type':  'application/json',
-      'Prefer':        method === 'POST' ? 'return=minimal' : ''
-    }
-  };
-  if(body !== undefined) opts.body = JSON.stringify(body);
-  return fetch(SUPA_URL + '/rest/v1/' + path, opts);
+  var opts={method:method||'GET',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=minimal':''}};
+  if(body!==undefined)opts.body=JSON.stringify(body);
+  return fetch(SUPA_URL+'/rest/v1/'+path,opts);
 }
 
-function loadVotes(){
-  return sfetch('votes?select=slot_key,user_name')
-    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
-    .then(function(d){ if(Array.isArray(d)){ allVotes=d; setSyncStatus(true); } })
-    .catch(function(){ setSyncStatus(false); });
+function loadAllVotes(){
+  // Charge les deux tables en parallele
+  return Promise.all([
+    sfetch('votes?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];}).then(function(d){if(Array.isArray(d))votesA=d;}).catch(function(){}),
+    sfetch('votes_b?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];}).then(function(d){if(Array.isArray(d))votesB=d;}).catch(function(){})
+  ]).then(function(){ setSyncStatus(true); }).catch(function(){ setSyncStatus(false); });
 }
 
 function loadConfig(){
   return sfetch('config?select=key,value')
-    .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
+    .then(function(r){return r.ok?r.json():[];})
     .then(function(d){
-      if(!Array.isArray(d)) return;
+      if(!Array.isArray(d))return;
       d.forEach(function(row){
-        if(row.key==='headerName')   ls.headerName   = row.value;
-        if(row.key==='headerSub')    ls.headerSub    = row.value;
-        if(row.key==='pollTitle')    ls.pollTitle    = row.value;
-        if(row.key==='pollSubtitle') ls.pollSubtitle = row.value;
-        if(row.key==='pollDate')     ls.pollDate     = row.value;
-        if(row.key==='startMin'){
-          var hm=fromMin(parseInt(row.value,10));
-          ls.startH=hm.h; ls.startM=hm.m;
-        }
-        if(row.key==='endMin'){
-          var v=parseInt(row.value,10);
-          if(v===1440){ ls.endH=24; ls.endM=0; }
-          else{ var hm2=fromMin(v); ls.endH=hm2.h; ls.endM=hm2.m; }
-        }
+        // Header
+        if(row.key==='headerName')ls.headerName=row.value;
+        if(row.key==='headerSub') ls.headerSub=row.value;
+        // Sondage A
+        if(row.key==='aTitle')   ls.aTitle=row.value;
+        if(row.key==='aSubtitle')ls.aSubtitle=row.value;
+        if(row.key==='aDate')    ls.aDate=row.value;
+        if(row.key==='aStartMin'){var hm=fromMin(parseInt(row.value,10));ls.aStartH=hm.h;ls.aStartM=hm.m;}
+        if(row.key==='aEndMin'){var v=parseInt(row.value,10);if(v===1440){ls.aEndH=24;ls.aEndM=0;}else{var hm2=fromMin(v);ls.aEndH=hm2.h;ls.aEndM=hm2.m;}}
+        // Sondage B
+        if(row.key==='bVisible') ls.bVisible=(row.value==='true');
+        if(row.key==='bTitle')   ls.bTitle=row.value;
+        if(row.key==='bSubtitle')ls.bSubtitle=row.value;
+        if(row.key==='bDate')    ls.bDate=row.value;
+        if(row.key==='bStartMin'){var hm3=fromMin(parseInt(row.value,10));ls.bStartH=hm3.h;ls.bStartM=hm3.m;}
+        if(row.key==='bEndMin'){var v2=parseInt(row.value,10);if(v2===1440){ls.bEndH=24;ls.bEndM=0;}else{var hm4=fromMin(v2);ls.bEndH=hm4.h;ls.bEndM=hm4.m;}}
       });
     }).catch(function(){});
 }
 
-function saveCfg(k, v){
-  return sfetch('config?key=eq.'+encodeURIComponent(k), 'DELETE')
-    .then(function(){ return sfetch('config','POST',{key:k,value:String(v)}); });
+function saveCfg(k,v){
+  return sfetch('config?key=eq.'+encodeURIComponent(k),'DELETE')
+    .then(function(){return sfetch('config','POST',{key:k,value:String(v)});});
 }
 
-function addVote(sk, un){
-  return sfetch('votes','POST',{slot_key:sk, user_name:un});
-}
-function removeVote(sk, un){
-  return sfetch('votes?slot_key=eq.'+encodeURIComponent(sk)+'&user_name=eq.'+encodeURIComponent(un),'DELETE');
-}
-// Reset seulement les votes — pas les configs, pas les prenoms
-function resetVotes(){
-  return sfetch('votes?slot_key=neq.__none__','DELETE');
-}
+function addVoteA(sk,un){return sfetch('votes','POST',{slot_key:sk,user_name:un});}
+function removeVoteA(sk,un){return sfetch('votes?slot_key=eq.'+encodeURIComponent(sk)+'&user_name=eq.'+encodeURIComponent(un),'DELETE');}
+function clearVotesA(){return sfetch('votes?slot_key=neq.__none__','DELETE');}
+
+function addVoteB(sk,un){return sfetch('votes_b','POST',{slot_key:sk,user_name:un});}
+function removeVoteB(sk,un){return sfetch('votes_b?slot_key=eq.'+encodeURIComponent(sk)+'&user_name=eq.'+encodeURIComponent(un),'DELETE');}
+function clearVotesB(){return sfetch('votes_b?slot_key=neq.__none__','DELETE');}
 
 function setSyncStatus(ok){
-  synced = ok;
-  var dot = document.getElementById('syncDot');
-  var lbl = document.getElementById('syncLbl');
-  dot.style.background = ok ? 'var(--green)' : 'var(--red)';
-  dot.style.animation  = ok ? 'pulse 1.5s infinite' : 'none';
-  lbl.textContent = tx(ok ? 'syncOk' : 'syncErr');
+  synced=ok;
+  var dot=document.getElementById('syncDot'),lbl=document.getElementById('syncLbl');
+  dot.style.background=ok?'var(--green)':'var(--red)';
+  dot.style.animation=ok?'pulse 1.5s infinite':'none';
+  lbl.textContent=tx(ok?'syncOk':'syncErr');
 }
 
 // ============================================================
-// GENERATION DES CRENEAUX — supporte le passage minuit
+// SLOTS
 // ============================================================
-function pad(n){ return n<10?'0'+n:''+n; }
-function toMin(h,m){ return h*60+m; }
-function fromMin(t){ return {h:Math.floor(t/60)%24, m:t%60}; }
+function pad(n){return n<10?'0'+n:''+n;}
+function toMin(h,m){return h*60+m;}
+function fromMin(t){return{h:Math.floor(t/60)%24,m:t%60};}
 
-function genSlots(){
-  var arr = [];
-  var sm  = toMin(ls.startH, ls.startM);
-  var em  = (ls.endH===24 && ls.endM===0) ? 1440 : toMin(ls.endH, ls.endM);
-  // Nombre total de minutes couvertes (supporte minuit)
-  var totalMin = em > sm ? em - sm : (1440 - sm) + em;
-  for(var i=0; i<totalMin; i+=15){
-    var t   = (sm + i)    % 1440;
-    var tn  = (sm + i+15) % 1440;
-    var cur = fromMin(t);
-    var nxt = fromMin(tn);
-    arr.push({
-      key:   cur.h + ':' + pad(cur.m),
-      label: pad(cur.h)+'H'+pad(cur.m)+' - '+pad(nxt.h)+'H'+pad(nxt.m)
-    });
+function genSlots(startH,startM,endH,endM){
+  var arr=[];
+  var sm=toMin(startH,startM);
+  var em=(endH===24&&endM===0)?1440:toMin(endH,endM);
+  var totalMin=em>sm?(em-sm):(1440-sm+em);
+  for(var i=0;i<totalMin;i+=15){
+    var t=(sm+i)%1440,tn=(sm+i+15)%1440;
+    var cur=fromMin(t),nxt=fromMin(tn);
+    arr.push({key:cur.h+':'+pad(cur.m),label:pad(cur.h)+'H'+pad(cur.m)+' - '+pad(nxt.h)+'H'+pad(nxt.m)});
   }
   return arr;
 }
 
-function getCurKey(){
-  var n = new Date();
-  return n.getHours() + ':' + pad(Math.floor(n.getMinutes()/15)*15);
+function getCurKey(){var n=new Date();return n.getHours()+':'+pad(Math.floor(n.getMinutes()/15)*15);}
+
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(tab){
+  ls.currentTab = tab;
+  saveLocal();
+  document.getElementById('tabBtnA').classList.toggle('active', tab==='A');
+  document.getElementById('tabBtnB').classList.toggle('active', tab==='B');
+  renderSlots();
+}
+
+function updateTabs(){
+  var tabs = document.getElementById('pollTabs');
+  if(ls.bVisible){
+    tabs.style.display = 'block';
+    // Badge A = nombre de votes
+    document.getElementById('tabBadgeA').textContent = votesA.length;
+    // Si tab courant n'est plus valide
+    if(!ls.bVisible && ls.currentTab==='B') ls.currentTab='A';
+  } else {
+    tabs.style.display = 'none';
+    ls.currentTab = 'A';
+  }
+  document.getElementById('tabBtnA').classList.toggle('active', ls.currentTab==='A');
+  document.getElementById('tabBtnB').classList.toggle('active', ls.currentTab==='B');
 }
 
 // ============================================================
-// RENDU PRINCIPAL
+// RENDU
 // ============================================================
 function renderSlots(){
-  var now = new Date();
-  document.getElementById('bTime').textContent = pad(now.getHours())+':'+pad(now.getMinutes());
+  var now=new Date();
+  document.getElementById('bTime').textContent=pad(now.getHours())+':'+pad(now.getMinutes());
+  document.getElementById('headerName').textContent=ls.headerName;
+  document.getElementById('headerSub').textContent=ls.headerSub+' ✏️';
 
-  // Header
-  document.getElementById('headerName').textContent = ls.headerName;
-  document.getElementById('headerSub').textContent  = ls.headerSub + ' ✏️';
+  updateTabs();
 
-  // Titre + sous-titre du sondage
-  document.getElementById('pollTitle').textContent = ls.pollTitle;
+  // Choisir le bon sondage
+  var isB     = (ls.bVisible && ls.currentTab==='B');
+  var title   = isB ? ls.bTitle    : ls.aTitle;
+  var sub     = isB ? ls.bSubtitle : ls.aSubtitle;
+  var date    = isB ? ls.bDate     : ls.aDate;
+  var votes   = isB ? votesB       : votesA;
+  var SLOTS   = isB
+    ? genSlots(ls.bStartH,ls.bStartM,ls.bEndH,ls.bEndM)
+    : genSlots(ls.aStartH,ls.aStartM,ls.aEndH,ls.aEndM);
+  var addFn   = isB ? addVoteB    : addVoteA;
+  var remFn   = isB ? removeVoteB : removeVoteA;
+
+  // Titre & sous-titre
+  document.getElementById('pollTitle').textContent = title;
   var subEl = document.getElementById('pollSubtitle');
-  if(ls.pollSubtitle && ls.pollSubtitle.trim()){
-    subEl.textContent    = ls.pollSubtitle;
-    subEl.style.display  = 'block';
-  } else {
-    subEl.style.display  = 'none';
-  }
+  if(sub && sub.trim()){subEl.textContent=sub;subEl.style.display='block';}
+  else{subEl.style.display='none';}
 
   // Bandeau date
   var banner = document.getElementById('dateBanner');
   var bannerVal = document.getElementById('dateBannerVal');
-  if(ls.pollDate){
+  if(date){
     try{
-      // Formatter la date selon la langue
-      var d    = new Date(ls.pollDate + 'T00:00:00');
-      var loc  = lang==='de' ? 'de-DE' : lang==='en' ? 'en-GB' : 'fr-FR';
-      var opts = {weekday:'long', day:'numeric', month:'long', year:'numeric'};
-      bannerVal.textContent            = d.toLocaleDateString(loc, opts);
-      document.getElementById('dateBannerLabel').textContent = tx('dateBannerLabel');
-      banner.style.display             = 'flex';
-    }catch(e){ banner.style.display = 'none'; }
+      var d=new Date(date+'T00:00:00');
+      var loc=lang==='de'?'de-DE':lang==='en'?'en-GB':'fr-FR';
+      var opts={weekday:'long',day:'numeric',month:'long',year:'numeric'};
+      bannerVal.textContent=d.toLocaleDateString(loc,opts);
+      document.getElementById('dateBannerLbl').textContent=tx('dateBannerLbl');
+      banner.classList.add('show');
+    }catch(e){banner.classList.remove('show');}
   } else {
-    banner.style.display = 'none';
+    banner.classList.remove('show');
   }
 
-  // Prenom dans la barre
-  var inp = document.getElementById('nameInput');
-  if(ls.userName && !inp.value) inp.value = ls.userName;
+  // Input prenom
+  var inp=document.getElementById('nameInput');
+  if(ls.userName&&!inp.value)inp.value=ls.userName;
 
-  var srch   = document.getElementById('searchInp').value.toLowerCase();
-  var curKey = getCurKey();
-  var SLOTS  = genSlots();
-  var total  = allVotes.length;
-  var free=0, taken=0, curLabel='';
-  var list = document.getElementById('optList');
-  list.innerHTML = '';
+  var srch=document.getElementById('searchInp').value.toLowerCase();
+  var curKey=getCurKey();
+  var total=votes.length;
+  var free=0,taken=0,curLabel='';
+  var list=document.getElementById('optList');
+  list.innerHTML='';
 
   SLOTS.forEach(function(slot){
-    if(srch && slot.label.toLowerCase().indexOf(srch)===-1) return;
+    if(srch&&slot.label.toLowerCase().indexOf(srch)===-1)return;
+    var voters=votes.filter(function(v){return v.slot_key===slot.key;}).map(function(v){return v.user_name;});
+    var isMine=(ls.userName!==''&&voters.indexOf(ls.userName)!==-1);
+    var isCur=(slot.key===curKey && !isB); // badge EN COURS seulement sur sondage A
+    if(isCur)curLabel=slot.label;
+    if(voters.length===0)free++;else taken++;
+    var pct=(total>0&&voters.length>0)?Math.max(Math.round(voters.length/total*100),5):0;
 
-    var voters = allVotes
-      .filter(function(v){ return v.slot_key===slot.key; })
-      .map(function(v){ return v.user_name; });
-    var isMine = ls.userName!=='' && voters.indexOf(ls.userName)!==-1;
-    var isCur  = slot.key === curKey;
-    if(isCur) curLabel = slot.label;
-    if(voters.length===0) free++; else taken++;
-
-    var pct = (total>0 && voters.length>0) ? Math.max(Math.round(voters.length/total*100),5) : 0;
-
-    var row = document.createElement('div');
-    row.className = 'orow' + (isMine?' sel':'') + (isCur?' cur':'');
-
-    var avH = voters.slice(0,3).map(function(n){
-      return '<div class="vav" style="background:'+gc(n)+'" title="'+n+'">'+gi(n)+'</div>';
+    var row=document.createElement('div');
+    row.className='orow'+(isMine?' sel':'')+(isCur?' cur':'');
+    var avH=voters.slice(0,3).map(function(n){
+      return'<div class="vav" style="background:'+gc(n)+'" title="'+n+'">'+gi(n)+'</div>';
     }).join('');
+    row.innerHTML=
+      '<div class="wacircle"><svg class="wacheck" width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>'+
+      '<div class="ocontent"><div class="otime">🙏 '+slot.label+
+      (isCur?'<span class="nowbadge">'+tx('nowBadge')+'</span>':'')+
+      '</div><div class="obarwrap"><div class="obar" style="width:'+pct+'%"></div></div></div>'+
+      '<div class="vstk">'+avH+'<div class="vcnt">'+(voters.length>0?voters.length:'')+'</div></div>';
 
-    row.innerHTML =
-      '<div class="wacircle"><svg class="wacheck" width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>' +
-      '<div class="ocontent">' +
-        '<div class="otime">🙏 ' + slot.label +
-          (isCur ? ' <span class="nowbadge">'+tx('nowBadge')+'</span>' : '') +
-        '</div>' +
-        '<div class="obarwrap"><div class="obar" style="width:'+pct+'%"></div></div>' +
-      '</div>' +
-      '<div class="vstk">' + avH + '<div class="vcnt">'+(voters.length>0?voters.length:'')+'</div></div>';
-
-    (function(sk, mine){
-      row.onclick = function(){
-        if(!ls.userName){ openNameModal(); return; }
+    (function(sk,mine,af,rf){
+      row.onclick=function(){
+        if(!ls.userName){openNameModal();return;}
         row.classList.add('busy');
-        var op = mine ? removeVote(sk, ls.userName) : addVote(sk, ls.userName);
-        op.then(function(r){ if(!r.ok) throw new Error(); return loadVotes(); })
-          .then(function(){ renderSlots(); })
-          .catch(function(){ showToast(tx('errConn')); row.classList.remove('busy'); });
+        var op=mine?rf(sk,ls.userName):af(sk,ls.userName);
+        op.then(function(r){if(!r.ok)throw new Error();return loadAllVotes();})
+          .then(function(){renderSlots();})
+          .catch(function(){showToast(tx('errConn'));row.classList.remove('busy');});
       };
-    })(slot.key, isMine);
-
+    })(slot.key,isMine,addFn,remFn);
     list.appendChild(row);
   });
 
-  if(list.children.length === 0){
-    list.innerHTML = '<div class="emsg">'+tx('noVotes')+'</div>';
-  }
-
-  document.getElementById('sFree').textContent  = free + (free!==1?' '+tx('free'):' '+tx('freeOne'));
-  document.getElementById('sTaken').textContent = taken + ' ' + tx('taken');
-  document.getElementById('sNow').textContent   = curLabel ? '⏰ '+curLabel : '';
+  if(list.children.length===0)list.innerHTML='<div class="emsg">'+tx('noVotes')+'</div>';
+  document.getElementById('sFree').textContent=free+(free!==1?' '+tx('free'):' '+tx('freeOne'));
+  document.getElementById('sTaken').textContent=taken+' '+tx('taken');
+  document.getElementById('sNow').textContent=curLabel?'⏰ '+curLabel:'';
 }
 
 // ============================================================
-// PRENOM — modal premiere visite, barre en bas pour modifier
+// PRENOM
 // ============================================================
 function openNameModal(){
-  document.getElementById('nmInput').value = '';
+  document.getElementById('nmInput').value='';
   document.getElementById('nameModal').classList.add('open');
-  setTimeout(function(){ document.getElementById('nmInput').focus(); }, 250);
+  setTimeout(function(){document.getElementById('nmInput').focus();},250);
 }
 function confirmName(){
-  var v = document.getElementById('nmInput').value.trim();
-  if(!v) return;
-  ls.userName = v;
-  saveLocal();
-  document.getElementById('nameInput').value = v;
+  var v=document.getElementById('nmInput').value.trim();
+  if(!v)return;
+  ls.userName=v;saveLocal();
+  document.getElementById('nameInput').value=v;
   document.getElementById('nameModal').classList.remove('open');
-  showToast(tx('hello') + v + ' !');
+  showToast(tx('hello')+v+' !');
   renderSlots();
 }
-// Barre du bas : permet de modifier le prenom
 function setName(){
-  var v = document.getElementById('nameInput').value.trim();
-  if(!v){ openNameModal(); return; }
-  ls.userName = v;
-  saveLocal();
-  renderSlots();
-  showToast(tx('hello') + v + ' !');
+  var v=document.getElementById('nameInput').value.trim();
+  if(!v){openNameModal();return;}
+  ls.userName=v;saveLocal();renderSlots();
+  showToast(tx('hello')+v+' !');
 }
 
 // ============================================================
-// VOTERS (Stimmen ansehen)
+// VOTERS
 // ============================================================
 function openVoters(){
-  var SLOTS = genSlots();
-  var list  = document.getElementById('voterList');
-  list.innerHTML = '';
-  var has = false;
+  var isB=(ls.bVisible&&ls.currentTab==='B');
+  var votes=isB?votesB:votesA;
+  var SLOTS=isB?genSlots(ls.bStartH,ls.bStartM,ls.bEndH,ls.bEndM):genSlots(ls.aStartH,ls.aStartM,ls.aEndH,ls.aEndM);
+  var list=document.getElementById('voterList');
+  list.innerHTML='';var has=false;
   SLOTS.forEach(function(slot){
-    allVotes
-      .filter(function(v){ return v.slot_key===slot.key; })
-      .forEach(function(v){
-        has = true;
-        var item = document.createElement('div');
-        item.className = 'vitem';
-        item.innerHTML =
-          '<div class="viav" style="background:'+gc(v.user_name)+'">'+gi(v.user_name)+'</div>' +
-          '<div>' +
-            '<div style="font-size:14px">'+v.user_name+'</div>' +
-            '<div style="font-size:12px;color:var(--muted)">🙏 '+slot.label+'</div>' +
-          '</div>';
-        list.appendChild(item);
-      });
+    votes.filter(function(v){return v.slot_key===slot.key;}).forEach(function(v){
+      has=true;var item=document.createElement('div');item.className='vitem';
+      item.innerHTML='<div class="viav" style="background:'+gc(v.user_name)+'">'+gi(v.user_name)+'</div>'+
+        '<div><div style="font-size:14px">'+v.user_name+'</div>'+
+        '<div style="font-size:12px;color:var(--muted)">🙏 '+slot.label+'</div></div>';
+      list.appendChild(item);
+    });
   });
-  if(!has) list.innerHTML = '<div class="emsg">'+tx('noVotes')+'</div>';
+  if(!has)list.innerHTML='<div class="emsg">'+tx('noVotes')+'</div>';
   document.getElementById('votersModal').classList.add('open');
 }
-function closeVoters(){ document.getElementById('votersModal').classList.remove('open'); }
+function closeVoters(){document.getElementById('votersModal').classList.remove('open');}
 
 // ============================================================
-// ADMIN — selects de 15 en 15 min
+// ADMIN — selects
 // ============================================================
 function buildSelects(){
-  var ss = document.getElementById('slotStart');
-  var se = document.getElementById('slotEnd');
-  ss.innerHTML = '';
-  se.innerHTML = '';
-  // Debut : 00H00 → 23H45
-  for(var t=0; t<1440; t+=15){
-    var hm = fromMin(t);
-    var o  = document.createElement('option');
-    o.value = t;
-    o.textContent = pad(hm.h)+'H'+pad(hm.m);
-    ss.appendChild(o);
-  }
-  // Fin : 00H15 → 00H00 (minuit = 1440)
-  for(var t2=15; t2<=1440; t2+=15){
-    var hm2 = fromMin(t2 % 1440);
-    var o2  = document.createElement('option');
-    o2.value = t2;
-    o2.textContent = pad(hm2.h)+'H'+pad(hm2.m);
-    se.appendChild(o2);
-  }
+  ['slotAStart','slotAEnd','slotBStart','slotBEnd'].forEach(function(id){
+    var el=document.getElementById(id);
+    el.innerHTML='';
+    var isEnd=(id==='slotAEnd'||id==='slotBEnd');
+    var start=isEnd?15:0;
+    var end=isEnd?1440:1425;
+    var step=15;
+    for(var t=start;t<=end;t+=step){
+      var hm=fromMin(t%1440),o=document.createElement('option');
+      o.value=t;o.textContent=pad(hm.h)+'H'+pad(hm.m);
+      el.appendChild(o);
+    }
+  });
 }
 
-function updateSlotCount(){
-  var ss = document.getElementById('slotStart');
-  var se = document.getElementById('slotEnd');
-  if(!ss || !se) return;
-  var sm = parseInt(ss.value, 10);
-  var em = parseInt(se.value, 10);
-  if(isNaN(sm) || isNaN(em)){
-    document.getElementById('slotCountDisp').textContent = '0';
-    return;
-  }
-  var total = em > sm ? Math.floor((em-sm)/15) : Math.floor((1440-sm+em)/15);
-  document.getElementById('slotCountDisp').textContent = total > 0 ? total : 0;
-  var wb = document.getElementById('warnBox');
-  if(em <= sm){
-    wb.textContent    = tx('slotWarn');
-    wb.style.display  = 'block';
-  } else {
-    wb.style.display  = 'none';
-  }
+function computeSlotCount(sm,em){
+  var total=em>sm?Math.floor((em-sm)/15):Math.floor((1440-sm+em)/15);
+  return total>0?total:0;
+}
+
+function updateSlotCountA(){
+  var sm=parseInt(document.getElementById('slotAStart').value,10)||0;
+  var em=parseInt(document.getElementById('slotAEnd').value,10)||1440;
+  document.getElementById('slotCountA').textContent=computeSlotCount(sm,em);
+  var wb=document.getElementById('warnA');
+  if(em<=sm){wb.textContent=tx('slotWarn');wb.style.display='block';}else{wb.style.display='none';}
+}
+function updateSlotCountB(){
+  var sm=parseInt(document.getElementById('slotBStart').value,10)||0;
+  var em=parseInt(document.getElementById('slotBEnd').value,10)||1440;
+  document.getElementById('slotCountB').textContent=computeSlotCount(sm,em);
+  var wb=document.getElementById('warnB');
+  if(em<=sm){wb.textContent=tx('slotWarn');wb.style.display='block';}else{wb.style.display='none';}
+}
+
+function updateToggleBBtn(){
+  var btn=document.getElementById('admBtnToggleB');
+  if(ls.bVisible){btn.textContent=tx('bVisible');btn.className='mbt mbt-g';}
+  else{btn.textContent=tx('bHidden');btn.className='mbt mbt-c';}
+}
+
+function toggleBVisible(){
+  ls.bVisible=!ls.bVisible;
+  saveLocal();
+  updateToggleBBtn();
+  saveCfg('bVisible',ls.bVisible).catch(function(){});
+  renderSlots();
+  showToast(ls.bVisible?'✅ Sondage B visible':'🚫 Sondage B masque');
 }
 
 function openAdmin(){
-  document.getElementById('admLock').style.display    = 'block';
-  document.getElementById('admContent').style.display = 'none';
-  document.getElementById('admPwd').value = '';
+  document.getElementById('admLock').style.display='block';
+  document.getElementById('admContent').style.display='none';
+  document.getElementById('admPwd').value='';
   document.getElementById('adminModal').classList.add('open');
-  setTimeout(function(){ document.getElementById('admPwd').focus(); }, 250);
+  setTimeout(function(){document.getElementById('admPwd').focus();},250);
 }
-function closeAdmin(){ document.getElementById('adminModal').classList.remove('open'); }
+function closeAdmin(){document.getElementById('adminModal').classList.remove('open');}
 
 function unlockAdmin(){
-  var pwd = document.getElementById('admPwd').value;
-  if(pwd !== ADMIN_PWD){
+  if(document.getElementById('admPwd').value!==ADMIN_PWD){
     showToast(tx('wrongPwd'));
-    document.getElementById('admPwd').value = '';
+    document.getElementById('admPwd').value='';
     document.getElementById('admPwd').focus();
     return;
   }
-  // Remplir tous les champs avec les valeurs actuelles
-  document.getElementById('editPollTitle').value = ls.pollTitle;
-  document.getElementById('editPollSub').value   = ls.pollSubtitle || '';
-  document.getElementById('editDate').value      = ls.pollDate || '';
-  document.getElementById('editName').value      = ls.headerName;
-  document.getElementById('editSub').value       = ls.headerSub;
-  buildSelects();
-  var sm = toMin(ls.startH, ls.startM);
-  var em = (ls.endH===24 && ls.endM===0) ? 1440 : toMin(ls.endH, ls.endM);
-  document.getElementById('slotStart').value = sm;
-  document.getElementById('slotEnd').value   = em;
-  updateSlotCount();
-  document.getElementById('admLock').style.display    = 'none';
-  document.getElementById('admContent').style.display = 'block';
+  // Remplir A
+  document.getElementById('editATitle').value=ls.aTitle;
+  document.getElementById('editASub').value=ls.aSubtitle||'';
+  document.getElementById('editADate').value=ls.aDate||'';
+  document.getElementById('slotAStart').value=toMin(ls.aStartH,ls.aStartM);
+  document.getElementById('slotAEnd').value=(ls.aEndH===24&&ls.aEndM===0)?1440:toMin(ls.aEndH,ls.aEndM);
+  updateSlotCountA();
+  // Remplir B
+  document.getElementById('editBTitle').value=ls.bTitle;
+  document.getElementById('editBSub').value=ls.bSubtitle||'';
+  document.getElementById('editBDate').value=ls.bDate||'';
+  document.getElementById('slotBStart').value=toMin(ls.bStartH,ls.bStartM);
+  document.getElementById('slotBEnd').value=(ls.bEndH===24&&ls.bEndM===0)?1440:toMin(ls.bEndH,ls.bEndM);
+  updateSlotCountB();
+  // Header
+  document.getElementById('editName').value=ls.headerName;
+  document.getElementById('editSub').value=ls.headerSub;
+  updateToggleBBtn();
+  document.getElementById('admLock').style.display='none';
+  document.getElementById('admContent').style.display='block';
 }
 
 function saveAdmin(){
-  var pt  = document.getElementById('editPollTitle').value.trim();
-  var ps  = document.getElementById('editPollSub').value.trim();
-  var pd  = document.getElementById('editDate').value;
-  var hn  = document.getElementById('editName').value.trim();
-  var hs  = document.getElementById('editSub').value.trim();
-  var sm  = parseInt(document.getElementById('slotStart').value, 10);
-  var em  = parseInt(document.getElementById('slotEnd').value,   10);
+  // A
+  var at=document.getElementById('editATitle').value.trim();
+  var as=document.getElementById('editASub').value.trim();
+  var ad=document.getElementById('editADate').value;
+  var asm=parseInt(document.getElementById('slotAStart').value,10);
+  var aem=parseInt(document.getElementById('slotAEnd').value,10);
+  // B
+  var bt=document.getElementById('editBTitle').value.trim();
+  var bs=document.getElementById('editBSub').value.trim();
+  var bd=document.getElementById('editBDate').value;
+  var bsm=parseInt(document.getElementById('slotBStart').value,10);
+  var bem=parseInt(document.getElementById('slotBEnd').value,10);
+  // Header
+  var hn=document.getElementById('editName').value.trim();
+  var hs=document.getElementById('editSub').value.trim();
 
-  if(isNaN(sm) || isNaN(em)){
-    showToast('⚠️ Horaires invalides');
-    return;
-  }
+  if(isNaN(asm)||isNaN(aem)||isNaN(bsm)||isNaN(bem)){showToast('⚠️ Horaires invalides');return;}
 
-  if(pt) ls.pollTitle    = pt;
-  ls.pollSubtitle = ps;
-  ls.pollDate     = pd;
-  if(hn) ls.headerName  = hn;
-  if(hs) ls.headerSub   = hs;
+  if(at)ls.aTitle=at; ls.aSubtitle=as; ls.aDate=ad;
+  var ashm=fromMin(asm);ls.aStartH=ashm.h;ls.aStartM=ashm.m;
+  if(aem===1440){ls.aEndH=24;ls.aEndM=0;}else{var aehm=fromMin(aem);ls.aEndH=aehm.h;ls.aEndM=aehm.m;}
 
-  var shm = fromMin(sm);
-  ls.startH = shm.h; ls.startM = shm.m;
-  if(em === 1440){ ls.endH=24; ls.endM=0; }
-  else{ var ehm=fromMin(em); ls.endH=ehm.h; ls.endM=ehm.m; }
+  if(bt)ls.bTitle=bt; ls.bSubtitle=bs; ls.bDate=bd;
+  var bshm=fromMin(bsm);ls.bStartH=bshm.h;ls.bStartM=bshm.m;
+  if(bem===1440){ls.bEndH=24;ls.bEndM=0;}else{var behm=fromMin(bem);ls.bEndH=behm.h;ls.bEndM=behm.m;}
 
+  if(hn)ls.headerName=hn;
+  if(hs)ls.headerSub=hs;
   saveLocal();
 
-  // Synchroniser avec Supabase
   Promise.all([
-    saveCfg('pollTitle',    ls.pollTitle),
-    saveCfg('pollSubtitle', ls.pollSubtitle),
-    saveCfg('pollDate',     ls.pollDate),
-    saveCfg('headerName',   ls.headerName),
-    saveCfg('headerSub',    ls.headerSub),
-    saveCfg('startMin',     sm),
-    saveCfg('endMin',       em)
+    saveCfg('headerName',ls.headerName), saveCfg('headerSub',ls.headerSub),
+    saveCfg('aTitle',ls.aTitle), saveCfg('aSubtitle',ls.aSubtitle),
+    saveCfg('aDate',ls.aDate), saveCfg('aStartMin',asm), saveCfg('aEndMin',aem),
+    saveCfg('bTitle',ls.bTitle), saveCfg('bSubtitle',ls.bSubtitle),
+    saveCfg('bDate',ls.bDate), saveCfg('bStartMin',bsm), saveCfg('bEndMin',bem),
+    saveCfg('bVisible',ls.bVisible)
   ]).catch(function(){});
 
-  renderSlots();
-  closeAdmin();
-  showToast(tx('saved'));
+  renderSlots(); closeAdmin(); showToast(tx('saved'));
 }
 
-function doReset(){
-  if(!confirm(tx('resetConfirm'))) return;
-  // Reset SEULEMENT les votes — prenom et config intacts
-  resetVotes()
-    .then(function(r){ if(!r.ok) throw new Error(); return loadVotes(); })
-    .then(function(){
-      renderSlots();
-      closeAdmin();
-      showToast(tx('resetDone'));
-    })
-    .catch(function(){ showToast(tx('errReset')); });
+function doResetA(){
+  if(!confirm(tx('resetAConfirm')))return;
+  clearVotesA()
+    .then(function(r){if(!r.ok)throw new Error();return loadAllVotes();})
+    .then(function(){renderSlots();closeAdmin();showToast(tx('resetADone'));})
+    .catch(function(){showToast(tx('errConn'));});
 }
 
 // ============================================================
 // TOAST
 // ============================================================
-var toastTimer;
+var ttt;
 function showToast(msg){
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3500);
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(ttt);ttt=setTimeout(function(){t.classList.remove('show');},3500);
 }
 
 // ============================================================
-// TOUS LES EVENEMENTS — attaches ici uniquement
+// EVENTS
 // ============================================================
-// Header
-document.getElementById('hdrAv').onclick    = openAdmin;
-document.getElementById('hdrInfo').onclick  = openAdmin;
-// Poll footer
-document.getElementById('btnAdmin').onclick    = openAdmin;
-document.getElementById('btnStimmen').onclick  = openVoters;
-// Name bar
-document.getElementById('btnSend').onclick = setName;
-document.getElementById('nameInput').addEventListener('keydown', function(e){ if(e.key==='Enter') setName(); });
-// Name modal
-document.getElementById('nmBtn').onclick = confirmName;
-document.getElementById('nmInput').addEventListener('keydown', function(e){ if(e.key==='Enter') confirmName(); });
-// Admin lock
-document.getElementById('admBtnCancel').onclick = closeAdmin;
-document.getElementById('admBtnEnter').onclick  = unlockAdmin;
-document.getElementById('admPwd').addEventListener('keydown', function(e){ if(e.key==='Enter') unlockAdmin(); });
-// Admin content
-document.getElementById('admBtnClose').onclick = closeAdmin;
-document.getElementById('admBtnSave').onclick  = saveAdmin;
-document.getElementById('admBtnReset').onclick = doReset;
-// Voters
-document.getElementById('btnVotersClose').onclick = closeVoters;
-// Lang buttons
-document.getElementById('btn-fr').onclick = function(){ setLang('fr'); };
-document.getElementById('btn-de').onclick = function(){ setLang('de'); };
-document.getElementById('btn-en').onclick = function(){ setLang('en'); };
+document.getElementById('hdrAv').onclick     = openAdmin;
+document.getElementById('hdrInfo').onclick   = openAdmin;
+document.getElementById('btnAdmin').onclick  = openAdmin;
+document.getElementById('btnStimmen').onclick= openVoters;
+document.getElementById('btnSend').onclick   = setName;
+document.getElementById('nameInput').addEventListener('keydown',function(e){if(e.key==='Enter')setName();});
+document.getElementById('nmBtn').onclick     = confirmName;
+document.getElementById('nmInput').addEventListener('keydown',function(e){if(e.key==='Enter')confirmName();});
+document.getElementById('admBtnCancel').onclick  = closeAdmin;
+document.getElementById('admBtnEnter').onclick   = unlockAdmin;
+document.getElementById('admPwd').addEventListener('keydown',function(e){if(e.key==='Enter')unlockAdmin();});
+document.getElementById('admBtnClose').onclick   = closeAdmin;
+document.getElementById('admBtnSave').onclick    = saveAdmin;
+document.getElementById('admBtnResetA').onclick  = doResetA;
+document.getElementById('admBtnToggleB').onclick = toggleBVisible;
+document.getElementById('btnVotersClose').onclick= closeVoters;
+document.getElementById('btn-fr').onclick = function(){setLang('fr');};
+document.getElementById('btn-de').onclick = function(){setLang('de');};
+document.getElementById('btn-en').onclick = function(){setLang('en');};
 
 // ============================================================
-// POLLING — rafraichit les votes toutes les 5 secondes
+// POLLING
 // ============================================================
 function startPolling(){
-  setInterval(function(){
-    loadVotes().then(function(){ renderSlots(); });
-  }, 5000);
+  setInterval(function(){loadAllVotes().then(function(){renderSlots();});},5000);
 }
-
-// Horloge — met a jour l'heure affichee toutes les 30 secondes
 setInterval(function(){
-  var n = new Date();
-  document.getElementById('bTime').textContent = pad(n.getHours())+':'+pad(n.getMinutes());
-}, 30000);
+  var n=new Date();
+  document.getElementById('bTime').textContent=pad(n.getHours())+':'+pad(n.getMinutes());
+},30000);
 
 // ============================================================
-// DEMARRAGE
+// INIT
 // ============================================================
 loadLocal();
-lang = ls.lang || 'fr';
-['fr','de','en'].forEach(function(l){
-  document.getElementById('btn-'+l).classList.toggle('active', l===lang);
-});
+lang=ls.lang||'fr';
+['fr','de','en'].forEach(function(l){document.getElementById('btn-'+l).classList.toggle('active',l===lang);});
 buildSelects();
 applyLang();
-if(ls.userName) document.getElementById('nameInput').value = ls.userName;
+if(ls.userName)document.getElementById('nameInput').value=ls.userName;
 
 loadConfig()
-  .then(function(){ return loadVotes(); })
+  .then(function(){return loadAllVotes();})
   .then(function(){
     renderSlots();
     startPolling();
-    // Modal prenom uniquement si premiere visite
-    if(!ls.userName){
-      setTimeout(function(){ openNameModal(); }, 700);
-    }
+    if(!ls.userName)setTimeout(function(){openNameModal();},700);
   })
   .catch(function(){
     renderSlots();
     startPolling();
-    if(!ls.userName){
-      setTimeout(function(){ openNameModal(); }, 700);
-    }
+    if(!ls.userName)setTimeout(function(){openNameModal();},700);
   });
 </script>
 </body>
