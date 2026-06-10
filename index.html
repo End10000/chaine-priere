@@ -736,16 +736,23 @@ function renderSlots(){
   var lblB = getTabLabel(st.bDate) || tx('tabTomorrow');
   document.getElementById('tabLblB').textContent = lblB;
 
-  // Badge A : nombre de votes
+  // Badge A : toujours le nombre de votes A
   document.getElementById('tabCntA').textContent = votesA.length;
 
-  // Badge B : nombre de votes ou 'Nouveau' si vide
+  // Badge B : nombre de votes si >0, sinon 'Nouveau' — mais JAMAIS sur l'onglet actif
   var tabBadgeB = document.getElementById('tabNewB');
   if(votesB.length > 0){
+    // Il y a des votes — afficher le compteur
     tabBadgeB.textContent = votesB.length;
     tabBadgeB.style.background = 'rgba(0,168,132,0.2)';
     tabBadgeB.style.color = 'var(--green)';
+  } else if(st.tab === 'B'){
+    // Onglet B actif et vide — pas de badge "Nouveau", juste rien
+    tabBadgeB.textContent = '';
+    tabBadgeB.style.background = 'transparent';
+    tabBadgeB.style.color = 'transparent';
   } else {
+    // Onglet B inactif et vide — badge "Nouveau" pour attirer l'attention
     tabBadgeB.textContent = tx('tabNew');
     tabBadgeB.style.background = 'var(--gold)';
     tabBadgeB.style.color = '#1a0a00';
