@@ -348,7 +348,7 @@ var TR = {
     nowBadge:'EN COURS',noName:'✏️ Entrez votre prenom',
     hello:'👋 Bonjour ',namePh:'Votre prenom...',
     nmTitle:'👋 Bienvenue',nmSub:'Entrez votre prenom. Une seule fois.',nmBtn:'✓ Confirmer',
-    tabToday:"Aujourd'hui",tabTomorrow:'Demain',tabNew:'Nouveau',
+    tabToday:"Aujourd'hui",tabTomorrow:'Demain',tabYesterday:'Hier',tabInDays:'Dans {n} jours',tabAgo:'Il y a {n} jours',tabNew:'Nouveau',
     admTitle:'⚙️ Panneau Admin',admLockSub:'Mot de passe administrateur.',admPwdPh:'Mot de passe...',
     wrongPwd:'❌ Mot de passe incorrect',
     admSecA:'Sondage A — Actif',admSecB:'Sondage B — Suivant',
@@ -387,7 +387,7 @@ var TR = {
     nowBadge:'JETZT',noName:'✏️ Namen eingeben',
     hello:'👋 Hallo ',namePh:'Dein Vorname...',
     nmTitle:'👋 Willkommen',nmSub:'Gib deinen Vornamen ein. Nur einmal.',nmBtn:'✓ Bestatigen',
-    tabToday:'Heute',tabTomorrow:'Morgen',tabNew:'Neu',
+    tabToday:'Heute',tabTomorrow:'Morgen',tabYesterday:'Gestern',tabInDays:'In {n} Tagen',tabAgo:'Vor {n} Tagen',tabNew:'Neu',
     admTitle:'⚙️ Admin',admLockSub:'Admin-Passwort.',admPwdPh:'Passwort...',
     wrongPwd:'❌ Falsches Passwort',
     admSecA:'Umfrage A — Aktiv',admSecB:'Umfrage B — Nachste',
@@ -426,7 +426,7 @@ var TR = {
     nowBadge:'NOW',noName:'✏️ Enter your name',
     hello:'👋 Hello ',namePh:'Your name...',
     nmTitle:'👋 Welcome',nmSub:'Enter your name. Only once.',nmBtn:'✓ Confirm',
-    tabToday:'Today',tabTomorrow:'Tomorrow',tabNew:'New',
+    tabToday:'Today',tabTomorrow:'Tomorrow',tabYesterday:'Yesterday',tabInDays:'In {n} days',tabAgo:'{n} days ago',tabNew:'New',
     admTitle:'⚙️ Admin Panel',admLockSub:'Admin password.',admPwdPh:'Password...',
     wrongPwd:'❌ Wrong password',
     admSecA:'Poll A — Active',admSecB:'Poll B — Next',
@@ -506,9 +506,8 @@ function applyLang(){
   el('vTitle').textContent      = tx('vTitle');
   el('vClose').textContent      = tx('btnClose');
   el('dbannerLbl').textContent  = tx('dbannerLbl');
-  el('tabLblA').textContent     = tx('tabToday');
-  el('tabLblB').textContent     = tx('tabTomorrow');
-  el('tabNewB').textContent     = tx('tabNew');
+  // tabLblA/B sont mis a jour dynamiquement dans renderSlots selon les vraies dates
+  el('tabNewB').textContent     = tx('tabNew'); // fallback si 0 votes
   updateAdmVisBtns();
   updatePrioBtns();
   setSyncStatus(synced);
@@ -714,7 +713,32 @@ function renderSlots(){
   else{if(st.tab==='A'&&!st.aVisible)st.tab='B';if(st.tab==='B'&&!st.bVisible)st.tab='A';}
   document.getElementById('tabA').classList.toggle('active',st.tab==='A');
   document.getElementById('tabB').classList.toggle('active',st.tab==='B');
-  document.getElementById('tabCntA').textContent=votesA.length;
+
+  // Etiquettes dynamiques basees sur les vraies dates des sondages
+  var todayStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
+
+  function getTabLabel(date){
+    if(!date) return null;
+    var diff = Math.round((new Date(date+'T00:00:00') - new Date(todayStr+'T00:00:00')) / 86400000);
+    if(diff === 0)  return tx('tabToday');      // Aujourd'hui
+    if(diff === 1)  return tx('tabTomorrow');   // Demain
+    if(diff === -1) return tx('tabYesterday');  // Hier
+    if(diff > 1)    return tx('tabInDays').replace('{n}', diff);   // Dans N jours
+    if(diff < -1)   return tx('tabAgo').replace('{n}', Math.abs(diff)); // Il y a N jours
+    return null;
+  }
+
+  // Label onglet A
+  var lblA = getTabLabel(st.aDate) || tx('tabToday');
+  document.getElementById('tabLblA').textContent = lblA;
+
+  // Label onglet B
+  var lblB = getTabLabel(st.bDate) || tx('tabTomorrow');
+  document.getElementById('tabLblB').textContent = lblB;
+
+  // Badge A : nombre de votes
+  document.getElementById('tabCntA').textContent = votesA.length;
+
   // Badge B : nombre de votes ou 'Nouveau' si vide
   var tabBadgeB = document.getElementById('tabNewB');
   if(votesB.length > 0){
