@@ -12,7 +12,7 @@
   --muted:#8696A0;--border:#2A3942;--input:#2A3942;
   --red:#CF6679;--gold:#C8861A;
 }
-body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;}
 .hdr{width:100%;max-width:480px;background:var(--panel);display:flex;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);}
 .hdr-av{width:40px;height:40px;border-radius:50%;background:var(--green2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;cursor:pointer;}
 .hdr-info{flex:1;min-width:0;cursor:pointer;}
@@ -20,13 +20,13 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .hdr-name:hover{color:var(--green);}
 .hdr-sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lbtns{display:flex;gap:4px;flex-shrink:0;}
-.lbtn{background:var(--border);border:none;color:var(--muted);font-size:11px;font-weight:600;padding:4px 7px;border-radius:12px;cursor:pointer;font-family:inherit;transition:background 0.15s;}
+.lbtn{background:var(--border);border:none;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;border-radius:12px;cursor:pointer;font-family:inherit;transition:background 0.15s;touch-action:manipulation;}
 .lbtn.active{background:var(--green);color:#fff;}
 .lbtn:hover:not(.active){background:#3A4A52;color:var(--text);}
 .tabs-wrap{width:100%;max-width:480px;display:none;}
 .tabs-wrap.show{display:block;}
 .tabs{display:flex;border-bottom:1px solid var(--border);background:var(--panel);}
-.tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);border-bottom:2px solid transparent;font-family:inherit;transition:all 0.15s;}
+.tab{flex:1;padding:12px 10px;text-align:center;font-size:14px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);border-bottom:2px solid transparent;font-family:inherit;transition:all 0.15s;touch-action:manipulation;}
 .tab.active{color:var(--green);border-bottom-color:var(--green);}
 .tab:hover:not(.active){color:var(--text);}
 .tab-count{display:inline-block;background:var(--border);color:var(--muted);font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;}
@@ -42,10 +42,15 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .d-free{background:var(--green);}.d-taken{background:var(--gold);}
 .syncdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--green);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+/* Desktop : encadre l'app pour la distinguer */
+@media(min-width:520px){
+  body{padding:0;}
+  .hdr{border-radius:0;}
+}
 .srchwrap{width:100%;max-width:480px;padding:8px 10px 0;}
-.srchinp{width:100%;background:var(--bubble);border:none;border-radius:20px;padding:8px 14px;font-size:13px;color:var(--text);font-family:inherit;outline:none;}
+.srchinp{width:100%;background:var(--bubble);border:none;border-radius:20px;padding:8px 14px;font-size:16px;color:var(--text);font-family:inherit;outline:none;}
 .srchinp::placeholder{color:var(--muted);}
-.chat{width:100%;max-width:480px;flex:1;padding:12px 10px 100px;}
+.chat{width:100%;max-width:480px;flex:1;padding:12px 10px;padding-bottom:calc(100px + env(safe-area-inset-bottom));}
 .bbl{background:var(--bubble);border-radius:0 8px 8px 8px;padding:8px 8px 4px;}
 .bmeta{display:flex;align-items:center;gap:8px;margin-bottom:4px;padding:0 4px;}
 .bav{width:28px;height:28px;border-radius:50%;background:var(--green2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0;}
@@ -53,7 +58,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .btime{font-size:11px;color:var(--muted);margin-left:auto;}
 .ptitle{font-size:14px;font-weight:500;padding:2px 6px 4px;}
 .psubtitle{font-size:12px;color:var(--gold);padding:0 6px 8px;font-style:italic;}
-.orow{display:flex;align-items:center;gap:10px;padding:9px 6px;border-radius:8px;cursor:pointer;transition:background 0.1s;margin-bottom:1px;user-select:none;}
+.orow{display:flex;align-items:center;gap:10px;padding:9px 6px;border-radius:8px;cursor:pointer;transition:background 0.1s;margin-bottom:1px;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 .orow:hover{background:rgba(255,255,255,0.05);}
 .orow.sel{background:rgba(0,168,132,0.10);}
 .orow.cur{border-left:3px solid var(--gold);padding-left:9px;}
@@ -75,10 +80,10 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .stmbtn{background:none;border:none;color:var(--green);font-size:14px;font-weight:500;padding:10px 6px 4px;cursor:pointer;text-align:left;font-family:inherit;}
 .admbtn{background:none;border:none;color:var(--muted);font-size:13px;padding:4px 6px 8px;cursor:pointer;text-align:left;font-family:inherit;}
 .admbtn:hover{color:var(--red);}
-.botbar{width:100%;max-width:480px;background:var(--input);padding:10px 14px;position:fixed;bottom:0;display:flex;align-items:center;gap:10px;border-top:1px solid var(--border);}
-.ninp{flex:1;background:var(--bubble);border:none;border-radius:20px;padding:9px 16px;font-size:14px;color:var(--text);font-family:inherit;outline:none;}
+.botbar{width:100%;max-width:480px;background:var(--input);padding:10px 14px;padding-bottom:calc(10px + env(safe-area-inset-bottom));position:fixed;bottom:0;display:flex;align-items:center;gap:10px;border-top:1px solid var(--border);z-index:50;}
+.ninp{flex:1;background:var(--bubble);border:none;border-radius:20px;padding:9px 16px;font-size:16px;color:var(--text);font-family:inherit;outline:none;}
 .ninp::placeholder{color:var(--muted);}
-.sndbtn{width:42px;height:42px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sndbtn{width:44px;height:44px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;}
 .sndbtn:hover{background:#009473;}
 .mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;align-items:flex-end;justify-content:center;}
 .mbg.open{display:flex;}
@@ -87,7 +92,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .mtitle{font-size:16px;font-weight:500;margin-bottom:8px;}
 .msub{font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.5;}
 .macts{display:flex;gap:8px;margin-top:1rem;}
-.mbt{flex:1;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:opacity 0.15s;}
+.mbt{flex:1;padding:11px;border-radius:8px;border:none;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:opacity 0.15s;touch-action:manipulation;}
 .mbt:hover{opacity:0.85;}
 .mbt-c{background:var(--border);color:var(--muted);}
 .mbt-g{background:var(--green);color:#fff;}
@@ -97,9 +102,9 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .asec:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
 .asectitle{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
 .albl{font-size:12px;color:var(--muted);margin-bottom:3px;margin-top:8px;display:block;}
-.ainp{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;margin-bottom:2px;}
+.ainp{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:16px;color:var(--text);font-family:inherit;outline:none;margin-bottom:2px;}
 .ainp:focus{border-color:var(--green);}
-.asel{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;margin-bottom:2px;cursor:pointer;-webkit-appearance:none;appearance:none;}
+.asel{width:100%;background:var(--bubble);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:16px;color:var(--text);font-family:inherit;outline:none;margin-bottom:2px;cursor:pointer;-webkit-appearance:none;appearance:none;}
 .asel:focus{border-color:var(--green);}
 .poll-ctrl{display:flex;gap:6px;margin-top:10px;}
 .poll-ctrl .mbt{font-size:12px;padding:8px 10px;}
@@ -114,8 +119,10 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .member-list{max-height:180px;overflow-y:auto;margin:6px 0;}
 .member-item{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:6px;background:var(--bubble);margin-bottom:3px;}
 .member-name{font-size:13px;color:var(--text);}
-.member-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 2px;line-height:1;transition:color 0.1s;}
+.member-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 2px;line-height:1;transition:color 0.1s;touch-action:manipulation;}
 .member-del:hover{color:var(--red);}
+.member-edit{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;transition:opacity 0.1s;touch-action:manipulation;}
+.member-edit:hover{opacity:0.7;}
 .add-row{display:flex;gap:6px;margin-top:6px;}
 .add-row .ainp{margin-bottom:0;flex:1;}
 .add-row .mbt{flex:none;padding:9px 16px;font-size:14px;}
@@ -208,7 +215,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 </div>
 
 <div class="botbar">
-  <input class="ninp" id="nameInput" maxlength="25">
+  <input class="ninp" id="nameInput" maxlength="25" autocomplete="off" autocapitalize="words" enterkeyhint="send">
   <button class="sndbtn" id="btnSend">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
   </button>
@@ -219,7 +226,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
   <div class="msh">
     <div class="mtitle" id="nmTitle">👋 Bienvenue</div>
     <div class="msub" id="nmSub">Entrez votre prenom. Une seule fois.</div>
-    <input class="ainp" id="nmInput" maxlength="25">
+    <input class="ainp" id="nmInput" maxlength="25" autocomplete="off" autocapitalize="words" enterkeyhint="done">
     <div class="macts" style="margin-top:6px">
       <button class="mbt mbt-g" id="nmBtn">✓ Confirmer</button>
     </div>
@@ -232,7 +239,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
     <div class="mtitle" id="admTitle">⚙️ Admin</div>
     <div id="admLock">
       <div class="msub" id="admLockSub">Mot de passe administrateur.</div>
-      <input class="ainp" id="admPwd" type="password">
+      <input class="ainp" id="admPwd" type="password" autocomplete="off" autocapitalize="off">
       <div class="macts" style="margin-top:6px">
         <button class="mbt mbt-c" id="aBtnCancel">Annuler</button>
         <button class="mbt mbt-g" id="aBtnEnter">→</button>
@@ -291,18 +298,18 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
         <div class="msub" id="admMembersSub" style="margin-bottom:8px">Liste de reference. Mise a jour automatique quand quelqu'un vote pour la premiere fois.</div>
         <div class="member-list" id="memberList"></div>
         <div class="add-row">
-          <input class="ainp" id="memberInput" maxlength="30">
+          <input class="ainp" id="memberInput" maxlength="30" autocomplete="off" autocapitalize="words" enterkeyhint="done">
           <button class="mbt mbt-g" id="btnAddMember">+</button>
         </div>
         <div style="margin-top:14px">
           <div class="asectitle" id="admSecAbsents">Absents</div>
           <div style="display:flex;gap:6px;margin-bottom:10px;">
-            <button class="mbt mbt-g absent-tab-btn" id="absentTabA">Sondage A</button>
-            <button class="mbt mbt-c absent-tab-btn" id="absentTabB">Sondage B</button>
+            <button class="mbt mbt-g absent-tab-btn" id="absentTabA"><span id="absentTabLblA">Sondage A</span></button>
+            <button class="mbt mbt-c absent-tab-btn" id="absentTabB"><span id="absentTabLblB">Sondage B</span></button>
           </div>
           <div class="absent-stats" id="absentStats"></div>
           <div class="absent-list" id="absentList"></div>
-          <button class="dl-btn" id="btnDlAbsents">⬇ Telecharger (.txt)</button>
+          <button class="dl-btn" id="btnDlAbsents"><span id="dlBtnLbl">⬇ Telecharger (.txt)</span></button>
         </div>
       </div>
 
@@ -368,6 +375,7 @@ var TR = {
     admSecAbsents:'Absents — sondage affiche',
     absentLabel:'absents',presentLabel:'presents',membersLabel:'membres',
     dlBtn:'⬇ Telecharger la liste (.txt)',
+    pollLblA:'Sondage A',pollLblB:'Sondage B',
     noMembers:'Aucun membre. Ajoutez les STARS ci-dessus.',
     memberAdded:'✅ Membre ajoute',memberExists:'⚠️ Ce membre existe deja',
     memberDel:'Membre supprime',
@@ -407,6 +415,7 @@ var TR = {
     admSecAbsents:'Abwesende — angezeigte Umfrage',
     absentLabel:'abwesend',presentLabel:'anwesend',membersLabel:'Mitglieder',
     dlBtn:'⬇ Liste herunterladen (.txt)',
+    pollLblA:'Umfrage A',pollLblB:'Umfrage B',
     noMembers:'Keine Mitglieder. Bitte oben hinzufugen.',
     memberAdded:'✅ Mitglied hinzugefugt',memberExists:'⚠️ Mitglied existiert bereits',
     memberDel:'Mitglied geloscht',
@@ -446,6 +455,7 @@ var TR = {
     admSecAbsents:'Absent — displayed poll',
     absentLabel:'absent',presentLabel:'present',membersLabel:'members',
     dlBtn:'⬇ Download list (.txt)',
+    pollLblA:'Poll A',pollLblB:'Poll B',
     noMembers:'No members yet. Add STARS above.',
     memberAdded:'✅ Member added',memberExists:'⚠️ Member already exists',
     memberDel:'Member removed',
@@ -464,56 +474,101 @@ var lang='fr';
 function tx(k){return(TR[lang]&&TR[lang][k])||TR.fr[k]||k;}
 
 function applyLang(){
-  function el(id){return document.getElementById(id);}
+  // Helper safe - ne plante jamais si l'element n'existe pas
+  function el(id){
+    var e=document.getElementById(id);
+    if(!e){return {textContent:'',placeholder:'',className:''};}
+    return e;
+  }
+  // ---- INTERFACE PRINCIPALE ----
   el('searchInp').placeholder   = tx('srchPh');
   el('nameInput').placeholder   = tx('namePh');
   el('ldmsg').textContent       = '⏳ '+tx('loading');
   el('btnStimmen').textContent  = tx('stimmen');
   el('btnAdmin').textContent    = tx('admin');
+
+  // ---- MODAL PRENOM ----
   el('nmTitle').textContent     = tx('nmTitle');
   el('nmSub').textContent       = tx('nmSub');
   el('nmBtn').textContent       = tx('nmBtn');
   el('nmInput').placeholder     = tx('namePh');
+
+  // ---- ADMIN LOCK ----
   el('admTitle').textContent    = tx('admTitle');
   el('admLockSub').textContent  = tx('admLockSub');
   el('admPwd').placeholder      = tx('admPwdPh');
   el('aBtnCancel').textContent  = tx('btnCancel');
+
+  // ---- ADMIN SONDAGE A ----
   el('admSecA').textContent     = tx('admSecA');
+  var psAEl = document.getElementById('psA');
+  if(psAEl){ psAEl.textContent=st.aVisible?tx('psVisible'):tx('psHidden'); psAEl.className='poll-status '+(st.aVisible?'ps-visible':'ps-hidden'); }
+  el('aLblTitle').textContent   = tx('lblTitle');
+  el('aLblSub').textContent     = tx('lblSub');
+  el('aLblDate').textContent    = tx('lblDate');
+  el('aLblStart').textContent   = tx('lblStart');
+  el('aLblEnd').textContent     = tx('lblEnd');
+  el('aLblSlot').textContent    = tx('lblSlot');
+  var aBV = document.getElementById('aBtnVis');
+  if(aBV){ aBV.textContent=st.aVisible?tx('btnVisible'):tx('btnHidden'); aBV.className='mbt '+(st.aVisible?'mbt-g':'mbt-c'); }
+  var aBC = document.getElementById('aBtnClear');
+  if(aBC) aBC.textContent = tx('btnClear');
+
+  // ---- ADMIN SONDAGE B ----
   el('admSecB').textContent     = tx('admSecB');
-  ['a','b'].forEach(function(p){
-    el(p+'LblTitle').textContent = tx('lblTitle');
-    el(p+'LblSub').textContent   = tx('lblSub');
-    el(p+'LblDate').textContent  = tx('lblDate');
-    el(p+'LblStart').textContent = tx('lblStart');
-    el(p+'LblEnd').textContent   = tx('lblEnd');
-    el(p+'LblSlot').textContent  = tx('lblSlot');
-  });
+  var psBEl = document.getElementById('psB');
+  if(psBEl){ psBEl.textContent=st.bVisible?tx('psVisible'):tx('psHidden'); psBEl.className='poll-status '+(st.bVisible?'ps-visible':'ps-hidden'); }
+  el('bLblTitle').textContent   = tx('lblTitle');
+  el('bLblSub').textContent     = tx('lblSub');
+  el('bLblDate').textContent    = tx('lblDate');
+  el('bLblStart').textContent   = tx('lblStart');
+  el('bLblEnd').textContent     = tx('lblEnd');
+  el('bLblSlot').textContent    = tx('lblSlot');
+  var bBV = document.getElementById('bBtnVis');
+  if(bBV){ bBV.textContent=st.bVisible?tx('btnVisible'):tx('btnHidden'); bBV.className='mbt '+(st.bVisible?'mbt-g':'mbt-c'); }
+  var bBC = document.getElementById('bBtnClear');
+  if(bBC) bBC.textContent = tx('btnClear');
+
+  // ---- ADMIN PRIORITE ----
   el('admSecPrio').textContent  = tx('admSecPrio');
   el('admPrioSub').textContent  = tx('admPrioSub');
-  el('pBtnA').textContent       = tx('prioA');
-  el('pBtnB').textContent       = tx('prioB');
-  el('pBtnAuto').textContent    = tx('prioAuto');
+  var pa=document.getElementById('pBtnA'),pb=document.getElementById('pBtnB'),pau=document.getElementById('pBtnAuto');
+  if(pa){ pa.textContent=tx('prioA'); pa.className='mbt '+(st.priority==='A'?'mbt-g':'mbt-c'); }
+  if(pb){ pb.textContent=tx('prioB'); pb.className='mbt '+(st.priority==='B'?'mbt-g':'mbt-c'); }
+  if(pau){ pau.textContent=tx('prioAuto'); pau.className='mbt '+(st.priority==='auto'?'mbt-gold':'mbt-c'); }
+
+  // ---- ADMIN MEMBRES ----
   el('admSecMembers').textContent  = tx('admSecMembers');
   el('admMembersSub').textContent  = tx('admMembersSub');
   el('memberInput').placeholder    = tx('memberPh');
-  el('admSecAbsents').textContent  = tx('admSecAbsents');
-  el('btnDlAbsents').textContent   = tx('dlBtn');
+  el('admSecAbsents').textContent  = tx('admSecAbsents') + ' (' + absentTab + ')';
+  var la=document.getElementById('absentTabLblA'); if(la) la.textContent=tx('pollLblA');
+  var lb=document.getElementById('absentTabLblB'); if(lb) lb.textContent=tx('pollLblB');
+  var dl=document.getElementById('dlBtnLbl');      if(dl) dl.textContent=tx('dlBtn');
+
+  // ---- ADMIN GROUPE ----
   el('admSecGrp').textContent   = tx('admSecGrp');
   el('gLblName').textContent    = tx('gLblName');
   el('gLblSub').textContent     = tx('gLblSub');
   el('aBtnClose').textContent   = tx('btnClose');
   el('aBtnSave').textContent    = tx('btnSave');
+
+  // ---- MODAL VOTES ----
   el('vTitle').textContent      = tx('vTitle');
   el('vClose').textContent      = tx('btnClose');
+
+  // ---- BANDEAU DATE ----
   el('dbannerLbl').textContent  = tx('dbannerLbl');
-  // tabLblA/B sont mis a jour dynamiquement dans renderSlots selon les vraies dates
-  el('tabNewB').textContent     = tx('tabNew'); // fallback si 0 votes
-  updateAdmVisBtns();
-  updatePrioBtns();
+
+  // ---- ONGLETS (fallback - renderSlots met a jour dynamiquement) ----
+  el('tabNewB').textContent     = tx('tabNew');
+
+  // ---- SYNC STATUS ----
   setSyncStatus(synced);
+
+  // ---- CALCUL CRENEAUX (seulement si selects existent) ----
   calcA(); calcB();
 }
-
 function setLang(l){
   lang=l;st.lang=l;saveLocal();
   ['fr','de','en'].forEach(function(x){document.getElementById('btn-'+x).classList.toggle('active',x===l);});
@@ -701,6 +756,28 @@ function getDefaultTab(){
   return 'A';
 }
 
+// Fonctions globales utilitaires dates
+function getTodayStr(){
+  return new Date().toISOString().split('T')[0];
+}
+function getTabLabel(date, todayStr){
+  if(!date) return null;
+  var today = todayStr || getTodayStr();
+  var diff = Math.round((new Date(date+'T00:00:00') - new Date(today+'T00:00:00')) / 86400000);
+  if(diff === 0)  return tx('tabToday');
+  if(diff === 1)  return tx('tabTomorrow');
+  if(diff === -1) return tx('tabYesterday');
+  if(diff > 1)    return tx('tabInDays').replace('{n}', diff);
+  if(diff < -1)   return tx('tabAgo').replace('{n}', Math.abs(diff));
+  return null;
+}
+function isFuturePoll(date){
+  if(!date) return false;
+  var today = getTodayStr();
+  var diff = Math.round((new Date(date+'T00:00:00') - new Date(today+'T00:00:00')) / 86400000);
+  return diff > 0;
+}
+
 function renderSlots(){
   var now=new Date();
   document.getElementById('bTime').textContent=pad(now.getHours())+':'+pad(now.getMinutes());
@@ -717,63 +794,46 @@ function renderSlots(){
   // Etiquettes dynamiques basees sur les vraies dates des sondages
   var todayStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
 
-  function getTabLabel(date){
-    if(!date) return null;
-    var diff = Math.round((new Date(date+'T00:00:00') - new Date(todayStr+'T00:00:00')) / 86400000);
-    if(diff === 0)  return tx('tabToday');      // Aujourd'hui
-    if(diff === 1)  return tx('tabTomorrow');   // Demain
-    if(diff === -1) return tx('tabYesterday');  // Hier
-    if(diff > 1)    return tx('tabInDays').replace('{n}', diff);   // Dans N jours
-    if(diff < -1)   return tx('tabAgo').replace('{n}', Math.abs(diff)); // Il y a N jours
-    return null;
-  }
-
   // Label onglet A
-  var lblA = getTabLabel(st.aDate) || tx('tabToday');
+  var lblA = getTabLabel(st.aDate, todayStr) || tx('tabToday');
   document.getElementById('tabLblA').textContent = lblA;
 
   // Label onglet B
-  var lblB = getTabLabel(st.bDate) || tx('tabTomorrow');
+  var lblB = getTabLabel(st.bDate, todayStr) || tx('tabTomorrow');
   document.getElementById('tabLblB').textContent = lblB;
 
-  // Badge A : nombre de votes si >0, sinon 'Nouveau' si A est inactif et vide
+  // Logique des badges
+
+  // Badge onglet A
   var tabCntA = document.getElementById('tabCntA');
   if(votesA.length > 0){
     tabCntA.textContent = votesA.length;
     tabCntA.className = 'tab-count';
-    tabCntA.style.background = '';
-    tabCntA.style.color = '';
-  } else if(st.tab !== 'A'){
-    // A inactif et vide — badge Nouveau
+    tabCntA.style.cssText = '';
+  } else if(st.tab !== 'A' && isFuturePoll(st.aDate)){
     tabCntA.textContent = tx('tabNew');
     tabCntA.className = 'tab-new';
-    tabCntA.style.background = '';
-    tabCntA.style.color = '';
+    tabCntA.style.cssText = '';
   } else {
-    // A actif et vide — juste le count a 0
-    tabCntA.textContent = '0';
+    tabCntA.textContent = '';
     tabCntA.className = 'tab-count';
+    tabCntA.style.cssText = 'display:none;width:0;padding:0;margin:0';
   }
 
-  // Badge B : nombre de votes si >0, sinon 'Nouveau' si B est inactif et vide
+  // Badge onglet B
   var tabBadgeB = document.getElementById('tabNewB');
   if(votesB.length > 0){
     tabBadgeB.textContent = votesB.length;
     tabBadgeB.className = 'tab-count';
-    tabBadgeB.style.background = 'rgba(0,168,132,0.2)';
-    tabBadgeB.style.color = 'var(--green)';
-  } else if(st.tab !== 'B'){
-    // B inactif et vide — badge Nouveau
+    tabBadgeB.style.cssText = 'background:rgba(0,168,132,0.2);color:var(--green)';
+  } else if(st.tab !== 'B' && isFuturePoll(st.bDate)){
     tabBadgeB.textContent = tx('tabNew');
     tabBadgeB.className = 'tab-new';
-    tabBadgeB.style.background = '';
-    tabBadgeB.style.color = '';
+    tabBadgeB.style.cssText = '';
   } else {
-    // B actif et vide — rien
     tabBadgeB.textContent = '';
     tabBadgeB.className = 'tab-new';
-    tabBadgeB.style.background = 'transparent';
-    tabBadgeB.style.color = 'transparent';
+    tabBadgeB.style.cssText = 'display:none;width:0;padding:0;margin:0';
   }
 
   var isB=(st.tab==='B');
@@ -898,8 +958,61 @@ function renderMemberList(){
   members.forEach(function(name){
     var item=document.createElement('div');
     item.className='member-item';
-    item.innerHTML='<span class="member-name">'+esc(name)+'</span><button class="member-del" title="Supprimer">×</button>';
+    item.innerHTML=
+      '<span class="member-name" id="mname_'+esc(name.replace(/ /g,'_'))+'">'+esc(name)+'</span>'+
+      '<div style="display:flex;gap:6px;flex-shrink:0">'+
+        '<button class="member-edit" title="Modifier">✏️</button>'+
+        '<button class="member-del" title="Supprimer">×</button>'+
+      '</div>';
+    // Supprimer
     item.querySelector('.member-del').onclick=function(){deleteMember(name);};
+    // Modifier - transforme le nom en champ editable
+    item.querySelector('.member-edit').onclick=function(){
+      var nameSpan = item.querySelector('.member-name');
+      var currentName = nameSpan.textContent;
+      // Remplacer le span par un input
+      var inp = document.createElement('input');
+      inp.className = 'ainp';
+      inp.value = currentName;
+      inp.style.cssText = 'flex:1;margin:0;padding:4px 8px;font-size:14px;';
+      inp.maxLength = 30;
+      inp.autocapitalize = 'words';
+      nameSpan.replaceWith(inp);
+      inp.focus();
+      inp.select();
+      // Cacher le bouton modifier pendant l'edition
+      item.querySelector('.member-edit').style.display='none';
+      // Valider sur Enter ou blur
+      function saveEdit(){
+        var newName = inp.value.trim();
+        if(!newName || newName === currentName){
+          // Annuler - remettre le span
+          inp.replaceWith(nameSpan);
+          item.querySelector('.member-edit').style.display='';
+          return;
+        }
+        // Verifier doublon
+        var exists = members.some(function(m){return m.toLowerCase()===newName.toLowerCase() && m!==currentName;});
+        if(exists){showToast(tx('memberExists'));inp.focus();return;}
+        // Sauvegarder : supprimer l'ancien et creer le nouveau
+        sfetch('members?name=eq.'+encodeURIComponent(currentName),'DELETE')
+          .then(function(){return sfetch('members','POST',{name:newName});})
+          .then(function(r){
+            if(!r.ok)throw new Error();
+            members = members.map(function(m){return m===currentName?newName:m;});
+            members.sort();
+            renderMemberList();
+            renderAbsents();
+            showToast('✅ '+currentName+' → '+newName);
+          })
+          .catch(function(){showToast(tx('errConn'));inp.replaceWith(nameSpan);item.querySelector('.member-edit').style.display='';});
+      }
+      inp.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){e.preventDefault();saveEdit();}
+        if(e.key==='Escape'){inp.replaceWith(nameSpan);item.querySelector('.member-edit').style.display='';}
+      });
+      inp.addEventListener('blur',function(){setTimeout(saveEdit,150);});
+    };
     list.appendChild(item);
   });
 }
@@ -942,6 +1055,11 @@ function setAbsentTab(tab){
   absentTab = tab;
   document.getElementById('absentTabA').className = 'mbt absent-tab-btn '+(tab==='A'?'mbt-g':'mbt-c');
   document.getElementById('absentTabB').className = 'mbt absent-tab-btn '+(tab==='B'?'mbt-g':'mbt-c');
+  // Labels traduits
+  var la = document.getElementById('absentTabLblA');
+  var lb = document.getElementById('absentTabLblB');
+  if(la) la.textContent = tx('pollLblA');
+  if(lb) lb.textContent = tx('pollLblB');
   renderAbsents();
 }
 
@@ -1087,18 +1205,20 @@ function buildSelects(){
 }
 function calcCount(sm,em){var t=em>sm?Math.floor((em-sm)/15):Math.floor((1440-sm+em)/15);return t>0?t:0;}
 function calcA(){
-  var sm=+document.getElementById('aStart').value||0;
-  var em=+document.getElementById('aEnd').value||1440;
+  var aS=document.getElementById('aStart'); if(!aS)return;
+  var aE=document.getElementById('aEnd');   if(!aE)return;
+  var sm=+aS.value||0, em=+aE.value||1440;
   document.getElementById('aCnt').textContent=calcCount(sm,em);
   var wb=document.getElementById('aWarn');
-  if(em<=sm){wb.textContent=tx('slotWarn');wb.style.display='block';}else{wb.style.display='none';}
+  if(wb){if(em<=sm){wb.textContent=tx('slotWarn');wb.style.display='block';}else{wb.style.display='none';}}
 }
 function calcB(){
-  var sm=+document.getElementById('bStart').value||0;
-  var em=+document.getElementById('bEnd').value||1440;
+  var bS=document.getElementById('bStart'); if(!bS)return;
+  var bE=document.getElementById('bEnd');   if(!bE)return;
+  var sm=+bS.value||0, em=+bE.value||1440;
   document.getElementById('bCnt').textContent=calcCount(sm,em);
   var wb=document.getElementById('bWarn');
-  if(em<=sm){wb.textContent=tx('slotWarn');wb.style.display='block';}else{wb.style.display='none';}
+  if(wb){if(em<=sm){wb.textContent=tx('slotWarn');wb.style.display='block';}else{wb.style.display='none';}}
 }
 
 function updateAdmVisBtns(){
@@ -1109,8 +1229,8 @@ function updateAdmVisBtns(){
     b.className='mbt '+(visible?'mbt-g':'mbt-c');
   }
   setBtn('aBtnVis',st.aVisible); setBtn('bBtnVis',st.bVisible);
-  document.getElementById('aBtnClear').textContent=tx('btnClear');
-  document.getElementById('bBtnClear').textContent=tx('btnClear');
+  var ca=document.getElementById('aBtnClear'); if(ca) ca.textContent=tx('btnClear');
+  var cb=document.getElementById('bBtnClear'); if(cb) cb.textContent=tx('btnClear');
   function setPS(id,visible){
     var el=document.getElementById(id);
     if(!el)return;
@@ -1165,6 +1285,9 @@ function unlockAdmin(){
   // Initialiser les boutons de l'onglet absents
   document.getElementById('absentTabA').className='mbt absent-tab-btn '+(absentTab==='A'?'mbt-g':'mbt-c');
   document.getElementById('absentTabB').className='mbt absent-tab-btn '+(absentTab==='B'?'mbt-g':'mbt-c');
+  var _la=document.getElementById('absentTabLblA'); if(_la)_la.textContent=tx('pollLblA');
+  var _lb=document.getElementById('absentTabLblB'); if(_lb)_lb.textContent=tx('pollLblB');
+  var _dl=document.getElementById('dlBtnLbl'); if(_dl)_dl.textContent=tx('dlBtn');
   renderAbsents();
   document.getElementById('admLock').style.display='none';
   document.getElementById('admContent').style.display='block';
@@ -1282,6 +1405,8 @@ document.getElementById('btn-en').onclick     = function(){setLang('en');};
 document.getElementById('btnAddMember').onclick = addMember;
 document.getElementById('memberInput').addEventListener('keydown',function(e){if(e.key==='Enter')addMember();});
 document.getElementById('btnDlAbsents').onclick = downloadAbsents;
+document.getElementById('absentTabA').onclick = function(){setAbsentTab('A');};
+document.getElementById('absentTabB').onclick = function(){setAbsentTab('B');};
 
 function startPolling(){
   // Polling adaptatif : 5s si page visible, 30s si en arriere-plan
