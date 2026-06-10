@@ -736,26 +736,44 @@ function renderSlots(){
   var lblB = getTabLabel(st.bDate) || tx('tabTomorrow');
   document.getElementById('tabLblB').textContent = lblB;
 
-  // Badge A : toujours le nombre de votes A
-  document.getElementById('tabCntA').textContent = votesA.length;
+  // Badge A : nombre de votes si >0, sinon 'Nouveau' si A est inactif et vide
+  var tabCntA = document.getElementById('tabCntA');
+  if(votesA.length > 0){
+    tabCntA.textContent = votesA.length;
+    tabCntA.className = 'tab-count';
+    tabCntA.style.background = '';
+    tabCntA.style.color = '';
+  } else if(st.tab !== 'A'){
+    // A inactif et vide — badge Nouveau
+    tabCntA.textContent = tx('tabNew');
+    tabCntA.className = 'tab-new';
+    tabCntA.style.background = '';
+    tabCntA.style.color = '';
+  } else {
+    // A actif et vide — juste le count a 0
+    tabCntA.textContent = '0';
+    tabCntA.className = 'tab-count';
+  }
 
-  // Badge B : nombre de votes si >0, sinon 'Nouveau' — mais JAMAIS sur l'onglet actif
+  // Badge B : nombre de votes si >0, sinon 'Nouveau' si B est inactif et vide
   var tabBadgeB = document.getElementById('tabNewB');
   if(votesB.length > 0){
-    // Il y a des votes — afficher le compteur
     tabBadgeB.textContent = votesB.length;
+    tabBadgeB.className = 'tab-count';
     tabBadgeB.style.background = 'rgba(0,168,132,0.2)';
     tabBadgeB.style.color = 'var(--green)';
-  } else if(st.tab === 'B'){
-    // Onglet B actif et vide — pas de badge "Nouveau", juste rien
+  } else if(st.tab !== 'B'){
+    // B inactif et vide — badge Nouveau
+    tabBadgeB.textContent = tx('tabNew');
+    tabBadgeB.className = 'tab-new';
+    tabBadgeB.style.background = '';
+    tabBadgeB.style.color = '';
+  } else {
+    // B actif et vide — rien
     tabBadgeB.textContent = '';
+    tabBadgeB.className = 'tab-new';
     tabBadgeB.style.background = 'transparent';
     tabBadgeB.style.color = 'transparent';
-  } else {
-    // Onglet B inactif et vide — badge "Nouveau" pour attirer l'attention
-    tabBadgeB.textContent = tx('tabNew');
-    tabBadgeB.style.background = 'var(--gold)';
-    tabBadgeB.style.color = '#1a0a00';
   }
 
   var isB=(st.tab==='B');
