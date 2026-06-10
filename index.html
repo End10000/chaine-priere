@@ -131,6 +131,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .absent-row:last-child{border-bottom:none;}
 .absent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .dl-btn{width:100%;padding:10px;border-radius:8px;border:none;background:var(--green2);color:#A8E6D4;font-size:13px;font-weight:500;cursor:pointer;margin-top:8px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;}
+.absent-tab-btn{flex:1;font-size:12px;padding:6px;}
 .dl-btn:hover{background:#0A5C46;}
 /* VOTERS */
 .vlist{max-height:45vh;overflow-y:auto;}
@@ -186,7 +187,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
   </div>
 </div>
 
-<div class="srchwrap"><input class="srchinp" id="searchInp" oninput="renderSlots()"></div>
+<div class="srchwrap"><input class="srchinp" id="searchInp" oninput="debouncedRender()"></div>
 
 <div class="chat">
   <div class="bbl">
@@ -294,7 +295,11 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
           <button class="mbt mbt-g" id="btnAddMember">+</button>
         </div>
         <div style="margin-top:14px">
-          <div class="asectitle" id="admSecAbsents">Absents — sondage actif (A)</div>
+          <div class="asectitle" id="admSecAbsents">Absents</div>
+          <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <button class="mbt mbt-g absent-tab-btn" id="absentTabA">Sondage A</button>
+            <button class="mbt mbt-c absent-tab-btn" id="absentTabB">Sondage B</button>
+          </div>
           <div class="absent-stats" id="absentStats"></div>
           <div class="absent-list" id="absentList"></div>
           <button class="dl-btn" id="btnDlAbsents">⬇ Telecharger (.txt)</button>
@@ -360,7 +365,7 @@ var TR = {
     admSecMembers:'Membres (STARS)',
     admMembersSub:"Liste de reference. Mise a jour automatique quand quelqu'un vote.",
     memberPh:'Ajouter un membre...',
-    admSecAbsents:'Absents — sondage actif (A)',
+    admSecAbsents:'Absents — sondage affiche',
     absentLabel:'absents',presentLabel:'presents',membersLabel:'membres',
     dlBtn:'⬇ Telecharger la liste (.txt)',
     noMembers:'Aucun membre. Ajoutez les STARS ci-dessus.',
@@ -399,7 +404,7 @@ var TR = {
     admSecMembers:'Mitglieder (STARS)',
     admMembersSub:'Referenzliste. Automatisch aktualisiert wenn jemand abstimmt.',
     memberPh:'Mitglied hinzufugen...',
-    admSecAbsents:'Abwesende — aktive Umfrage (A)',
+    admSecAbsents:'Abwesende — angezeigte Umfrage',
     absentLabel:'abwesend',presentLabel:'anwesend',membersLabel:'Mitglieder',
     dlBtn:'⬇ Liste herunterladen (.txt)',
     noMembers:'Keine Mitglieder. Bitte oben hinzufugen.',
@@ -438,7 +443,7 @@ var TR = {
     admSecMembers:'Members (STARS)',
     admMembersSub:'Reference list. Auto-updated when someone votes for the first time.',
     memberPh:'Add a member...',
-    admSecAbsents:'Absent — active poll (A)',
+    admSecAbsents:'Absent — displayed poll',
     absentLabel:'absent',presentLabel:'present',membersLabel:'members',
     dlBtn:'⬇ Download list (.txt)',
     noMembers:'No members yet. Add STARS above.',
@@ -513,10 +518,20 @@ function applyLang(){
 function setLang(l){
   lang=l;st.lang=l;saveLocal();
   ['fr','de','en'].forEach(function(x){document.getElementById('btn-'+x).classList.toggle('active',x===l);});
+  document.documentElement.lang = l;
   applyLang();renderSlots();
 }
 
 var COLORS=['#E53935','#8E24AA','#1E88E5','#00897B','#F4511E','#3949AB','#039BE5','#43A047','#FB8C00','#6D4C41','#D81B60','#5E35B1'];
+// Echappe les caracteres HTML pour eviter les XSS dans innerHTML
+function esc(s){
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
 function gc(n){var h=0;for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%COLORS.length;return COLORS[Math.abs(h)];}
 function gi(n){var p=n.trim().split(' '),r='';for(var i=0;i<Math.min(p.length,2);i++)if(p[i])r+=p[i][0].toUpperCase();return r||'?';}
 
@@ -545,11 +560,24 @@ function sfetch(path,method,body){
   return fetch(SUPA_URL+'/rest/v1/'+path,o);
 }
 
+var _votesCacheA = '';
+var _votesCacheB = '';
 function loadAllVotes(){
   return Promise.all([
-    sfetch('votes?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];}).then(function(d){if(Array.isArray(d))votesA=d;}),
-    sfetch('votes_b?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];}).then(function(d){if(Array.isArray(d))votesB=d;})
-  ]).then(function(){setSyncStatus(true);}).catch(function(){setSyncStatus(false);});
+    sfetch('votes?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];})
+      .then(function(d){if(Array.isArray(d))votesA=d;}),
+    sfetch('votes_b?select=slot_key,user_name').then(function(r){return r.ok?r.json():[];})
+      .then(function(d){if(Array.isArray(d))votesB=d;})
+  ]).then(function(){
+    setSyncStatus(true);
+    // Retourne true si les donnees ont change (evite re-render inutile)
+    var newCacheA = JSON.stringify(votesA);
+    var newCacheB = JSON.stringify(votesB);
+    var changed = (newCacheA !== _votesCacheA || newCacheB !== _votesCacheB);
+    _votesCacheA = newCacheA;
+    _votesCacheB = newCacheB;
+    return changed;
+  }).catch(function(){setSyncStatus(false);return false;});
 }
 
 function loadMembers(){
@@ -584,8 +612,16 @@ function loadConfig(){
 }
 
 function saveCfg(k,v){
-  return sfetch('config?key=eq.'+encodeURIComponent(k),'DELETE')
-    .then(function(){return sfetch('config','POST',{key:k,value:String(v)});});
+  // Upsert atomique — evite les race conditions du DELETE+POST
+  return fetch(SUPA_URL+'/rest/v1/config',{
+    method:'POST',
+    headers:{
+      'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,
+      'Content-Type':'application/json',
+      'Prefer':'resolution=merge-duplicates,return=minimal'
+    },
+    body:JSON.stringify({key:k,value:String(v)})
+  });
 }
 function clearA(){return sfetch('votes?slot_key=neq.__x__','DELETE');}
 function clearB(){return sfetch('votes_b?slot_key=neq.__x__','DELETE');}
@@ -594,16 +630,33 @@ function remVA(sk,un){return sfetch('votes?slot_key=eq.'+encodeURIComponent(sk)+
 function addVB(sk,un){return sfetch('votes_b','POST',{slot_key:sk,user_name:un});}
 function remVB(sk,un){return sfetch('votes_b?slot_key=eq.'+encodeURIComponent(sk)+'&user_name=eq.'+encodeURIComponent(un),'DELETE');}
 
-// Auto-add voter to members list if not already there
+// Auto-add voter to members list if not already there (appele une seule fois par votant nouveau)
 function autoAddMember(name){
   if(!name)return;
   var norm=name.trim();
   if(!norm)return;
+  // Guard strict: verifier avant l'appel reseau
   var already=members.some(function(m){return m.toLowerCase()===norm.toLowerCase();});
   if(already)return;
-  sfetch('members','POST',{name:norm}).then(function(r){
-    if(r.ok){members.push(norm);}
-  }).catch(function(){});
+  // Ajouter localement immediatement pour eviter les doubles appels
+  members.push(norm);
+  members.sort();
+  // Mettre a jour la liste si le panneau admin est ouvert
+  if(document.getElementById('admContent').style.display !== 'none'){
+    renderMemberList();
+    renderAbsents();
+  }
+  // Puis persister en base
+  sfetch('members','POST',{name:norm})
+    .then(function(r){
+      // Si erreur (ex: duplicate key), retirer de la liste locale
+      if(!r.ok && r.status!==409){
+        members=members.filter(function(m){return m!==norm;});
+      }
+    })
+    .catch(function(){
+      members=members.filter(function(m){return m!==norm;});
+    });
 }
 
 function setSyncStatus(ok){
@@ -615,6 +668,15 @@ function setSyncStatus(ok){
 }
 
 function pad(n){return n<10?'0'+n:''+n;}
+// Memoisation de genSlots — evite de recalculer si les parametres n'ont pas change
+var _slotsCache = {};
+function genSlotsMemo(sh,sm,eh,em){
+  var key = sh+':'+sm+':'+eh+':'+em;
+  if(_slotsCache[key]) return _slotsCache[key];
+  var result = genSlots(sh,sm,eh,em);
+  _slotsCache[key] = result;
+  return result;
+}
 function toMin(h,m){return h*60+m;}
 function fromMin(t){return{h:Math.floor(t/60)%24,m:t%60};}
 function genSlots(sh,sm,eh,em){
@@ -653,11 +715,22 @@ function renderSlots(){
   document.getElementById('tabA').classList.toggle('active',st.tab==='A');
   document.getElementById('tabB').classList.toggle('active',st.tab==='B');
   document.getElementById('tabCntA').textContent=votesA.length;
+  // Badge B : nombre de votes ou 'Nouveau' si vide
+  var tabBadgeB = document.getElementById('tabNewB');
+  if(votesB.length > 0){
+    tabBadgeB.textContent = votesB.length;
+    tabBadgeB.style.background = 'rgba(0,168,132,0.2)';
+    tabBadgeB.style.color = 'var(--green)';
+  } else {
+    tabBadgeB.textContent = tx('tabNew');
+    tabBadgeB.style.background = 'var(--gold)';
+    tabBadgeB.style.color = '#1a0a00';
+  }
 
   var isB=(st.tab==='B');
   var title=isB?st.bTitle:st.aTitle,sub=isB?st.bSub:st.aSub,date=isB?st.bDate:st.aDate;
   var votes=isB?votesB:votesA;
-  var SLOTS=isB?genSlots(st.bSH,st.bSM,st.bEH,st.bEM):genSlots(st.aSH,st.aSM,st.aEH,st.aEM);
+  var SLOTS=isB?genSlotsMemo(st.bSH,st.bSM,st.bEH,st.bEM):genSlotsMemo(st.aSH,st.aSM,st.aEH,st.aEM);
   var addFn=isB?addVB:addVA,remFn=isB?remVB:remVA;
 
   document.getElementById('pollTitle').textContent=title;
@@ -687,13 +760,13 @@ function renderSlots(){
     if(srch&&slot.label.toLowerCase().indexOf(srch)===-1)return;
     var voters=votes.filter(function(v){return v.slot_key===slot.key;}).map(function(v){return v.user_name;});
     var isMine=(st.userName!==''&&voters.indexOf(st.userName)!==-1);
-    var isCur=(!isB&&slot.key===curKey);
+    var isCur=(slot.key===curKey); // EN COURS sur le sondage actuellement affiche (A ou B)
     if(isCur)curLabel=slot.label;
     if(voters.length===0)free++;else taken++;
     var pct=(total>0&&voters.length>0)?Math.max(Math.round(voters.length/total*100),5):0;
     var row=document.createElement('div');
     row.className='orow'+(isMine?' sel':'')+(isCur?' cur':'');
-    var avH=voters.slice(0,3).map(function(n){return'<div class="vav" style="background:'+gc(n)+'" title="'+n+'">'+gi(n)+'</div>';}).join('');
+    var avH=voters.slice(0,3).map(function(n){return'<div class="vav" style="background:'+gc(n)+'" title="'+esc(n)+'">'+gi(n)+'</div>';}).join('');
     row.innerHTML=
       '<div class="wacircle"><svg class="wacheck" width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>'+
       '<div class="ocontent"><div class="otime">🙏 '+slot.label+(isCur?' <span class="nowbadge">'+tx('nowBadge')+'</span>':'')+
@@ -746,15 +819,15 @@ function setName(){
 function openVoters(){
   var isB=(st.tab==='B');
   var votes=isB?votesB:votesA;
-  var SLOTS=isB?genSlots(st.bSH,st.bSM,st.bEH,st.bEM):genSlots(st.aSH,st.aSM,st.aEH,st.aEM);
+  var SLOTS=isB?genSlotsMemo(st.bSH,st.bSM,st.bEH,st.bEM):genSlotsMemo(st.aSH,st.aSM,st.aEH,st.aEM);
   var list=document.getElementById('vList');
   list.innerHTML='';var has=false;
   SLOTS.forEach(function(slot){
     votes.filter(function(v){return v.slot_key===slot.key;}).forEach(function(v){
       has=true;var item=document.createElement('div');item.className='vitem';
       item.innerHTML='<div class="viav" style="background:'+gc(v.user_name)+'">'+gi(v.user_name)+'</div>'+
-        '<div><div style="font-size:14px">'+v.user_name+'</div>'+
-        '<div style="font-size:12px;color:var(--muted)">🙏 '+slot.label+'</div></div>';
+        '<div><div style="font-size:14px">'+esc(v.user_name)+'</div>'+
+        '<div style="font-size:12px;color:var(--muted)">🙏 '+esc(slot.label)+'</div></div>';
       list.appendChild(item);
     });
   });
@@ -776,7 +849,7 @@ function renderMemberList(){
   members.forEach(function(name){
     var item=document.createElement('div');
     item.className='member-item';
-    item.innerHTML='<span class="member-name">'+name+'</span><button class="member-del" title="Supprimer">×</button>';
+    item.innerHTML='<span class="member-name">'+esc(name)+'</span><button class="member-del" title="Supprimer">×</button>';
     item.querySelector('.member-del').onclick=function(){deleteMember(name);};
     list.appendChild(item);
   });
@@ -813,42 +886,69 @@ function deleteMember(name){
     .catch(function(){showToast(tx('errConn'));});
 }
 
+// Onglet selectionne dans la section absents de l'admin (independant de l'onglet principal)
+var absentTab = 'A'; // 'A' ou 'B'
+
+function setAbsentTab(tab){
+  absentTab = tab;
+  document.getElementById('absentTabA').className = 'mbt absent-tab-btn '+(tab==='A'?'mbt-g':'mbt-c');
+  document.getElementById('absentTabB').className = 'mbt absent-tab-btn '+(tab==='B'?'mbt-g':'mbt-c');
+  renderAbsents();
+}
+
+function getDisplayedPollInfo(){
+  // Utilise absentTab (choix independant dans l'admin) plutot que st.tab
+  var isB = (absentTab === 'B');
+  return {
+    isB: isB,
+    votes: isB ? votesB : votesA,
+    title: isB ? st.bTitle : st.aTitle,
+    date: isB ? st.bDate : st.aDate,
+    label: isB ? 'B' : 'A'
+  };
+}
+
 function renderAbsents(){
-  // Voters actifs du sondage A
-  var voterNamesA=votesA.map(function(v){return v.user_name.toLowerCase();});
-  // Liste des absents = membres sans creneau dans sondage A
-  var absents=members.filter(function(m){return voterNamesA.indexOf(m.toLowerCase())===-1;});
-  var presents=members.filter(function(m){return voterNamesA.indexOf(m.toLowerCase())!==-1;});
+  var poll = getDisplayedPollInfo();
+  var voterNames = poll.votes.map(function(v){ return v.user_name.toLowerCase(); });
+  var absents  = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) === -1; });
+  var presents = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) !== -1; });
+
+  // Titre de la section avec indication A ou B
+  document.getElementById('admSecAbsents').textContent =
+    tx('admSecAbsents') + ' (' + poll.label + ')';
 
   // Stats
-  var statsEl=document.getElementById('absentStats');
-  statsEl.innerHTML=
-    '<div class="absent-stat-box"><div class="absent-stat-num n-red">'+absents.length+'</div><div class="absent-stat-lbl">'+tx('absentLabel')+' / '+members.length+' '+tx('membersLabel')+'</div></div>'+
-    '<div class="absent-stat-box"><div class="absent-stat-num n-green">'+presents.length+'</div><div class="absent-stat-lbl">'+tx('presentLabel')+'</div></div>';
+  var statsEl = document.getElementById('absentStats');
+  statsEl.innerHTML =
+    '<div class="absent-stat-box"><div class="absent-stat-num n-red">'+absents.length+'</div>' +
+    '<div class="absent-stat-lbl">'+tx('absentLabel')+' / '+members.length+' '+tx('membersLabel')+'</div></div>'+
+    '<div class="absent-stat-box"><div class="absent-stat-num n-green">'+presents.length+'</div>' +
+    '<div class="absent-stat-lbl">'+tx('presentLabel')+'</div></div>';
 
   // Liste absents
-  var listEl=document.getElementById('absentList');
-  listEl.innerHTML='';
-  if(absents.length===0){
-    listEl.innerHTML='<div style="font-size:13px;color:var(--green);padding:6px 0">✅ Tous les membres ont un creneau !</div>';
+  var listEl = document.getElementById('absentList');
+  listEl.innerHTML = '';
+  if(absents.length === 0){
+    listEl.innerHTML = '<div style="font-size:13px;color:var(--green);padding:6px 0">✅ Tous les membres ont un creneau !</div>';
   } else {
     absents.forEach(function(name){
-      var row=document.createElement('div');
-      row.className='absent-row';
-      row.innerHTML='<div class="absent-dot" style="background:var(--red)"></div><span>'+name+'</span>';
+      var row = document.createElement('div');
+      row.className = 'absent-row';
+      row.innerHTML = '<div class="absent-dot" style="background:var(--red)"></div><span>'+esc(name)+'</span>';
       listEl.appendChild(row);
     });
   }
 }
 
 function downloadAbsents(){
-  var voterNamesA = votesA.map(function(v){ return v.user_name.toLowerCase(); });
-  var absents     = members.filter(function(m){ return voterNamesA.indexOf(m.toLowerCase()) === -1; });
-  var pres        = presents();
-  var date        = st.aDate || new Date().toISOString().split('T')[0];
+  var poll        = getDisplayedPollInfo();
+  var voterNames  = poll.votes.map(function(v){ return v.user_name.toLowerCase(); });
+  var absents     = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) === -1; });
+  var pres        = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) !== -1; });
+  var date        = poll.date || new Date().toISOString().split('T')[0];
   var sep         = '='.repeat(40);
 
-  // Format date lisible
   var dateLabel = date;
   try {
     var d = new Date(date + 'T00:00:00');
@@ -857,45 +957,36 @@ function downloadAbsents(){
   } catch(e) {}
 
   var lines = [];
-
-  // EN-TETE
   lines.push(sep);
   lines.push('  CHAINE DE PRIERE — ICC BREMEN');
   lines.push('  ' + st.grpName);
   lines.push(sep);
-  lines.push('  Sondage : ' + st.aTitle.replace('📋 ',''));
+  lines.push('  Sondage ' + poll.label + ' : ' + poll.title.replace('📋 ',''));
   lines.push('  Date    : ' + dateLabel);
   lines.push('  Total   : ' + absents.length + ' absent(s) / ' + pres.length + ' present(s) / ' + members.length + ' membres');
   lines.push(sep);
   lines.push('');
 
-  // SECTION ABSENTS
   lines.push('❌ ABSENTS (' + absents.length + ')');
   lines.push('-'.repeat(30));
   if (absents.length === 0) {
     lines.push('✅ Tous les membres ont pris un creneau !');
   } else {
-    absents.forEach(function(name, i) {
-      lines.push((i + 1) + '. ' + name);
-    });
+    absents.forEach(function(name, i){ lines.push((i+1) + '. ' + name); });
   }
   lines.push('');
 
-  // SECTION PRESENTS
   lines.push('✅ PRESENTS (' + pres.length + ')');
   lines.push('-'.repeat(30));
   if (pres.length === 0) {
     lines.push('Aucun membre n\'a encore vote.');
   } else {
-    pres.forEach(function(name, i) {
-      lines.push((i + 1) + '. ' + name);
-    });
+    pres.forEach(function(name, i){ lines.push((i+1) + '. ' + name); });
   }
   lines.push('');
   lines.push(sep);
   lines.push('');
 
-  // MESSAGE WHATSAPP PRET A COLLER
   lines.push('💬 MESSAGE WHATSAPP — copier/coller directement :');
   lines.push('-'.repeat(40));
   if (absents.length === 0) {
@@ -905,9 +996,7 @@ function downloadAbsents(){
     lines.push('');
     lines.push('Voici ceux qui n\'ont pas encore pris de creneau pour la chaine de priere du ' + dateLabel + ' :');
     lines.push('');
-    absents.forEach(function(name) {
-      lines.push('@' + name);
-    });
+    absents.forEach(function(name){ lines.push('@' + name); });
     lines.push('');
     lines.push('Merci de prendre votre creneau rapidement 🙏🔥');
     lines.push('');
@@ -920,7 +1009,7 @@ function downloadAbsents(){
   var url  = URL.createObjectURL(blob);
   var a    = document.createElement('a');
   a.href   = url;
-  a.download = 'absents_' + date + '.txt';
+  a.download = 'absents_sondage' + poll.label + '_' + date + '.txt';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -928,8 +1017,10 @@ function downloadAbsents(){
 }
 
 function presents(){
-  var voterNamesA=votesA.map(function(v){return v.user_name.toLowerCase();});
-  return members.filter(function(m){return voterNamesA.indexOf(m.toLowerCase())!==-1;});
+  // Compatibilite — utilise le sondage affiche
+  var poll = getDisplayedPollInfo();
+  var voterNames = poll.votes.map(function(v){ return v.user_name.toLowerCase(); });
+  return members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) !== -1; });
 }
 
 // ============================================================
@@ -989,6 +1080,7 @@ function updatePrioBtns(){
 }
 
 function openAdmin(){
+  absentTab = 'A'; // Reset a A a chaque ouverture
   document.getElementById('admLock').style.display='block';
   document.getElementById('admContent').style.display='none';
   document.getElementById('admPwd').value='';
@@ -1021,6 +1113,9 @@ function unlockAdmin(){
   updateAdmVisBtns();
   updatePrioBtns();
   renderMemberList();
+  // Initialiser les boutons de l'onglet absents
+  document.getElementById('absentTabA').className='mbt absent-tab-btn '+(absentTab==='A'?'mbt-g':'mbt-c');
+  document.getElementById('absentTabB').className='mbt absent-tab-btn '+(absentTab==='B'?'mbt-g':'mbt-c');
   renderAbsents();
   document.getElementById('admLock').style.display='none';
   document.getElementById('admContent').style.display='block';
@@ -1067,13 +1162,15 @@ function saveAdmin(){
   var gn=document.getElementById('gName').value.trim();
   var gs=document.getElementById('gSub').value.trim();
   if(isNaN(asm)||isNaN(aem)||isNaN(bsm)||isNaN(bem)){showToast('⚠️ Horaires invalides');return;}
-  if(at)st.aTitle=at;st.aSub=as;st.aDate=ad;
+  // Toujours sauvegarder le contenu du champ — si vide, garder l'ancien titre (protection)
+  st.aTitle=at||st.aTitle;st.aSub=as;st.aDate=ad;
   var ashm=fromMin(asm);st.aSH=ashm.h;st.aSM=ashm.m;
   if(aem===1440){st.aEH=24;st.aEM=0;}else{var aehm=fromMin(aem);st.aEH=aehm.h;st.aEM=aehm.m;}
-  if(bt)st.bTitle=bt;st.bSub=bs;st.bDate=bd;
+  st.bTitle=bt||st.bTitle;st.bSub=bs;st.bDate=bd;
   var bshm=fromMin(bsm);st.bSH=bshm.h;st.bSM=bshm.m;
   if(bem===1440){st.bEH=24;st.bEM=0;}else{var behm=fromMin(bem);st.bEH=behm.h;st.bEM=behm.m;}
-  if(gn)st.grpName=gn;if(gs)st.grpSub=gs;
+  st.grpName=gn||st.grpName;st.grpSub=gs||st.grpSub;
+  _slotsCache = {}; // Invalider cache creneaux apres modification
   saveLocal();
   Promise.all([
     saveCfg('grpName',st.grpName),saveCfg('grpSub',st.grpSub),
@@ -1086,6 +1183,13 @@ function saveAdmin(){
     saveCfg('priority',st.priority)
   ]).catch(function(){});
   renderSlots();closeAdmin();showToast(tx('saved'));
+}
+
+// Debounce recherche — evite un render a chaque frappe
+var _debounceTimer;
+function debouncedRender(){
+  clearTimeout(_debounceTimer);
+  _debounceTimer = setTimeout(function(){ renderSlots(); }, 180);
 }
 
 var ttt;
@@ -1131,9 +1235,32 @@ document.getElementById('memberInput').addEventListener('keydown',function(e){if
 document.getElementById('btnDlAbsents').onclick = downloadAbsents;
 
 function startPolling(){
-  setInterval(function(){
-    loadAllVotes().then(function(){renderSlots();});
-  },5000);
+  // Polling adaptatif : 5s si page visible, 30s si en arriere-plan
+  // Reduit la consommation Supabase la nuit quand personne ne regarde
+  function doPoll(){
+    loadAllVotes().then(function(changed){
+      if(changed !== false) renderSlots();
+    });
+  }
+  function getInterval(){
+    return document.hidden ? 30000 : 5000;
+  }
+  var pollTimer = null;
+  function schedulePoll(){
+    clearTimeout(pollTimer);
+    pollTimer = setTimeout(function(){
+      doPoll();
+      schedulePoll();
+    }, getInterval());
+  }
+  // Quand la page redevient visible, on recharge immediatement
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden){
+      doPoll();
+    }
+    schedulePoll();
+  });
+  schedulePoll();
 }
 setInterval(function(){
   var n=new Date();
