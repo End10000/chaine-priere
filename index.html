@@ -139,6 +139,12 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
 .absent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .dl-btn{width:100%;padding:10px;border-radius:8px;border:none;background:var(--green2);color:#A8E6D4;font-size:13px;font-weight:500;cursor:pointer;margin-top:8px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;}
 .absent-tab-btn{flex:1;font-size:12px;padding:6px;}
+/* Modal membres */
+.mmb-tab{flex:1;padding:10px 6px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);border-bottom:2px solid transparent;font-family:inherit;transition:all 0.15s;touch-action:manipulation;}
+.mmb-tab.active{color:var(--green);border-bottom-color:var(--green);}
+.mmb-tab:hover:not(.active){color:var(--text);}
+.mmb-badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 5px;border-radius:10px;margin-left:3px;background:var(--red);color:#fff;}
+.mmb-badge.green{background:rgba(0,168,132,0.2);color:var(--green);}
 .dl-btn:hover{background:#0A5C46;}
 /* VOTERS */
 .vlist{max-height:45vh;overflow-y:auto;}
@@ -209,7 +215,10 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
     <hr class="pdiv">
     <div class="pfooter">
       <button class="stmbtn" id="btnStimmen">---</button>
-      <button class="admbtn" id="btnAdmin">⚙️ Admin</button>
+      <div style="display:flex;gap:0;border-top:1px solid var(--border)">
+        <button class="admbtn" id="btnAdmin" style="flex:1;border-right:1px solid var(--border)">⚙️ Admin</button>
+        <button class="admbtn" id="btnMembers" style="flex:1;color:var(--green)">👥 <span id="btnMembersLbl">Membres</span></button>
+      </div>
     </div>
   </div>
 </div>
@@ -292,26 +301,7 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
         </div>
       </div>
 
-      <!-- MEMBRES & ABSENTS -->
-      <div class="asec">
-        <div class="asectitle" id="admSecMembers">Membres (STARS)</div>
-        <div class="msub" id="admMembersSub" style="margin-bottom:8px">Liste de reference. Mise a jour automatique quand quelqu'un vote pour la premiere fois.</div>
-        <div class="member-list" id="memberList"></div>
-        <div class="add-row">
-          <input class="ainp" id="memberInput" maxlength="30" autocomplete="off" autocapitalize="words" enterkeyhint="done">
-          <button class="mbt mbt-g" id="btnAddMember">+</button>
-        </div>
-        <div style="margin-top:14px">
-          <div class="asectitle" id="admSecAbsents">Absents</div>
-          <div style="display:flex;gap:6px;margin-bottom:10px;">
-            <button class="mbt mbt-g absent-tab-btn" id="absentTabA"><span id="absentTabLblA">Sondage A</span></button>
-            <button class="mbt mbt-c absent-tab-btn" id="absentTabB"><span id="absentTabLblB">Sondage B</span></button>
-          </div>
-          <div class="absent-stats" id="absentStats"></div>
-          <div class="absent-list" id="absentList"></div>
-          <button class="dl-btn" id="btnDlAbsents"><span id="dlBtnLbl">⬇ Telecharger (.txt)</span></button>
-        </div>
-      </div>
+
 
       <!-- GROUPE -->
       <div class="asec">
@@ -325,6 +315,58 @@ body{background:var(--bg);font-family:-apple-system,'Segoe UI',Helvetica,Arial,s
         <button class="mbt mbt-g" id="aBtnSave">✓ Enregistrer</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- MEMBRES MODAL -->
+<div class="mbg" id="membersModal">
+  <div class="msh" style="padding:0;overflow:hidden;">
+    <!-- HEADER MODAL -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--panel);">
+      <div style="font-size:16px;font-weight:500" id="mmbTitle">👥 Membres &amp; Absents</div>
+      <button id="mmbClose" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:0 4px;line-height:1;touch-action:manipulation;">×</button>
+    </div>
+    <!-- LOCK -->
+    <div id="mmbLock" style="padding:16px">
+      <div class="msub" id="mmbLockSub">Mot de passe administrateur.</div>
+      <input class="ainp" id="mmbPwd" type="password" autocomplete="off">
+      <div class="macts" style="margin-top:6px">
+        <button class="mbt mbt-c" id="mmbBtnCancel">Annuler</button>
+        <button class="mbt mbt-g" id="mmbBtnEnter">→</button>
+      </div>
+    </div>
+    <!-- ONGLETS -->
+    <div id="mmbContent" style="display:none">
+    <div style="display:flex;border-bottom:1px solid var(--border);background:var(--panel);">
+      <button class="mmb-tab active" id="mmbTabMembers" onclick="switchMmbTab('members')"><span id="mmbTabMembersLbl">Liste</span></button>
+      <button class="mmb-tab" id="mmbTabAbsA" onclick="switchMmbTab('absA')"><span id="mmbTabAbsALbl">Absents A</span> <span class="mmb-badge" id="mmbBadgeA">0</span></button>
+      <button class="mmb-tab" id="mmbTabAbsB" onclick="switchMmbTab('absB')"><span id="mmbTabAbsBLbl">Absents B</span> <span class="mmb-badge" id="mmbBadgeB">0</span></button>
+    </div>
+    <!-- CONTENU -->
+    <div style="max-height:70vh;overflow-y:auto;padding:14px 16px;">
+      <!-- LISTE MEMBRES -->
+      <div id="mmbPaneMembers">
+        <div class="msub" id="mmbMembersSub" style="margin-bottom:10px">Liste de reference. Mise a jour automatique quand quelqu'un vote.</div>
+        <div class="member-list" id="memberList"></div>
+        <div class="add-row" style="margin-top:8px">
+          <input class="ainp" id="memberInput" maxlength="30" autocomplete="off" autocapitalize="words" enterkeyhint="done" style="margin-bottom:0">
+          <button class="mbt mbt-g" id="btnAddMember" style="flex:none;padding:10px 16px;font-size:16px;min-width:44px">+</button>
+        </div>
+      </div>
+      <!-- ABSENTS A -->
+      <div id="mmbPaneAbsA" style="display:none">
+        <div class="absent-stats" id="absentStatsA" style="margin-bottom:10px"></div>
+        <div class="absent-list" id="absentListA"></div>
+        <button class="dl-btn" id="btnDlAbsentsA" style="margin-top:10px"><span id="dlBtnLblA">⬇ Telecharger (.txt)</span></button>
+      </div>
+      <!-- ABSENTS B -->
+      <div id="mmbPaneAbsB" style="display:none">
+        <div class="absent-stats" id="absentStatsB" style="margin-bottom:10px"></div>
+        <div class="absent-list" id="absentListB"></div>
+        <button class="dl-btn" id="btnDlAbsentsB" style="margin-top:10px"><span id="dlBtnLblB">⬇ Telecharger (.txt)</span></button>
+      </div>
+    </div>
+    </div><!-- fin mmbContent -->
   </div>
 </div>
 
@@ -369,6 +411,7 @@ var TR = {
     admSecPrio:"Priorite d'affichage",
     admPrioSub:'Quand les deux sont visibles, lequel apparait en premier ?',
     prioA:'A en premier',prioB:'B en premier',prioAuto:'Auto (date)',
+    mmbTitle:'👥 Membres & Absents',mmbBtnLbl:'Membres',mmbTabMembers:'Liste',mmbTabAbsA:'Absents A',mmbTabAbsB:'Absents B',
     admSecMembers:'Membres (STARS)',
     admMembersSub:"Liste de reference. Mise a jour automatique quand quelqu'un vote.",
     memberPh:'Ajouter un membre...',
@@ -409,6 +452,7 @@ var TR = {
     admSecPrio:'Anzeigeprioritat',
     admPrioSub:'Welche wird zuerst angezeigt wenn beide sichtbar sind?',
     prioA:'A zuerst',prioB:'B zuerst',prioAuto:'Auto (Datum)',
+    mmbTitle:'👥 Mitglieder & Abwesende',mmbBtnLbl:'Mitglieder',mmbTabMembers:'Liste',mmbTabAbsA:'Abwesend A',mmbTabAbsB:'Abwesend B',
     admSecMembers:'Mitglieder (STARS)',
     admMembersSub:'Referenzliste. Automatisch aktualisiert wenn jemand abstimmt.',
     memberPh:'Mitglied hinzufugen...',
@@ -449,6 +493,7 @@ var TR = {
     admSecPrio:'Display priority',
     admPrioSub:'When both are visible, which one appears first?',
     prioA:'A first',prioB:'B first',prioAuto:'Auto (date)',
+    mmbTitle:'👥 Members & Absent',mmbBtnLbl:'Members',mmbTabMembers:'List',mmbTabAbsA:'Absent A',mmbTabAbsB:'Absent B',
     admSecMembers:'Members (STARS)',
     admMembersSub:'Reference list. Auto-updated when someone votes for the first time.',
     memberPh:'Add a member...',
@@ -538,13 +583,22 @@ function applyLang(){
   if(pau){ pau.textContent=tx('prioAuto'); pau.className='mbt '+(st.priority==='auto'?'mbt-gold':'mbt-c'); }
 
   // ---- ADMIN MEMBRES ----
-  el('admSecMembers').textContent  = tx('admSecMembers');
-  el('admMembersSub').textContent  = tx('admMembersSub');
-  el('memberInput').placeholder    = tx('memberPh');
-  el('admSecAbsents').textContent  = tx('admSecAbsents') + ' (' + absentTab + ')';
-  var la=document.getElementById('absentTabLblA'); if(la) la.textContent=tx('pollLblA');
-  var lb=document.getElementById('absentTabLblB'); if(lb) lb.textContent=tx('pollLblB');
-  var dl=document.getElementById('dlBtnLbl');      if(dl) dl.textContent=tx('dlBtn');
+  // Modal membres
+  var mmb = document.getElementById('membersModal');
+  if(mmb){
+    var mmbEl = document.getElementById('mmbTitle'); if(mmbEl) mmbEl.textContent = tx('mmbTitle');
+    var mmbLS = document.getElementById('mmbLockSub'); if(mmbLS) mmbLS.textContent = tx('admLockSub');
+    var mmbPwEl = document.getElementById('mmbPwd'); if(mmbPwEl) mmbPwEl.placeholder = tx('admPwdPh');
+    var mmbBC = document.getElementById('mmbBtnCancel'); if(mmbBC) mmbBC.textContent = tx('btnCancel');
+    var mmbMS = document.getElementById('mmbMembersSub'); if(mmbMS) mmbMS.textContent = tx('admMembersSub');
+    var mmbMI = document.getElementById('memberInput'); if(mmbMI) mmbMI.placeholder = tx('memberPh');
+    var mmbTA = document.getElementById('mmbTabMembersLbl'); if(mmbTA) mmbTA.textContent = tx('mmbTabMembers');
+    var mmbAA = document.getElementById('mmbTabAbsALbl'); if(mmbAA) mmbAA.textContent = tx('mmbTabAbsA');
+    var mmbAB = document.getElementById('mmbTabAbsBLbl'); if(mmbAB) mmbAB.textContent = tx('mmbTabAbsB');
+    var dlA = document.getElementById('dlBtnLblA'); if(dlA) dlA.textContent = tx('dlBtn');
+    var dlB = document.getElementById('dlBtnLblB'); if(dlB) dlB.textContent = tx('dlBtn');
+  }
+  var bml = document.getElementById('btnMembersLbl'); if(bml) bml.textContent = tx('mmbBtnLbl');
 
   // ---- ADMIN GROUPE ----
   el('admSecGrp').textContent   = tx('admSecGrp');
@@ -888,8 +942,7 @@ function renderSlots(){
         var op=mine?rf(sk,st.userName):af(sk,st.userName);
         op.then(function(r){if(!r.ok)throw new Error();return loadAllVotes();})
           .then(function(){
-            // Auto-ajouter le votant aux membres si nouveau
-            if(!mine)autoAddMember(st.userName);
+            if(!mine){ autoAddMember(st.userName); updateMmbBadges(); }
             renderSlots();
           })
           .catch(function(){showToast(tx('errConn'));row.classList.remove('busy');});
@@ -946,158 +999,172 @@ function openVoters(){
 function closeVoters(){document.getElementById('votersModal').classList.remove('open');}
 
 // ============================================================
-// MEMBRES & ABSENTS
+// MEMBRES & ABSENTS — MODAL DEDIE
 // ============================================================
+
+var currentMmbTab = 'members'; // 'members' | 'absA' | 'absB'
+var mmbUnlocked = false; // Mot de passe deja valide pour cette session
+
+function openMembersModal(){
+  // Reutiliser le meme ecran de lock que l'admin
+  // Ouvrir un mini-modal de mot de passe dedie
+  document.getElementById('mmbLock').style.display = 'block';
+  document.getElementById('mmbContent').style.display = 'none';
+  document.getElementById('mmbPwd').value = '';
+  document.getElementById('membersModal').classList.add('open');
+  setTimeout(function(){ document.getElementById('mmbPwd').focus(); }, 250);
+}
+
+function unlockMmb(){
+  if(document.getElementById('mmbPwd').value !== ADMIN_PWD){
+    showToast(tx('wrongPwd'));
+    document.getElementById('mmbPwd').value = '';
+    document.getElementById('mmbPwd').focus();
+    return;
+  }
+  mmbUnlocked = true;
+  document.getElementById('mmbLock').style.display = 'none';
+  document.getElementById('mmbContent').style.display = 'block';
+  switchMmbTab('members');
+}
+
+function closeMembersModal(){
+  document.getElementById('membersModal').classList.remove('open');
+  mmbUnlocked = false; // Reset pour la prochaine ouverture
+}
+
+function switchMmbTab(tab){
+  currentMmbTab = tab;
+  ['members','absA','absB'].forEach(function(t){
+    var btn = document.getElementById('mmbTab'+t.charAt(0).toUpperCase()+t.slice(1));
+    var pane = document.getElementById('mmbPane'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(!btn || !pane) return;
+    btn.classList.toggle('active', t === tab);
+    pane.style.display = t === tab ? 'block' : 'none';
+  });
+  if(tab === 'members') renderMemberList();
+  if(tab === 'absA')    renderAbsents('A');
+  if(tab === 'absB')    renderAbsents('B');
+}
+
 function renderMemberList(){
-  var list=document.getElementById('memberList');
-  list.innerHTML='';
-  if(members.length===0){
-    list.innerHTML='<div class="emsg" style="padding:0.75rem">'+tx('noMembers')+'</div>';
+  var list = document.getElementById('memberList');
+  if(!list) return;
+  list.innerHTML = '';
+  if(members.length === 0){
+    list.innerHTML = '<div class="emsg" style="padding:0.75rem">'+tx('noMembers')+'</div>';
     return;
   }
   members.forEach(function(name){
-    var item=document.createElement('div');
-    item.className='member-item';
-    item.innerHTML=
-      '<span class="member-name" id="mname_'+esc(name.replace(/ /g,'_'))+'">'+esc(name)+'</span>'+
+    var item = document.createElement('div');
+    item.className = 'member-item';
+    item.innerHTML =
+      '<span class="member-name">'+esc(name)+'</span>'+
       '<div style="display:flex;gap:6px;flex-shrink:0">'+
         '<button class="member-edit" title="Modifier">✏️</button>'+
         '<button class="member-del" title="Supprimer">×</button>'+
       '</div>';
-    // Supprimer
-    item.querySelector('.member-del').onclick=function(){deleteMember(name);};
-    // Modifier - transforme le nom en champ editable
-    item.querySelector('.member-edit').onclick=function(){
+    item.querySelector('.member-del').onclick = function(){ deleteMember(name); };
+    item.querySelector('.member-edit').onclick = function(){
       var nameSpan = item.querySelector('.member-name');
       var currentName = nameSpan.textContent;
-      // Remplacer le span par un input
       var inp = document.createElement('input');
       inp.className = 'ainp';
       inp.value = currentName;
-      inp.style.cssText = 'flex:1;margin:0;padding:4px 8px;font-size:14px;';
+      inp.style.cssText = 'flex:1;margin:0;padding:6px 10px;font-size:16px;';
       inp.maxLength = 30;
       inp.autocapitalize = 'words';
       nameSpan.replaceWith(inp);
-      inp.focus();
-      inp.select();
-      // Cacher le bouton modifier pendant l'edition
-      item.querySelector('.member-edit').style.display='none';
-      // Valider sur Enter ou blur
+      item.querySelector('.member-edit').style.display = 'none';
+      inp.focus(); inp.select();
       function saveEdit(){
         var newName = inp.value.trim();
         if(!newName || newName === currentName){
-          // Annuler - remettre le span
           inp.replaceWith(nameSpan);
-          item.querySelector('.member-edit').style.display='';
+          item.querySelector('.member-edit').style.display = '';
           return;
         }
-        // Verifier doublon
-        var exists = members.some(function(m){return m.toLowerCase()===newName.toLowerCase() && m!==currentName;});
-        if(exists){showToast(tx('memberExists'));inp.focus();return;}
-        // Sauvegarder : supprimer l'ancien et creer le nouveau
+        var exists = members.some(function(m){ return m.toLowerCase()===newName.toLowerCase() && m!==currentName; });
+        if(exists){ showToast(tx('memberExists')); inp.focus(); return; }
         sfetch('members?name=eq.'+encodeURIComponent(currentName),'DELETE')
-          .then(function(){return sfetch('members','POST',{name:newName});})
+          .then(function(){ return sfetch('members','POST',{name:newName}); })
           .then(function(r){
-            if(!r.ok)throw new Error();
-            members = members.map(function(m){return m===currentName?newName:m;});
+            if(!r.ok) throw new Error();
+            members = members.map(function(m){ return m===currentName ? newName : m; });
             members.sort();
             renderMemberList();
-            renderAbsents();
             showToast('✅ '+currentName+' → '+newName);
           })
-          .catch(function(){showToast(tx('errConn'));inp.replaceWith(nameSpan);item.querySelector('.member-edit').style.display='';});
+          .catch(function(){ showToast(tx('errConn')); inp.replaceWith(nameSpan); item.querySelector('.member-edit').style.display=''; });
       }
       inp.addEventListener('keydown',function(e){
-        if(e.key==='Enter'){e.preventDefault();saveEdit();}
-        if(e.key==='Escape'){inp.replaceWith(nameSpan);item.querySelector('.member-edit').style.display='';}
+        if(e.key==='Enter'){ e.preventDefault(); saveEdit(); }
+        if(e.key==='Escape'){ inp.replaceWith(nameSpan); item.querySelector('.member-edit').style.display=''; }
       });
-      inp.addEventListener('blur',function(){setTimeout(saveEdit,150);});
+      inp.addEventListener('blur',function(){ setTimeout(saveEdit,150); });
     };
     list.appendChild(item);
   });
 }
 
 function addMember(){
-  var inp=document.getElementById('memberInput');
-  var name=inp.value.trim();
-  if(!name)return;
-  var already=members.some(function(m){return m.toLowerCase()===name.toLowerCase();});
-  if(already){showToast(tx('memberExists'));inp.value='';return;}
+  var inp = document.getElementById('memberInput');
+  if(!inp) return;
+  var name = inp.value.trim();
+  if(!name) return;
+  var already = members.some(function(m){ return m.toLowerCase()===name.toLowerCase(); });
+  if(already){ showToast(tx('memberExists')); inp.value=''; return; }
   sfetch('members','POST',{name:name})
     .then(function(r){
-      if(!r.ok)throw new Error();
+      if(!r.ok) throw new Error();
       members.push(name);
       members.sort();
-      inp.value='';
+      inp.value = '';
       renderMemberList();
-      renderAbsents();
+      renderAbsents(currentMmbTab==='absB'?'B':'A');
+      updateMmbBadges();
       showToast(tx('memberAdded'));
     })
-    .catch(function(){showToast(tx('errConn'));});
+    .catch(function(){ showToast(tx('errConn')); });
 }
 
 function deleteMember(name){
   sfetch('members?name=eq.'+encodeURIComponent(name),'DELETE')
     .then(function(r){
-      if(!r.ok)throw new Error();
-      members=members.filter(function(m){return m!==name;});
+      if(!r.ok) throw new Error();
+      members = members.filter(function(m){ return m!==name; });
       renderMemberList();
-      renderAbsents();
+      renderAbsents(currentMmbTab==='absB'?'B':'A');
+      updateMmbBadges();
       showToast(tx('memberDel'));
     })
-    .catch(function(){showToast(tx('errConn'));});
+    .catch(function(){ showToast(tx('errConn')); });
 }
 
-// Onglet selectionne dans la section absents de l'admin (independant de l'onglet principal)
-var absentTab = 'A'; // 'A' ou 'B'
+function renderAbsents(which){
+  // which = 'A' ou 'B'
+  var votes   = which==='B' ? votesB : votesA;
+  var title   = which==='B' ? st.bTitle : st.aTitle;
+  var date    = which==='B' ? st.bDate  : st.aDate;
+  var statsId = 'absentStats'+which;
+  var listId  = 'absentList'+which;
+  var statsEl = document.getElementById(statsId);
+  var listEl  = document.getElementById(listId);
+  if(!statsEl || !listEl) return;
 
-function setAbsentTab(tab){
-  absentTab = tab;
-  document.getElementById('absentTabA').className = 'mbt absent-tab-btn '+(tab==='A'?'mbt-g':'mbt-c');
-  document.getElementById('absentTabB').className = 'mbt absent-tab-btn '+(tab==='B'?'mbt-g':'mbt-c');
-  // Labels traduits
-  var la = document.getElementById('absentTabLblA');
-  var lb = document.getElementById('absentTabLblB');
-  if(la) la.textContent = tx('pollLblA');
-  if(lb) lb.textContent = tx('pollLblB');
-  renderAbsents();
-}
+  var voterNames = votes.map(function(v){ return v.user_name.toLowerCase(); });
+  var absents    = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase())===-1; });
+  var presents   = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase())!==-1; });
 
-function getDisplayedPollInfo(){
-  // Utilise absentTab (choix independant dans l'admin) plutot que st.tab
-  var isB = (absentTab === 'B');
-  return {
-    isB: isB,
-    votes: isB ? votesB : votesA,
-    title: isB ? st.bTitle : st.aTitle,
-    date: isB ? st.bDate : st.aDate,
-    label: isB ? 'B' : 'A'
-  };
-}
-
-function renderAbsents(){
-  var poll = getDisplayedPollInfo();
-  var voterNames = poll.votes.map(function(v){ return v.user_name.toLowerCase(); });
-  var absents  = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) === -1; });
-  var presents = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) !== -1; });
-
-  // Titre de la section avec indication A ou B
-  document.getElementById('admSecAbsents').textContent =
-    tx('admSecAbsents') + ' (' + poll.label + ')';
-
-  // Stats
-  var statsEl = document.getElementById('absentStats');
   statsEl.innerHTML =
-    '<div class="absent-stat-box"><div class="absent-stat-num n-red">'+absents.length+'</div>' +
+    '<div class="absent-stat-box"><div class="absent-stat-num n-red">'+absents.length+'</div>'+
     '<div class="absent-stat-lbl">'+tx('absentLabel')+' / '+members.length+' '+tx('membersLabel')+'</div></div>'+
-    '<div class="absent-stat-box"><div class="absent-stat-num n-green">'+presents.length+'</div>' +
+    '<div class="absent-stat-box"><div class="absent-stat-num n-green">'+presents.length+'</div>'+
     '<div class="absent-stat-lbl">'+tx('presentLabel')+'</div></div>';
 
-  // Liste absents
-  var listEl = document.getElementById('absentList');
   listEl.innerHTML = '';
   if(absents.length === 0){
-    listEl.innerHTML = '<div style="font-size:13px;color:var(--green);padding:6px 0">✅ Tous les membres ont un creneau !</div>';
+    listEl.innerHTML = '<div style="font-size:13px;color:var(--green);padding:8px 0">✅ Tous les membres ont un creneau !</div>';
   } else {
     absents.forEach(function(name){
       var row = document.createElement('div');
@@ -1106,64 +1173,77 @@ function renderAbsents(){
       listEl.appendChild(row);
     });
   }
+
+  // Badge sur l'onglet
+  updateMmbBadges();
 }
 
-function downloadAbsents(){
-  var poll        = getDisplayedPollInfo();
-  var voterNames  = poll.votes.map(function(v){ return v.user_name.toLowerCase(); });
-  var absents     = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) === -1; });
-  var pres        = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) !== -1; });
-  var date        = poll.date || new Date().toISOString().split('T')[0];
-  var sep         = '='.repeat(40);
+function updateMmbBadges(){
+  var voterNamesA = votesA.map(function(v){ return v.user_name.toLowerCase(); });
+  var voterNamesB = votesB.map(function(v){ return v.user_name.toLowerCase(); });
+  var absA = members.filter(function(m){ return voterNamesA.indexOf(m.toLowerCase())===-1; }).length;
+  var absB = members.filter(function(m){ return voterNamesB.indexOf(m.toLowerCase())===-1; }).length;
+  var badgeA = document.getElementById('mmbBadgeA');
+  var badgeB = document.getElementById('mmbBadgeB');
+  if(badgeA){
+    badgeA.textContent = absA;
+    badgeA.className = 'mmb-badge'+(absA===0?' green':'');
+  }
+  if(badgeB){
+    badgeB.textContent = absB;
+    badgeB.className = 'mmb-badge'+(absB===0?' green':'');
+  }
+}
 
-  var dateLabel = date;
-  try {
-    var d = new Date(date + 'T00:00:00');
-    var loc = lang === 'de' ? 'de-DE' : lang === 'en' ? 'en-GB' : 'fr-FR';
-    dateLabel = d.toLocaleDateString(loc, {weekday:'long', day:'numeric', month:'long', year:'numeric'});
-  } catch(e) {}
+function downloadAbsents(which){
+  var votes   = which==='B' ? votesB : votesA;
+  var title   = which==='B' ? st.bTitle : st.aTitle;
+  var date    = which==='B' ? st.bDate  : st.aDate;
+  var voterNames = votes.map(function(v){ return v.user_name.toLowerCase(); });
+  var absents    = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase())===-1; });
+  var pres       = members.filter(function(m){ return voterNames.indexOf(m.toLowerCase())!==-1; });
+  var dateLabel  = date || new Date().toISOString().split('T')[0];
+  try{
+    var d   = new Date(date+'T00:00:00');
+    var loc = lang==='de'?'de-DE':lang==='en'?'en-GB':'fr-FR';
+    dateLabel = d.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  }catch(e){}
 
+  var sep = '='.repeat(40);
   var lines = [];
   lines.push(sep);
   lines.push('  CHAINE DE PRIERE — ICC BREMEN');
-  lines.push('  ' + st.grpName);
+  lines.push('  '+st.grpName);
   lines.push(sep);
-  lines.push('  Sondage ' + poll.label + ' : ' + poll.title.replace('📋 ',''));
-  lines.push('  Date    : ' + dateLabel);
-  lines.push('  Total   : ' + absents.length + ' absent(s) / ' + pres.length + ' present(s) / ' + members.length + ' membres');
+  lines.push('  Sondage '+which+' : '+title.replace('📋 ',''));
+  lines.push('  Date    : '+dateLabel);
+  lines.push('  Total   : '+absents.length+' absent(s) / '+pres.length+' present(s) / '+members.length+' membres');
   lines.push(sep);
   lines.push('');
-
-  lines.push('❌ ABSENTS (' + absents.length + ')');
+  lines.push('❌ ABSENTS ('+absents.length+')');
   lines.push('-'.repeat(30));
-  if (absents.length === 0) {
+  if(absents.length===0){
     lines.push('✅ Tous les membres ont pris un creneau !');
   } else {
-    absents.forEach(function(name, i){ lines.push((i+1) + '. ' + name); });
+    absents.forEach(function(name,i){ lines.push((i+1)+'. '+name); });
   }
   lines.push('');
-
-  lines.push('✅ PRESENTS (' + pres.length + ')');
+  lines.push('✅ PRESENTS ('+pres.length+')');
   lines.push('-'.repeat(30));
-  if (pres.length === 0) {
-    lines.push('Aucun membre n\'a encore vote.');
-  } else {
-    pres.forEach(function(name, i){ lines.push((i+1) + '. ' + name); });
-  }
+  pres.forEach(function(name,i){ lines.push((i+1)+'. '+name); });
   lines.push('');
   lines.push(sep);
   lines.push('');
-
   lines.push('💬 MESSAGE WHATSAPP — copier/coller directement :');
   lines.push('-'.repeat(40));
-  if (absents.length === 0) {
+  if(absents.length===0){
     lines.push('🙏 Merci a tous ! Tous les creneaux sont pris. 🔥');
   } else {
     lines.push('🙏 Chers STARS,');
     lines.push('');
-    lines.push('Voici ceux qui n\'ont pas encore pris de creneau pour la chaine de priere du ' + dateLabel + ' :');
+    lines.push('Voici ceux qui n\'ont pas encore pris de creneau pour le '+dateLabel+' :');
     lines.push('');
-    absents.forEach(function(name){ lines.push('@' + name); });
+    absents.forEach(function(name){ lines.push('@'+name); });
     lines.push('');
     lines.push('Merci de prendre votre creneau rapidement 🙏🔥');
     lines.push('');
@@ -1172,22 +1252,39 @@ function downloadAbsents(){
   lines.push('-'.repeat(40));
 
   var txt  = lines.join('\n');
-  var blob = new Blob([txt], {type: 'text/plain;charset=utf-8'});
+  var blob = new Blob([txt],{type:'text/plain;charset=utf-8'});
   var url  = URL.createObjectURL(blob);
   var a    = document.createElement('a');
   a.href   = url;
-  a.download = 'absents_sondage' + poll.label + '_' + date + '.txt';
+  a.download = 'absents_sondage'+which+'_'+(date||'').replace(/-/g,'')+'.txt';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
-function presents(){
-  // Compatibilite — utilise le sondage affiche
-  var poll = getDisplayedPollInfo();
-  var voterNames = poll.votes.map(function(v){ return v.user_name.toLowerCase(); });
-  return members.filter(function(m){ return voterNames.indexOf(m.toLowerCase()) !== -1; });
+// Auto-add voter to members list
+function autoAddMember(name){
+  if(!name) return;
+  var norm = name.trim();
+  if(!norm) return;
+  var already = members.some(function(m){ return m.toLowerCase()===norm.toLowerCase(); });
+  if(already) return;
+  // Ajouter localement immediatement
+  members.push(norm);
+  members.sort();
+  if(document.getElementById('membersModal').classList.contains('open')){
+    if(currentMmbTab==='members') renderMemberList();
+    updateMmbBadges();
+  }
+  // Persister en base
+  sfetch('members','POST',{name:norm})
+    .then(function(r){
+      if(!r.ok && r.status!==409){
+        members = members.filter(function(m){ return m!==norm; });
+      }
+    })
+    .catch(function(){ members = members.filter(function(m){ return m!==norm; }); });
 }
 
 // ============================================================
@@ -1249,7 +1346,6 @@ function updatePrioBtns(){
 }
 
 function openAdmin(){
-  absentTab = 'A'; // Reset a A a chaque ouverture
   document.getElementById('admLock').style.display='block';
   document.getElementById('admContent').style.display='none';
   document.getElementById('admPwd').value='';
@@ -1281,14 +1377,6 @@ function unlockAdmin(){
   document.getElementById('gSub').value=st.grpSub;
   updateAdmVisBtns();
   updatePrioBtns();
-  renderMemberList();
-  // Initialiser les boutons de l'onglet absents
-  document.getElementById('absentTabA').className='mbt absent-tab-btn '+(absentTab==='A'?'mbt-g':'mbt-c');
-  document.getElementById('absentTabB').className='mbt absent-tab-btn '+(absentTab==='B'?'mbt-g':'mbt-c');
-  var _la=document.getElementById('absentTabLblA'); if(_la)_la.textContent=tx('pollLblA');
-  var _lb=document.getElementById('absentTabLblB'); if(_lb)_lb.textContent=tx('pollLblB');
-  var _dl=document.getElementById('dlBtnLbl'); if(_dl)_dl.textContent=tx('dlBtn');
-  renderAbsents();
   document.getElementById('admLock').style.display='none';
   document.getElementById('admContent').style.display='block';
 }
@@ -1402,11 +1490,15 @@ document.getElementById('tabB').onclick       = function(){switchTab('B');};
 document.getElementById('btn-fr').onclick     = function(){setLang('fr');};
 document.getElementById('btn-de').onclick     = function(){setLang('de');};
 document.getElementById('btn-en').onclick     = function(){setLang('en');};
+document.getElementById('btnMembers').onclick  = openMembersModal;
+document.getElementById('mmbClose').onclick    = closeMembersModal;
+document.getElementById('mmbBtnCancel').onclick= closeMembersModal;
+document.getElementById('mmbBtnEnter').onclick = unlockMmb;
+document.getElementById('mmbPwd').addEventListener('keydown',function(e){ if(e.key==='Enter') unlockMmb(); });
 document.getElementById('btnAddMember').onclick = addMember;
 document.getElementById('memberInput').addEventListener('keydown',function(e){if(e.key==='Enter')addMember();});
-document.getElementById('btnDlAbsents').onclick = downloadAbsents;
-document.getElementById('absentTabA').onclick = function(){setAbsentTab('A');};
-document.getElementById('absentTabB').onclick = function(){setAbsentTab('B');};
+document.getElementById('btnDlAbsentsA').onclick = function(){ downloadAbsents('A'); };
+document.getElementById('btnDlAbsentsB').onclick = function(){ downloadAbsents('B'); };
 
 function startPolling(){
   // Polling adaptatif : 5s si page visible, 30s si en arriere-plan
